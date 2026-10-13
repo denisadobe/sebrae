@@ -1,0 +1,37 @@
+{
+  "definitions": [
+    {
+      "title": "Embed (iframe)",
+      "id": "embed-iframe",
+      "model": "embed-iframe",
+      "plugins": {
+        "da": {
+          "name": "embed-iframe",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            {
+              "name": "url",
+              "selector": "div>div"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "embed-iframe",
+      "fields": [
+        {
+          "component": "text",
+          "name": "url",
+          "label": "URL da página incorporada",
+          "valueType": "string",
+          "required": true
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

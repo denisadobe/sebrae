@@ -1,0 +1,129 @@
+/* Cards Tagged: lavender text cards with a mint tag pill (sebrae.com.br .ps-featured-card) */
+.cards-tagged {
+  margin-top: 32px;
+}
+
+.cards-tagged > ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.cards-tagged .cards-tagged-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  box-sizing: border-box;
+  width: 100%;
+  padding: 16px;
+  border-radius: var(--radius-s);
+  background-color: var(--sebrae-lavender);
+  color: var(--text-color);
+}
+
+.cards-tagged .cards-tagged-card-image {
+  line-height: 0;
+  margin-bottom: 16px;
+}
+
+.cards-tagged .cards-tagged-card-image img {
+  width: 100%;
+  object-fit: cover;
+}
+
+/* tag pill */
+.cards-tagged .cards-tagged-card-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 0 32px;
+  padding: 8px 16px;
+  border-radius: 999px;
+  background-color: var(--sebrae-mint);
+  color: var(--link-color);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+.cards-tagged .cards-tagged-card-tag > * {
+  margin: 0;
+}
+
+/* text + link */
+.cards-tagged .cards-tagged-card-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  flex: 1;
+  width: 100%;
+}
+
+.cards-tagged .cards-tagged-card-body p {
+  margin: 0;
+  font-size: var(--body-font-size-m);
+  line-height: 24px;
+}
+
+.cards-tagged .cards-tagged-card-body > .cards-tagged-card-tag {
+  margin-bottom: 32px;
+  font-size: 10px;
+  line-height: 16px;
+}
+
+.cards-tagged .cards-tagged-card-body p.cards-tagged-card-link {
+  margin-top: 16px;
+}
+
+.cards-tagged .cards-tagged-card-link a:any-link {
+  color: var(--link-color);
+  font-weight: 700;
+}
+
+.cards-tagged .cards-tagged-card-link a::after {
+  content: '';
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  margin-left: 4px;
+  vertical-align: -2px;
+  background-color: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M16.1716 10.9999L10.8076 5.63589L12.2218 4.22168L20 11.9999L12.2218 19.778L10.8076 18.3638L16.1716 12.9999H4V10.9999H16.1716Z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+@media (width >= 900px) {
+  .cards-tagged {
+    margin-top: 48px;
+  }
+
+  .cards-tagged > ul {
+    flex-flow: row wrap;
+    justify-content: center;
+  }
+
+  .cards-tagged .cards-tagged-card {
+    flex: 0 1 300px;
+    max-width: 584px;
+    min-height: 396px;
+    padding: 24px 8px 24px 24px;
+  }
+
+  .cards-tagged .cards-tagged-card-tag,
+  .cards-tagged .cards-tagged-card-body > .cards-tagged-card-tag {
+    font-size: var(--body-font-size-xs);
+    line-height: 18px;
+  }
+
+  .cards-tagged .cards-tagged-card-body p {
+    font-size: var(--body-font-size-l);
+    line-height: 28px;
+  }
+
+  .cards-tagged .cards-tagged-card-body p.cards-tagged-card-link {
+    line-height: 24px;
+  }
+}

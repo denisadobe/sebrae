@@ -1,0 +1,268 @@
+/* ---------- tab list ---------- */
+.tabs-articles .tabs-articles-list-tabs {
+  display: flex;
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.tabs-articles .tabs-articles-tab {
+  box-sizing: border-box;
+  display: flex;
+  flex: 0 0 max-content;
+  align-items: center;
+  justify-content: center;
+  height: 72px;
+  margin: 0 0 8px;
+  border: 0;
+  border-bottom: 2px solid #e2e9fc;
+  border-radius: 0;
+  padding: 0 12px;
+  background-color: transparent;
+  color: var(--sebrae-gray);
+  font-size: var(--body-font-size-m);
+  font-weight: 400;
+  line-height: 24px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.tabs-articles .tabs-articles-tab p {
+  margin: 0;
+}
+
+.tabs-articles .tabs-articles-tab[aria-selected='true'] {
+  padding: 0 36px;
+  border-bottom-color: var(--sebrae-blue);
+  color: var(--sebrae-blue);
+  font-weight: 700;
+  cursor: initial;
+}
+
+/* ---------- panels ---------- */
+.tabs-articles .tabs-articles-panel {
+  padding: 16px;
+}
+
+.tabs-articles .tabs-articles-panel[aria-hidden='true'] {
+  display: none;
+}
+
+/* intro (heading, text, link) and the article list live in one rich text cell */
+.tabs-articles .tabs-articles-panel-content > * {
+  margin: 0 0 16px;
+}
+
+.tabs-articles .tabs-articles-panel-content > :is(h1, h2, h3, h4, h5, h6) {
+  color: var(--sebrae-navy);
+  font-size: var(--heading-font-size-l);
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.tabs-articles .tabs-articles-panel-content > p {
+  color: var(--sebrae-navy);
+  font-size: var(--body-font-size-m);
+  line-height: 24px;
+}
+
+.tabs-articles .tabs-articles-panel-content > p > a:any-link {
+  color: var(--sebrae-blue);
+  font-size: var(--body-font-size-m);
+  font-weight: 700;
+  line-height: 24px;
+}
+
+/* ---------- article list (scroll-snap row) ---------- */
+.tabs-articles .tabs-articles-panel-content > .tabs-articles-list {
+  display: flex;
+  gap: 16px;
+  min-width: 0;
+  margin: 32px 0 0;
+  padding: 4px 0;
+  list-style: none;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.tabs-articles .tabs-articles-list::-webkit-scrollbar {
+  display: none;
+}
+
+/* each item: picture / category / "Artigo | title" link / description */
+.tabs-articles .tabs-articles-item {
+  /* clamp: 1 category line + 4 lines of title + description */
+  display: -webkit-box;
+  flex: 0 0 284px;
+  align-self: flex-start;
+  box-sizing: border-box;
+  margin: 0 0 16px;
+  border-radius: var(--radius-s);
+  padding: 0 16px;
+  background-color: #fff;
+  color: var(--sebrae-navy);
+  font-size: var(--body-font-size-l);
+  line-height: 28px;
+  overflow: hidden;
+  scroll-snap-align: start;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 5;
+}
+
+.tabs-articles .tabs-articles-item > p {
+  margin: 0;
+}
+
+/* image */
+.tabs-articles .tabs-articles-item > p:first-child {
+  margin: 0 -16px;
+}
+
+.tabs-articles .tabs-articles-item > p:first-child picture,
+.tabs-articles .tabs-articles-item > p:first-child img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  border-radius: var(--radius-s);
+  object-fit: cover;
+}
+
+/* category pill */
+.tabs-articles .tabs-articles-item > p:nth-child(2) {
+  width: fit-content;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 24px 0 16px;
+  border-radius: 999px;
+  padding: 8px 16px;
+  background-color: var(--sebrae-mint);
+  color: var(--sebrae-blue);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 16px;
+  text-transform: uppercase;
+}
+
+/* "Artigo | title" + description flow as one clamped paragraph */
+.tabs-articles .tabs-articles-item > p:nth-child(3),
+.tabs-articles .tabs-articles-item > p:nth-child(4) {
+  display: inline;
+}
+
+.tabs-articles .tabs-articles-item > p:nth-child(3):not(:last-child)::after {
+  content: ': ';
+}
+
+.tabs-articles .tabs-articles-item > p:nth-child(3) a:any-link {
+  color: var(--sebrae-navy);
+  font-weight: 400;
+}
+
+/* ---------- pager (added by JS, outside the content cell) ---------- */
+.tabs-articles .tabs-articles-pager {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 40px 0 0;
+}
+
+.tabs-articles .tabs-articles-pager[hidden] {
+  display: none;
+}
+
+.tabs-articles .tabs-articles-pager-label {
+  margin: 0 8px 0 0;
+  color: var(--sebrae-navy);
+  font-size: var(--body-font-size-m);
+  line-height: 24px;
+}
+
+.tabs-articles .tabs-articles-pager-items {
+  display: flex;
+  gap: 4px;
+}
+
+.tabs-articles .tabs-articles-pager button {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 56px;
+  margin: 0;
+  border: 2px solid var(--sebrae-blue);
+  border-radius: var(--radius-s);
+  padding: 0;
+  background-color: transparent;
+  color: var(--sebrae-blue);
+  cursor: pointer;
+}
+
+.tabs-articles .tabs-articles-pager button:disabled {
+  border-color: #c0c9e5;
+  color: #96a1c1;
+  cursor: default;
+}
+
+.tabs-articles .tabs-articles-pager svg {
+  display: block;
+  width: 16px;
+  height: 16px;
+}
+
+@media (width >= 900px) {
+  .tabs-articles .tabs-articles-tab,
+  .tabs-articles .tabs-articles-tab[aria-selected='true'] {
+    height: 48px;
+    margin: 0;
+    padding: 0 24px;
+  }
+
+  .tabs-articles .tabs-articles-panel {
+    padding: 40px 0;
+  }
+
+  .tabs-articles .tabs-articles-panel-content > :is(h1, h2, h3, h4, h5, h6) {
+    line-height: 52px;
+  }
+
+  .tabs-articles .tabs-articles-panel-content > p > a:any-link {
+    font-size: var(--body-font-size-l);
+  }
+
+  /* intro on the left (1 of 4 columns), article row on the right */
+  .tabs-articles .tabs-articles-panel-content-has-items {
+    display: grid;
+    grid-template-columns: calc((100% - 48px) / 4) minmax(0, 1fr);
+    grid-auto-rows: min-content;
+    column-gap: 16px;
+  }
+
+  .tabs-articles .tabs-articles-panel-content-has-items > * {
+    grid-column: 1;
+  }
+
+  .tabs-articles .tabs-articles-panel-content-has-items > .tabs-articles-list {
+    grid-column: 2;
+    grid-row: 1 / span 20;
+    margin: 0;
+  }
+
+  .tabs-articles .tabs-articles-item {
+    flex-basis: calc((100% - 32px) / 3);
+    font-size: 20px;
+  }
+
+  .tabs-articles .tabs-articles-item > p:nth-child(2) {
+    font-size: var(--body-font-size-xs);
+    line-height: 18px;
+  }
+
+  .tabs-articles .tabs-articles-pager {
+    gap: 16px;
+  }
+}

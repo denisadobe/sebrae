@@ -1,0 +1,525 @@
+[
+  {
+    "id": "page-metadata",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Title"
+      },
+      {
+        "component": "text",
+        "name": "description",
+        "label": "Description"
+      },
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Image"
+      },
+      {
+        "component": "text",
+        "name": "robots",
+        "label": "Robots",
+        "description": "Index control via robots"
+      }
+    ]
+  },
+  {
+    "id": "image",
+    "fields": [
+      {
+        "component": "reference",
+        "name": "image",
+        "label": "Imagem",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "name": "imageAlt",
+        "label": "Texto alternativo"
+      }
+    ]
+  },
+  {
+    "id": "section",
+    "fields": [
+      {
+        "component": "multiselect",
+        "name": "style",
+        "label": "Estilo",
+        "options": [
+          {
+            "name": "Fundo azul",
+            "value": "blue"
+          },
+          {
+            "name": "Fundo claro (lavanda)",
+            "value": "light"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "accordion-item",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "summary",
+        "value": "",
+        "label": "Pergunta",
+        "required": true
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Resposta",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "card-compact",
+    "fields": [
+      {
+        "component": "select",
+        "name": "icon",
+        "label": "Ícone",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Comece",
+            "value": "comece"
+          },
+          {
+            "name": "Gerencie",
+            "value": "gerencie"
+          },
+          {
+            "name": "Expanda",
+            "value": "expanda"
+          },
+          {
+            "name": "Cursos",
+            "value": "cursos"
+          },
+          {
+            "name": "Eventos",
+            "value": "eventos"
+          },
+          {
+            "name": "Conteúdos",
+            "value": "conteudos"
+          },
+          {
+            "name": "Promoções",
+            "value": "promocoes"
+          },
+          {
+            "name": "Planilha",
+            "value": "planilha"
+          },
+          {
+            "name": "Preço",
+            "value": "preco"
+          },
+          {
+            "name": "Vendas",
+            "value": "vendas"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Conteúdo",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "card-icon",
+    "fields": [
+      {
+        "component": "select",
+        "name": "icon",
+        "label": "Ícone",
+        "valueType": "string",
+        "options": [
+          {
+            "name": "Comece",
+            "value": "comece"
+          },
+          {
+            "name": "Gerencie",
+            "value": "gerencie"
+          },
+          {
+            "name": "Expanda",
+            "value": "expanda"
+          },
+          {
+            "name": "Cursos",
+            "value": "cursos"
+          },
+          {
+            "name": "Eventos",
+            "value": "eventos"
+          },
+          {
+            "name": "Conteúdos",
+            "value": "conteudos"
+          },
+          {
+            "name": "Promoções",
+            "value": "promocoes"
+          },
+          {
+            "name": "Planilha",
+            "value": "planilha"
+          },
+          {
+            "name": "Preço",
+            "value": "preco"
+          },
+          {
+            "name": "Vendas",
+            "value": "vendas"
+          }
+        ]
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Conteúdo",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "card-tagged",
+    "fields": [
+      {
+        "component": "text",
+        "name": "tag",
+        "label": "Etiqueta",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Conteúdo",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "card",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Image Alt",
+        "multi": false
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "carousel-highlight-slide",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Imagem",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Texto alternativo",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Conteúdo (título, texto e botão)",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "quicklink",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "link",
+        "label": "Link",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "columns",
+    "fields": [
+      {
+        "component": "number",
+        "valueType": "number",
+        "name": "columns",
+        "label": "Number of Columns",
+        "value": 2,
+        "validation": {
+          "numberMin": 1,
+          "numberMax": 6
+        }
+      }
+    ]
+  },
+  {
+    "id": "cta-banner",
+    "fields": [
+      {
+        "component": "select",
+        "name": "classes",
+        "label": "Cor",
+        "valueType": "string",
+        "value": "",
+        "options": [
+          {
+            "name": "Verde-limão",
+            "value": ""
+          },
+          {
+            "name": "Azul-marinho",
+            "value": "navy"
+          },
+          {
+            "name": "Azul",
+            "value": "blue"
+          }
+        ]
+      },
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Imagem (opcional)",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Texto alternativo",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Conteúdo (título, texto e botões)",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "embed-iframe",
+    "fields": [
+      {
+        "component": "text",
+        "name": "url",
+        "label": "URL da página incorporada",
+        "valueType": "string",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "fragment",
+    "fields": [
+      {
+        "component": "text",
+        "name": "urlText",
+        "label": "Fragment URL Text"
+      },
+      {
+        "component": "text",
+        "name": "url",
+        "label": "Fragment URL",
+        "required": true
+      }
+    ]
+  },
+  {
+    "id": "hero-banner",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Imagem",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Texto alternativo",
+        "value": ""
+      },
+      {
+        "component": "richtext",
+        "name": "text",
+        "label": "Conteúdo (título, texto e botão)",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "hero",
+    "fields": [
+      {
+        "component": "reference",
+        "valueType": "string",
+        "name": "image",
+        "label": "Image",
+        "multi": false
+      },
+      {
+        "component": "text",
+        "valueType": "string",
+        "name": "imageAlt",
+        "label": "Alt",
+        "value": ""
+      },
+      {
+        "component": "text",
+        "name": "text",
+        "value": "",
+        "label": "Text",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "quote",
+    "fields": [
+      {
+        "component": "richtext",
+        "valueType": "string",
+        "name": "quote",
+        "label": "Citação",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "author",
+        "label": "Autor",
+        "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "stat",
+    "fields": [
+      {
+        "component": "text",
+        "name": "number",
+        "label": "Número (ex.: 40 mil)",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "label",
+        "label": "Descrição",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "table",
+    "fields": [
+      {
+        "component": "richtext",
+        "name": "table",
+        "value": "",
+        "label": "Conteúdo da tabela"
+      }
+    ]
+  },
+  {
+    "id": "tabs-articles-item",
+    "fields": [
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Nome da aba",
+        "valueType": "string"
+      },
+      {
+        "component": "richtext",
+        "name": "content",
+        "label": "Conteúdo (introdução + lista de artigos)",
+        "valueType": "string",
+        "value": ""
+      }
+    ]
+  },
+  {
+    "id": "video",
+    "fields": [
+      {
+        "component": "boolean",
+        "name": "classes_autoplay",
+        "label": "Reproduzir automaticamente",
+        "valueType": "boolean"
+      },
+      {
+        "component": "text",
+        "name": "videoUrl",
+        "label": "URL do vídeo",
+        "valueType": "string",
+        "required": true
+      },
+      {
+        "component": "text",
+        "name": "videoUrlText",
+        "label": "Texto do link",
+        "valueType": "string"
+      },
+      {
+        "component": "reference",
+        "name": "posterImage",
+        "label": "Imagem de capa",
+        "valueType": "string"
+      }
+    ]
+  }
+]

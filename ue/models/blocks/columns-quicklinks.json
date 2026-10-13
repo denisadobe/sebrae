@@ -1,0 +1,56 @@
+{
+  "definitions": [
+    {
+      "title": "Atalhos rápidos",
+      "id": "columns-quicklinks",
+      "model": "columns-quicklinks",
+      "filter": "columns-quicklinks",
+      "plugins": {
+        "da": {
+          "name": "columns-quicklinks",
+          "rows": 1,
+          "columns": 1
+        }
+      }
+    },
+    {
+      "title": "Atalho",
+      "id": "quicklink",
+      "model": "quicklink",
+      "plugins": {
+        "da": {
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            {
+              "name": "link",
+              "selector": "div"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "quicklink",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "link",
+          "label": "Link",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "columns-quicklinks",
+      "components": [
+        "quicklink"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,182 @@
+{
+  "templates": [
+    {
+      "name": "home",
+      "urls": [
+        "https://sebrae.com.br/"
+      ],
+      "representativeUrl": "https://sebrae.com.br/",
+      "description": "Sebrae homepage: hero banner with quick links, icon card grids, highlight carousel, articles tabs, audience cards and interest form embed",
+      "blocks": [
+        {
+          "name": "hero-banner",
+          "instances": [
+            ".ps-hero-banner > div:nth-of-type(1)"
+          ]
+        },
+        {
+          "name": "columns-quicklinks",
+          "instances": [
+            ".ps-hero-banner .hero-banner-primary"
+          ]
+        },
+        {
+          "name": "cards-icon",
+          "instances": [
+            ".ps-info-cards > div:nth-of-type(2)",
+            ".ps-highlight-carousel > div:nth-of-type(2)"
+          ]
+        },
+        {
+          "name": "cards-compact",
+          "instances": [
+            ".side-icons > div:nth-of-type(2)"
+          ]
+        },
+        {
+          "name": "carousel-highlight",
+          "instances": [
+            ".cmp-carousel"
+          ]
+        },
+        {
+          "name": "tabs-articles",
+          "instances": [
+            "[id^=\"panelcontainer\"]"
+          ]
+        },
+        {
+          "name": "cards-tagged",
+          "instances": [
+            ".ps-featured-card > div:nth-of-type(2)"
+          ]
+        },
+        {
+          "name": "embed-iframe",
+          "instances": [
+            ".embed__wrapper"
+          ]
+        }
+      ],
+      "urlPattern": "/",
+      "sections": [
+        {
+          "id": "section-1",
+          "name": "hero",
+          "selector": [
+            ".ps-hero-banner",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(1)"
+          ],
+          "style": null,
+          "blocks": [
+            "hero-banner",
+            "columns-quicklinks"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-2",
+          "name": "como-podemos-ajudar",
+          "selector": [
+            ".ps-info-cards",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-icon"
+          ],
+          "defaultContent": [
+            ".ps-info-cards > div:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "section-3",
+          "name": "black-friday",
+          "selector": [
+            ".side-icons",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(4)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-compact"
+          ],
+          "defaultContent": [
+            ".side-icons > div:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "section-4",
+          "name": "datasebrae-carousel",
+          "selector": [
+            ".cmp-carousel",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--tablet--12.aem-GridColumn--offset--tablet--0.aem-GridColumn--tablet--hide.aem-GridColumn--default--12:nth-of-type(6)"
+          ],
+          "style": null,
+          "blocks": [
+            "carousel-highlight"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-5",
+          "name": "aprenda-e-evolua",
+          "selector": [
+            ".ps-highlight-carousel",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(7)"
+          ],
+          "style": "blue",
+          "blocks": [
+            "cards-icon"
+          ],
+          "defaultContent": [
+            ".ps-highlight-carousel > div:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "section-6",
+          "name": "artigos-ebooks",
+          "selector": [
+            "[id^=\"panelcontainer\"]",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(8)"
+          ],
+          "style": null,
+          "blocks": [
+            "tabs-articles"
+          ],
+          "defaultContent": []
+        },
+        {
+          "id": "section-7",
+          "name": "impulsionamos",
+          "selector": [
+            ".ps-featured-card",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(9)"
+          ],
+          "style": null,
+          "blocks": [
+            "cards-tagged"
+          ],
+          "defaultContent": [
+            ".ps-featured-card > div:nth-of-type(1)"
+          ]
+        },
+        {
+          "id": "section-8",
+          "name": "seu-interesse",
+          "selector": [
+            ".embed__wrapper",
+            "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(10)"
+          ],
+          "style": null,
+          "blocks": [
+            "embed-iframe"
+          ],
+          "defaultContent": []
+        }
+      ]
+    }
+  ],
+  "metadata": {
+    "projectType": "da"
+  }
+}

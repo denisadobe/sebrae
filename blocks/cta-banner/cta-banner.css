@@ -1,0 +1,106 @@
+.cta-banner {
+  --cta-bg: var(--sebrae-lime);
+  --cta-text: var(--sebrae-navy);
+  --cta-button-bg: var(--sebrae-blue);
+  --cta-button-text: var(--sebrae-lime);
+  --cta-secondary: var(--sebrae-blue);
+}
+
+.cta-banner.navy {
+  --cta-bg: #001152;
+  --cta-text: #fff;
+  --cta-button-bg: var(--sebrae-lime);
+  --cta-button-text: var(--sebrae-blue);
+  --cta-secondary: #fff;
+}
+
+.cta-banner.blue {
+  --cta-bg: var(--sebrae-blue);
+  --cta-text: #fff;
+  --cta-button-bg: var(--sebrae-lime);
+  --cta-button-text: var(--sebrae-blue);
+  --cta-secondary: var(--sebrae-lime);
+}
+
+.cta-banner .cta-banner-inner {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  overflow: hidden;
+  border-radius: var(--radius-l);
+  padding: 32px 24px;
+  background-color: var(--cta-bg);
+  color: var(--cta-text);
+}
+
+.cta-banner .cta-banner-content h2,
+.cta-banner .cta-banner-content h3 {
+  margin: 0 0 12px;
+  color: var(--cta-text);
+}
+
+.cta-banner .cta-banner-content p {
+  margin: 0 0 16px;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.cta-banner .cta-banner-content .cta-banner-actions {
+  display: inline-flex;
+  margin: 8px 16px 0 0;
+}
+
+.cta-banner a.cta-banner-button:any-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  min-height: 56px;
+  border: 2px solid var(--cta-button-bg);
+  border-radius: var(--radius-s);
+  padding: 14px 24px;
+  background-color: var(--cta-button-bg);
+  color: var(--cta-button-text);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 24px;
+  text-decoration: none;
+}
+
+.cta-banner a.cta-banner-button-secondary:any-link {
+  border-color: var(--cta-secondary);
+  background-color: transparent;
+  color: var(--cta-secondary);
+}
+
+.cta-banner a.cta-banner-button:hover {
+  filter: brightness(0.95);
+}
+
+.cta-banner .cta-banner-image {
+  line-height: 0;
+}
+
+.cta-banner .cta-banner-image img {
+  width: 100%;
+  max-height: 320px;
+  border-radius: var(--radius-m);
+  object-fit: cover;
+}
+
+@media (width >= 900px) {
+  .cta-banner .cta-banner-inner {
+    flex-direction: row;
+    align-items: center;
+    gap: 48px;
+    padding: 56px 64px;
+  }
+
+  .cta-banner .cta-banner-content {
+    flex: 1 1 55%;
+  }
+
+  .cta-banner .cta-banner-image {
+    flex: 1 1 45%;
+  }
+}

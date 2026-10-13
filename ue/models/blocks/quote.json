@@ -1,0 +1,47 @@
+{
+  "definitions": [
+    {
+      "title": "Citação / depoimento",
+      "id": "quote",
+      "model": "quote",
+      "plugins": {
+        "da": {
+          "name": "quote",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            {
+              "name": "quote",
+              "selector": "div:nth-child(1)>div"
+            },
+            {
+              "name": "author",
+              "selector": "div:nth-child(2)>div"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "quote",
+      "fields": [
+        {
+          "component": "richtext",
+          "valueType": "string",
+          "name": "quote",
+          "label": "Citação",
+          "required": true
+        },
+        {
+          "component": "text",
+          "name": "author",
+          "label": "Autor",
+          "valueType": "string"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

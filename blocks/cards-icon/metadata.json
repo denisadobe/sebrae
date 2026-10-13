@@ -1,0 +1,14 @@
+{
+  "variantName": "cards-icon",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Lavender/white cards with colored icon tile above heading, description, links, CTA / Reuses cards-icon (same icon-tile card pattern; white cards on blue section)",
+  "contentPattern": "3 rows x 2 cells: [icon image | h3 + p + ul of links + 'Mostrar tudo' link]",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 2,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["cards-icon"]
+}

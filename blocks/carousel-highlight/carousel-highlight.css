@@ -1,0 +1,265 @@
+/*
+ * Carousel Highlight — centered slider ("Novo DataSebrae").
+ * Values from sebrae.com.br .cmp-carousel / .teaser-carousel computed styles + stylesheet rules.
+ * Breakpoints follow the source: < 768 mobile, 768–1279 tablet, >= 1280 desktop.
+ */
+
+.carousel-highlight {
+  /* the source track is min(viewport, 1184px) wide: bleed out of the section padding below that */
+  margin-inline: calc((100% - min(100% + 2 * var(--content-padding), var(--content-max-width))) / 2);
+}
+
+.carousel-highlight .carousel-highlight-slides-container {
+  --carousel-highlight-gap: 8px;
+  --carousel-highlight-slide-width: calc((100% - var(--carousel-highlight-gap)) * 0.93);
+  --carousel-highlight-image-height: 334px;
+
+  position: relative;
+}
+
+/* track */
+.carousel-highlight .carousel-highlight-slides {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  gap: var(--carousel-highlight-gap);
+  scroll-behavior: smooth;
+  scroll-snap-type: x mandatory;
+  overflow: scroll clip;
+  scrollbar-width: none;
+  min-width: 0;
+}
+
+.carousel-highlight .carousel-highlight-slides::-webkit-scrollbar {
+  display: none;
+}
+
+.carousel-highlight .carousel-highlight-slide,
+.carousel-highlight .carousel-highlight-slide-clone {
+  flex: 0 0 var(--carousel-highlight-slide-width);
+  max-width: 784px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.carousel-highlight .carousel-highlight-slide {
+  scroll-snap-align: center;
+}
+
+/* image (above the text, like the source) */
+.carousel-highlight .carousel-highlight-slide-image {
+  order: -1;
+  line-height: 0;
+  transform: scale(1);
+  transition: transform 0.4s ease-in-out;
+}
+
+.carousel-highlight .carousel-highlight-slide-image picture {
+  display: block;
+}
+
+.carousel-highlight .carousel-highlight-slide-image img {
+  display: block;
+  width: 100%;
+  height: var(--carousel-highlight-image-height);
+  border-radius: var(--radius-s);
+  object-fit: cover;
+  filter: brightness(100%);
+  transition: filter 0.4s ease-in-out;
+}
+
+/* peeking neighbours: shorter and dimmed, text hidden */
+.carousel-highlight .carousel-highlight-slide-clone .carousel-highlight-slide-image,
+.carousel-highlight .carousel-highlight-slide[aria-hidden="true"] .carousel-highlight-slide-image {
+  transform: scale(1, 0.857);
+}
+
+.carousel-highlight .carousel-highlight-slide-clone .carousel-highlight-slide-image img,
+.carousel-highlight .carousel-highlight-slide[aria-hidden="true"] .carousel-highlight-slide-image img {
+  filter: brightness(32%);
+}
+
+/* text column */
+.carousel-highlight .carousel-highlight-slide-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 24px 0 0;
+  padding: 0 24px;
+}
+
+.carousel-highlight .carousel-highlight-slide[aria-hidden="true"] .carousel-highlight-slide-content {
+  display: none;
+}
+
+.carousel-highlight .carousel-highlight-slide-content > * {
+  margin: 0;
+}
+
+.carousel-highlight .carousel-highlight-slide-content h2 {
+  margin: 0;
+  color: var(--sebrae-navy);
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 32px;
+}
+
+.carousel-highlight .carousel-highlight-slide-content p {
+  color: var(--sebrae-gray);
+  font-size: var(--body-font-size-m);
+  font-weight: 400;
+  line-height: 24px;
+}
+
+.carousel-highlight .carousel-highlight-slide-content p:not(:has(> a:only-child)) {
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* CTA: primary button (lime on blue) whether or not the link was buttonized */
+main .carousel-highlight .carousel-highlight-slide-content p > a:only-child:any-link,
+main .carousel-highlight .carousel-highlight-slide-content a.button:any-link {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  max-width: 273px;
+  min-height: 56px;
+  margin: 0;
+  padding: 0 16px;
+  border: 2px solid var(--sebrae-blue);
+  border-radius: var(--radius-s);
+  background-color: var(--sebrae-blue);
+  color: var(--sebrae-lime);
+  font-size: var(--body-font-size-l);
+  font-weight: 700;
+  line-height: 24px;
+  text-decoration: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+main .carousel-highlight .carousel-highlight-slide-content p > a:only-child:any-link:hover,
+main .carousel-highlight .carousel-highlight-slide-content p > a:only-child:any-link:focus-visible,
+main .carousel-highlight .carousel-highlight-slide-content a.button:any-link:hover,
+main .carousel-highlight .carousel-highlight-slide-content a.button:any-link:focus-visible {
+  border-color: var(--sebrae-blue-dark);
+  background-color: var(--sebrae-blue-dark);
+  color: var(--sebrae-lime);
+  text-decoration: none;
+}
+
+/* "1 de 5" + arrows: below the text on mobile, aligned to the centered slide's right edge */
+.carousel-highlight .carousel-highlight-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  box-sizing: border-box;
+  margin-top: 40px;
+  padding-right: calc((100% - var(--carousel-highlight-slide-width)) / 2);
+}
+
+.carousel-highlight .carousel-highlight-counter {
+  margin: 0 8px 0 0;
+  color: var(--sebrae-navy);
+  font-size: var(--body-font-size-m);
+  font-weight: 400;
+  line-height: 24px;
+  white-space: nowrap;
+}
+
+.carousel-highlight .carousel-highlight-navigation-buttons {
+  display: flex;
+  gap: 4px;
+  padding: 0 4px;
+}
+
+.carousel-highlight .carousel-highlight-navigation-buttons button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 48px;
+  height: 56px;
+  margin: 0;
+  padding: 0;
+  border: 2px solid var(--sebrae-blue);
+  border-radius: var(--radius-s);
+  background-color: transparent;
+  color: var(--sebrae-blue);
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.carousel-highlight .carousel-highlight-navigation-buttons button:hover {
+  background-color: var(--sebrae-lavender);
+}
+
+.carousel-highlight .carousel-highlight-navigation-buttons button::after {
+  content: '';
+  display: block;
+  width: 16px;
+  height: 16px;
+  background-color: currentcolor;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M10.828 12l4.95 4.95-1.414 1.414L8 12l6.364-6.364 1.414 1.414z'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.carousel-highlight .carousel-highlight-navigation-buttons button.slide-next::after {
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13.172 12L8.222 7.05l1.414-1.414L16 12l-6.364 6.364-1.414-1.414z'/%3E%3C/svg%3E");
+}
+
+/* tablet: text + controls side by side inside the centered slide */
+@media (width >= 768px) {
+  .carousel-highlight .carousel-highlight-slides-container {
+    --carousel-highlight-gap: 16px;
+    --carousel-highlight-slide-width: min(calc((100% - var(--carousel-highlight-gap)) * 0.91), 784px);
+  }
+
+  .carousel-highlight .carousel-highlight-slide-content {
+    margin: 24px;
+
+    /* 175px controls column + 40px gap */
+    padding: 0 215px 0 0;
+  }
+
+  .carousel-highlight .carousel-highlight-slide-content h2 {
+    font-size: 32px;
+    line-height: 36px;
+  }
+
+  .carousel-highlight .carousel-highlight-controls {
+    position: absolute;
+    top: calc(var(--carousel-highlight-image-height) + 24px);
+    right: calc((100% - var(--carousel-highlight-slide-width)) / 2 + 24px);
+    min-width: 175px;
+    min-height: 56px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .carousel-highlight .carousel-highlight-navigation-buttons {
+    padding: 0;
+  }
+}
+
+/* desktop */
+@media (width >= 1280px) {
+  .carousel-highlight .carousel-highlight-slides-container {
+    --carousel-highlight-slide-width: min(calc((100% - var(--carousel-highlight-gap)) * 0.6203), 784px);
+  }
+
+  .carousel-highlight .carousel-highlight-slide-content h2 {
+    font-size: 40px;
+    line-height: 52px;
+  }
+}

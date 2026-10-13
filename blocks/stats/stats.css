@@ -1,0 +1,40 @@
+.stats > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.stats .stats-item {
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: var(--sebrae-card-bg);
+  color: var(--sebrae-navy);
+}
+
+.stats .stats-number {
+  color: var(--sebrae-blue);
+  font-family: var(--display-font-family);
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 56px;
+}
+
+.stats .stats-number > * {
+  margin: 0;
+}
+
+.stats .stats-label > :first-child {
+  margin-top: 8px;
+}
+
+.stats .stats-label > :last-child {
+  margin-bottom: 0;
+}
+
+/* inside the blue section the cards turn white */
+main .section.blue .stats .stats-item {
+  background-color: #fff;
+}

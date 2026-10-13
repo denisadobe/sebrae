@@ -1,0 +1,14 @@
+{
+  "variantName": "tabs-articles",
+  "baseBlock": "tabs",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Underlined tab labels; panel with intro text left + horizontal article card row",
+  "contentPattern": "1 row per tab x 2 cells: [tab label | h3 + p + link + ul of article items (category tag, 'Artigo | title', description)]",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["tabs-articles"]
+}

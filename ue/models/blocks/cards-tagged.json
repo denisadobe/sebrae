@@ -1,0 +1,66 @@
+{
+  "definitions": [
+    {
+      "title": "Cards com etiqueta",
+      "id": "cards-tagged",
+      "model": "cards-tagged",
+      "filter": "cards-tagged",
+      "plugins": {
+        "da": {
+          "name": "cards-tagged",
+          "rows": 1,
+          "columns": 2
+        }
+      }
+    },
+    {
+      "title": "Card com etiqueta",
+      "id": "card-tagged",
+      "model": "card-tagged",
+      "plugins": {
+        "da": {
+          "rows": 1,
+          "columns": 2,
+          "fields": [
+            {
+              "name": "tag",
+              "selector": "div:nth-child(1)"
+            },
+            {
+              "name": "text",
+              "selector": "div:nth-child(2)"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "card-tagged",
+      "fields": [
+        {
+          "component": "text",
+          "name": "tag",
+          "label": "Etiqueta",
+          "valueType": "string"
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Conteúdo",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "cards-tagged",
+      "components": [
+        "card-tagged"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,51 @@
+{
+  "definitions": [
+    {
+      "title": "Tabela",
+      "id": "table",
+      "model": "table",
+      "filter": "table",
+      "plugins": {
+        "da": {
+          "name": "table",
+          "rows": 1,
+          "columns": 1,
+          "fields": [
+            {
+              "name": "table",
+              "selector": "div>div"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "table",
+      "fields": [
+        {
+          "component": "richtext",
+          "name": "table",
+          "value": "",
+          "label": "Conteúdo da tabela"
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "table",
+      "rte": {
+        "toolbar": {
+          "insert": [
+            "table"
+          ],
+          "sections": [
+            "insert"
+          ]
+        }
+      }
+    }
+  ]
+}

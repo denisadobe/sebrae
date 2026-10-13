@@ -1,0 +1,66 @@
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.accordion details {
+  border-radius: var(--radius-s);
+  background-color: var(--sebrae-card-bg);
+  transition: background-color 0.2s ease;
+}
+
+.accordion details[open] {
+  background-color: var(--sebrae-lavender);
+}
+
+.accordion details p {
+  margin: 0 0 12px;
+}
+
+.accordion details summary {
+  position: relative;
+  padding: 20px 56px 20px 24px;
+  color: var(--sebrae-navy);
+  font-size: var(--body-font-size-l);
+  font-weight: 700;
+  line-height: 24px;
+  list-style: none;
+  cursor: pointer;
+}
+
+.accordion details summary > p {
+  margin: 0;
+}
+
+.accordion details summary::-webkit-details-marker {
+  display: none;
+}
+
+.accordion details summary::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: 24px;
+  width: 20px;
+  height: 20px;
+  background-color: var(--sebrae-blue);
+  mask: url('../../icons/chevron-down.svg') center / contain no-repeat;
+  transform: translateY(-50%) rotate(90deg);
+  transition: transform 0.2s ease;
+}
+
+.accordion details[open] summary::after {
+  transform: translateY(-50%) rotate(-90deg);
+}
+
+.accordion details summary:focus-visible {
+  outline: 2px solid var(--sebrae-blue);
+  outline-offset: -2px;
+  border-radius: var(--radius-s);
+}
+
+.accordion details .accordion-item-body {
+  padding: 0 24px 12px;
+  color: var(--sebrae-navy);
+}

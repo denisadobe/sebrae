@@ -3,8 +3,13 @@
   flex-direction: column;
 }
 
+.columns {
+  color: var(--sebrae-navy);
+}
+
 .columns img {
   width: 100%;
+  border-radius: var(--radius-m);
 }
 
 .columns > div > div {
@@ -23,7 +28,7 @@
   .columns > div {
     align-items: center;
     flex-direction: unset;
-    gap: 24px;
+    gap: 48px;
   }
 
   .columns > div > div {

@@ -1,0 +1,64 @@
+{
+  "definitions": [
+    {
+      "title": "Seção",
+      "id": "section",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div></div>"
+        }
+      },
+      "filter": "section",
+      "model": "section"
+    }
+  ],
+  "models": [
+    {
+      "id": "section",
+      "fields": [
+        {
+          "component": "multiselect",
+          "name": "style",
+          "label": "Estilo",
+          "options": [
+            {
+              "name": "Fundo azul",
+              "value": "blue"
+            },
+            {
+              "name": "Fundo claro (lavanda)",
+              "value": "light"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "section",
+      "components": [
+        "text",
+        "image",
+        "hero-banner",
+        "columns-quicklinks",
+        "cards-icon",
+        "cards-compact",
+        "carousel-highlight",
+        "tabs-articles",
+        "cards-tagged",
+        "embed-iframe",
+        "cards",
+        "columns",
+        "hero",
+        "fragment",
+        "accordion",
+        "quote",
+        "video",
+        "table",
+        "stats",
+        "cta-banner"
+      ]
+    }
+  ]
+}

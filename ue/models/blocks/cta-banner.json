@@ -1,0 +1,78 @@
+{
+  "definitions": [
+    {
+      "title": "Chamada para ação",
+      "id": "cta-banner",
+      "model": "cta-banner",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"cta-banner\"><div><div><picture><img loading=\"lazy\"></picture></div><div><h2>Título da chamada</h2><p>Texto de apoio.</p><p><strong><a href=\"#\">Botão principal</a></strong></p></div></div></div>",
+          "fields": [
+            {
+              "name": "image",
+              "selector": "div>div:nth-child(1)>picture>img[src]"
+            },
+            {
+              "name": "imageAlt",
+              "selector": "div>div:nth-child(1)>picture>img[alt]"
+            },
+            {
+              "name": "text",
+              "selector": "div>div:nth-child(2)"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "cta-banner",
+      "fields": [
+        {
+          "component": "select",
+          "name": "classes",
+          "label": "Cor",
+          "valueType": "string",
+          "value": "",
+          "options": [
+            {
+              "name": "Verde-limão",
+              "value": ""
+            },
+            {
+              "name": "Azul-marinho",
+              "value": "navy"
+            },
+            {
+              "name": "Azul",
+              "value": "blue"
+            }
+          ]
+        },
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Imagem (opcional)",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "imageAlt",
+          "label": "Texto alternativo",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Conteúdo (título, texto e botões)",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

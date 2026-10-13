@@ -1,0 +1,14 @@
+{
+  "variantName": "columns-quicklinks",
+  "baseBlock": "columns",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "White shadowed bar of 4 arrow links overlapping hero bottom",
+  "contentPattern": "1 row, 4 cells; each cell = a single link",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["columns-quicklinks"]
+}

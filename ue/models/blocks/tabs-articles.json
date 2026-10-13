@@ -1,0 +1,66 @@
+{
+  "definitions": [
+    {
+      "title": "Abas de artigos",
+      "id": "tabs-articles",
+      "model": "tabs-articles",
+      "filter": "tabs-articles",
+      "plugins": {
+        "da": {
+          "name": "tabs-articles",
+          "rows": 2,
+          "columns": 1
+        }
+      }
+    },
+    {
+      "title": "Aba",
+      "id": "tabs-articles-item",
+      "model": "tabs-articles-item",
+      "plugins": {
+        "da": {
+          "rows": 2,
+          "columns": 0,
+          "fields": [
+            {
+              "name": "name",
+              "selector": "div:nth-child(1)"
+            },
+            {
+              "name": "content",
+              "selector": "div:nth-child(2)"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "tabs-articles-item",
+      "fields": [
+        {
+          "component": "text",
+          "name": "name",
+          "label": "Nome da aba",
+          "valueType": "string"
+        },
+        {
+          "component": "richtext",
+          "name": "content",
+          "label": "Conteúdo (introdução + lista de artigos)",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "tabs-articles",
+      "components": [
+        "tabs-articles-item"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,117 @@
+[
+  {
+    "id": "main",
+    "components": [
+      "section"
+    ]
+  },
+  {
+    "id": "section",
+    "components": [
+      "text",
+      "image",
+      "hero-banner",
+      "columns-quicklinks",
+      "cards-icon",
+      "cards-compact",
+      "carousel-highlight",
+      "tabs-articles",
+      "cards-tagged",
+      "embed-iframe",
+      "cards",
+      "columns",
+      "hero",
+      "fragment",
+      "accordion",
+      "quote",
+      "video",
+      "table",
+      "stats",
+      "cta-banner"
+    ]
+  },
+  {
+    "id": "accordion",
+    "components": [
+      "accordion-item"
+    ]
+  },
+  {
+    "id": "cards-compact",
+    "components": [
+      "card-compact"
+    ]
+  },
+  {
+    "id": "cards-icon",
+    "components": [
+      "card-icon"
+    ]
+  },
+  {
+    "id": "cards-tagged",
+    "components": [
+      "card-tagged"
+    ]
+  },
+  {
+    "id": "cards",
+    "components": [
+      "card"
+    ]
+  },
+  {
+    "id": "carousel-highlight",
+    "components": [
+      "carousel-highlight-slide"
+    ]
+  },
+  {
+    "id": "columns-quicklinks",
+    "components": [
+      "quicklink"
+    ]
+  },
+  {
+    "id": "columns",
+    "components": [
+      "columns-row"
+    ]
+  },
+  {
+    "id": "columns-row",
+    "components": []
+  },
+  {
+    "id": "columns-cell",
+    "components": [
+      "text",
+      "image"
+    ]
+  },
+  {
+    "id": "stats",
+    "components": [
+      "stat"
+    ]
+  },
+  {
+    "id": "table",
+    "rte": {
+      "toolbar": {
+        "insert": [
+          "table"
+        ],
+        "sections": [
+          "insert"
+        ]
+      }
+    }
+  },
+  {
+    "id": "tabs-articles",
+    "components": [
+      "tabs-articles-item"
+    ]
+  }
+]

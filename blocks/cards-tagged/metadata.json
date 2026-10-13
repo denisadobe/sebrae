@@ -1,0 +1,14 @@
+{
+  "variantName": "cards-tagged",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "No-image periwinkle cards with green tag pill, text and arrow link",
+  "contentPattern": "2 rows x 1 cell: [p tag + p text + link]",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["cards-tagged"]
+}

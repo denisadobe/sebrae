@@ -2,7 +2,6 @@ import {
   loadHeader,
   loadFooter,
   decorateIcons,
-  decorateSections,
   decorateBlocks,
   decorateTemplateAndTheme,
   waitForFirstImage,
@@ -10,6 +9,9 @@ import {
   loadSections,
   loadCSS,
   buildBlock,
+  readBlockConfig,
+  toCamelCase,
+  toClassName,
 } from './aem.js';
 
 if (window.trustedTypes && window.trustedTypes.createPolicy) {
@@ -143,6 +145,55 @@ function decorateButtons(main) {
 }
 
 /**
+ * Decorates all sections in a container element. Local replacement for the
+ * aem.js version: groups Universal Editor `.richtext` wrappers into default
+ * content and applies section-metadata (`style` -> classes, rest -> data-*).
+ * @param {Element} main The container element
+ */
+function decorateSections(main) {
+  main.querySelectorAll(':scope > div').forEach((section) => {
+    const wrappers = [];
+    let defaultContent = false;
+    [...section.children].forEach((e) => {
+      if (e.classList.contains('richtext')) {
+        e.removeAttribute('class');
+        if (!defaultContent) {
+          const wrapper = document.createElement('div');
+          wrapper.classList.add('default-content-wrapper');
+          wrappers.push(wrapper);
+          defaultContent = true;
+        }
+      } else if (e.tagName === 'DIV' || !defaultContent) {
+        const wrapper = document.createElement('div');
+        wrappers.push(wrapper);
+        defaultContent = e.tagName !== 'DIV';
+        if (defaultContent) wrapper.classList.add('default-content-wrapper');
+      }
+      wrappers[wrappers.length - 1].append(e);
+    });
+    wrappers.forEach((wrapper) => section.append(wrapper));
+    section.classList.add('section');
+    section.dataset.sectionStatus = 'initialized';
+    section.style.display = 'none';
+
+    const sectionMeta = section.querySelector(':scope > div > .section-metadata');
+    if (sectionMeta) {
+      const meta = readBlockConfig(sectionMeta);
+      Object.entries(meta).forEach(([key, value]) => {
+        if (key === 'style') {
+          String(value).split(',').map((style) => toClassName(style.trim()))
+            .filter(Boolean)
+            .forEach((style) => section.classList.add(style));
+        } else {
+          section.dataset[toCamelCase(key)] = value;
+        }
+      });
+      sectionMeta.parentElement.remove();
+    }
+  });
+}
+
+/**
  * Decorates the main element.
  * @param {Element} main The main element
  */
@@ -160,7 +211,7 @@ export function decorateMain(main) {
  * @param {Element} doc The container element
  */
 async function loadEager(doc) {
-  document.documentElement.lang = 'en';
+  document.documentElement.lang = 'pt-BR';
   decorateTemplateAndTheme();
   const main = doc.querySelector('main');
   if (main) {
@@ -212,6 +263,11 @@ async function loadPage() {
   await loadEager(document);
   await loadLazy(document);
   loadDelayed();
+}
+
+// Universal Editor (Author Bus) support, loaded before the page decorates
+if (/\.(stage-ue|ue)\.da\.live$/.test(window.location.hostname)) {
+  await import(`${window.hlx.codeBasePath}/ue/scripts/ue.js`).then(({ default: ue }) => ue());
 }
 
 loadPage();

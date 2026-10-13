@@ -1,0 +1,14 @@
+{
+  "variantName": "embed-iframe",
+  "baseBlock": "embed",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Full-width external iframe (lead form)",
+  "contentPattern": "1 row x 1 cell: link https://cloud.cliente.sebrae.com.br/seuinteressev2",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["embed-iframe"]
+}

@@ -1,0 +1,66 @@
+{
+  "definitions": [
+    {
+      "title": "Números em destaque",
+      "id": "stats",
+      "model": "stats",
+      "filter": "stats",
+      "plugins": {
+        "da": {
+          "name": "stats",
+          "rows": 1,
+          "columns": 2
+        }
+      }
+    },
+    {
+      "title": "Número",
+      "id": "stat",
+      "model": "stat",
+      "plugins": {
+        "da": {
+          "rows": 1,
+          "columns": 2,
+          "fields": [
+            {
+              "name": "number",
+              "selector": "div:nth-child(1)"
+            },
+            {
+              "name": "label",
+              "selector": "div:nth-child(2)"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "stat",
+      "fields": [
+        {
+          "component": "text",
+          "name": "number",
+          "label": "Número (ex.: 40 mil)",
+          "valueType": "string"
+        },
+        {
+          "component": "richtext",
+          "name": "label",
+          "label": "Descrição",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "stats",
+      "components": [
+        "stat"
+      ]
+    }
+  ]
+}

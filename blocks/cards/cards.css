@@ -8,12 +8,30 @@
 }
 
 .cards > ul > li {
-  border: 1px solid #dadada;
-  background-color: var(--background-color);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: var(--radius-s);
+  background-color: var(--sebrae-card-bg);
+  color: var(--sebrae-navy);
 }
 
 .cards .cards-card-body {
-  margin: 16px;
+  margin: 24px;
+}
+
+.cards .cards-card-body > :first-child {
+  margin-top: 0;
+}
+
+.cards .cards-card-body h3,
+.cards .cards-card-body h4 {
+  font-size: var(--heading-font-size-s);
+  line-height: 28px;
+}
+
+.cards .cards-card-body > :last-child {
+  margin-bottom: 0;
 }
 
 .cards .cards-card-image {

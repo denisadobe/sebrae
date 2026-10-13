@@ -1,0 +1,108 @@
+{
+  "definitions": [
+    {
+      "title": "Cards compactos",
+      "id": "cards-compact",
+      "model": "cards-compact",
+      "filter": "cards-compact",
+      "plugins": {
+        "da": {
+          "name": "cards-compact",
+          "rows": 1,
+          "columns": 2
+        }
+      }
+    },
+    {
+      "title": "Card compacto",
+      "id": "card-compact",
+      "model": "card-compact",
+      "plugins": {
+        "da": {
+          "rows": 1,
+          "columns": 2,
+          "fields": [
+            {
+              "name": "icon",
+              "selector": "div:nth-child(1)"
+            },
+            {
+              "name": "text",
+              "selector": "div:nth-child(2)"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "card-compact",
+      "fields": [
+        {
+          "component": "select",
+          "name": "icon",
+          "label": "Ícone",
+          "valueType": "string",
+          "options": [
+            {
+              "name": "Comece",
+              "value": "comece"
+            },
+            {
+              "name": "Gerencie",
+              "value": "gerencie"
+            },
+            {
+              "name": "Expanda",
+              "value": "expanda"
+            },
+            {
+              "name": "Cursos",
+              "value": "cursos"
+            },
+            {
+              "name": "Eventos",
+              "value": "eventos"
+            },
+            {
+              "name": "Conteúdos",
+              "value": "conteudos"
+            },
+            {
+              "name": "Promoções",
+              "value": "promocoes"
+            },
+            {
+              "name": "Planilha",
+              "value": "planilha"
+            },
+            {
+              "name": "Preço",
+              "value": "preco"
+            },
+            {
+              "name": "Vendas",
+              "value": "vendas"
+            }
+          ]
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Conteúdo",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "cards-compact",
+      "components": [
+        "card-compact"
+      ]
+    }
+  ]
+}

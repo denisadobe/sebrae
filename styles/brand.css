@@ -1,0 +1,72 @@
+/* Sebrae brand tokens — extracted from https://sebrae.com.br/ (computed styles) */
+:root {
+  /* palette */
+  --sebrae-navy: #1b244b;
+  --sebrae-blue: #2a4fda;
+  --sebrae-blue-dark: #1e3cb0;
+  --sebrae-lime: #e7f79e;
+  --sebrae-lime-dark: #d6ec6f;
+  --sebrae-mint: #caf8db;
+  --sebrae-lavender: #e3e9ff;
+  --sebrae-gray: #485274;
+  --sebrae-purple: #be64e3;
+  --sebrae-shadow: 0 10px 32px -4px rgb(0 94 184 / 10%), 0 6px 14px -6px rgb(0 94 184 / 20%);
+
+  /* semantic colors */
+  --background-color: #fff;
+  --text-color: var(--sebrae-navy);
+  --text-muted-color: var(--sebrae-gray);
+  --link-color: var(--sebrae-blue);
+  --link-hover-color: var(--sebrae-blue-dark);
+  --light-color: var(--sebrae-lavender);
+  --dark-color: var(--sebrae-navy);
+
+  /* fonts */
+  --body-font-family: figtree, figtree-fallback, sans-serif;
+  --heading-font-family: figtree, figtree-fallback, sans-serif;
+  --display-font-family: campuni, campuni-fallback, sans-serif;
+
+  /* body sizes (mobile) */
+  --body-font-size-l: 18px;
+  --body-font-size-m: 16px;
+  --body-font-size-s: 14px;
+  --body-font-size-xs: 12px;
+
+  /* heading sizes (mobile) */
+  --heading-font-size-xxl: 40px;
+  --heading-font-size-xl: 32px;
+  --heading-font-size-l: 28px;
+  --heading-font-size-m: 24px;
+  --heading-font-size-s: 18px;
+  --heading-font-size-xs: 16px;
+  --heading-line-height-xl: 36px;
+
+  /* surfaces */
+  --sebrae-card-bg: #f7f9ff;
+
+  /* layout */
+  --content-max-width: 1184px;
+  --content-padding: 16px;
+  --section-spacing: 48px;
+  --radius-s: 8px;
+  --radius-m: 16px;
+  --radius-l: 20px;
+  --nav-notification-height: 116px;
+  --nav-height: 196px;
+}
+
+@media (width >= 900px) {
+  :root {
+    --heading-font-size-xxl: 64px;
+    --heading-font-size-xl: 48px;
+    --heading-font-size-l: 40px;
+    --heading-font-size-m: 32px;
+    --heading-font-size-s: 18px;
+    --heading-font-size-xs: 16px;
+    --heading-line-height-xl: 56px;
+    --nav-notification-height: 60px;
+    --nav-height: 246px;
+    --content-padding: 32px;
+    --section-spacing: 96px;
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "variantName": "cards-compact",
+  "baseBlock": "cards",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "4-col compact cards, small icon inline with title, small arrow link",
+  "contentPattern": "4 rows x 2 cells: [icon image | h3 + p + link]",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["cards-compact"]
+}

@@ -1,0 +1,78 @@
+{
+  "definitions": [
+    {
+      "title": "Carrossel de destaques",
+      "id": "carousel-highlight",
+      "model": "carousel-highlight",
+      "filter": "carousel-highlight",
+      "plugins": {
+        "da": {
+          "name": "carousel-highlight",
+          "rows": 1,
+          "columns": 2
+        }
+      }
+    },
+    {
+      "title": "Slide",
+      "id": "carousel-highlight-slide",
+      "model": "carousel-highlight-slide",
+      "plugins": {
+        "da": {
+          "rows": 1,
+          "columns": 2,
+          "fields": [
+            {
+              "name": "image",
+              "selector": "div:nth-child(1)>picture>img[src]"
+            },
+            {
+              "name": "imageAlt",
+              "selector": "div:nth-child(1)>picture>img[alt]"
+            },
+            {
+              "name": "text",
+              "selector": "div:nth-child(2)"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "carousel-highlight-slide",
+      "fields": [
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Imagem",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "imageAlt",
+          "label": "Texto alternativo",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Conteúdo (título, texto e botão)",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": [
+    {
+      "id": "carousel-highlight",
+      "components": [
+        "carousel-highlight-slide"
+      ]
+    }
+  ]
+}

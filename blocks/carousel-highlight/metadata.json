@@ -1,0 +1,14 @@
+{
+  "variantName": "carousel-highlight",
+  "baseBlock": "carousel",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Text-forward highlight slider with \"1 de N\" counter and arrow buttons",
+  "contentPattern": "1 row per slide x 2 cells: [image | h2 + p + CTA link]",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["carousel-highlight"]
+}

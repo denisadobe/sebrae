@@ -1,0 +1,57 @@
+{
+  "definitions": [
+    {
+      "title": "Hero Banner",
+      "id": "hero-banner",
+      "model": "hero-banner",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"hero-banner\"><div><div><picture><img loading=\"lazy\"></picture></div></div><div><div><h1>Título do banner</h1><p>Texto de apoio do banner.</p><p><a href=\"#\">Chamada para ação</a></p></div></div></div>",
+          "fields": [
+            {
+              "name": "image",
+              "selector": "div:nth-child(1)>div>picture>img[src]"
+            },
+            {
+              "name": "imageAlt",
+              "selector": "div:nth-child(1)>div>picture>img[alt]"
+            },
+            {
+              "name": "text",
+              "selector": "div:nth-child(2)>div"
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "hero-banner",
+      "fields": [
+        {
+          "component": "reference",
+          "valueType": "string",
+          "name": "image",
+          "label": "Imagem",
+          "multi": false
+        },
+        {
+          "component": "text",
+          "valueType": "string",
+          "name": "imageAlt",
+          "label": "Texto alternativo",
+          "value": ""
+        },
+        {
+          "component": "richtext",
+          "name": "text",
+          "label": "Conteúdo (título, texto e botão)",
+          "valueType": "string",
+          "value": ""
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

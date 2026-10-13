@@ -1,0 +1,14 @@
+{
+  "variantName": "hero-banner",
+  "baseBlock": "hero",
+  "canonicalModel": "standalone",
+  "visualCharacteristics": "Split blue rounded panel: text left, collage image right, lime CTA",
+  "contentPattern": "1 column, 1 row: picture (collage image) + h1/h2 heading + paragraph + CTA link. Image rendered on the right half, text left, inside blue rounded panel.",
+  "usage": {
+    "pagesUsing": ["https://sebrae.com.br/"],
+    "reuseCount": 1,
+    "lastUsed": "2026-10-13"
+  },
+  "options": [],
+  "memberVariantIds": ["hero-banner"]
+}
