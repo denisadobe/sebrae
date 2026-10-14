@@ -527,6 +527,18 @@
     ]
   },
   {
+    "id": "product-details",
+    "fields": [
+      {
+        "component": "text",
+        "name": "defaultSku",
+        "label": "SKU do produto",
+        "valueType": "string",
+        "description": "SKU do produto no catálogo Adobe Commerce (ex.: TEESHIRT). Os dados do produto são carregados do catálogo."
+      }
+    ]
+  },
+  {
     "id": "quote",
     "fields": [
       {

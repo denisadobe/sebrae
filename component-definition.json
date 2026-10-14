@@ -486,6 +486,22 @@
           }
         },
         {
+          "title": "Detalhe de produto (Commerce)",
+          "id": "product-details",
+          "model": "product-details",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"product-details\"><div><div>defaultSku</div><div>TEESHIRT</div></div></div>",
+              "fields": [
+                {
+                  "name": "defaultSku",
+                  "selector": "div>div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
           "title": "Citação / depoimento",
           "id": "quote",
           "model": "quote",
