@@ -10,6 +10,7 @@ import {
 } from './brand-concierge-config.js';
 
 const MOUNT_ID = 'brand-concierge-mount';
+const FULL_PAGE = '/assistente';
 let runtime;
 let styling;
 let mounted = false;
@@ -140,7 +141,17 @@ export function addLauncher() {
   close.className = 'brand-concierge-popup-close';
   close.setAttribute('aria-label', 'Fechar assistente');
   close.append(icon('close'));
-  header.append(title, close);
+  // continue the same conversation on the full-page chat (sticky session + transcript)
+  const expand = document.createElement('a');
+  expand.className = 'brand-concierge-popup-expand';
+  expand.href = FULL_PAGE;
+  expand.setAttribute('aria-label', 'Abrir em tela cheia');
+  expand.title = 'Abrir em tela cheia';
+  expand.append(icon('expand'));
+  const actions = document.createElement('div');
+  actions.className = 'brand-concierge-popup-actions';
+  actions.append(expand, close);
+  header.append(title, actions);
   const body = document.createElement('div');
   body.className = 'brand-concierge-popup-body';
   panel.append(header, body);

@@ -21,6 +21,7 @@
 
 .brand-concierge-icon-sparkle { --icon: url('../icons/sparkle.svg'); }
 .brand-concierge-icon-close { --icon: url('../icons/close.svg'); }
+.brand-concierge-icon-expand { --icon: url('../icons/expand.svg'); }
 
 .brand-concierge-launcher {
   position: fixed;
@@ -91,6 +92,13 @@
   color: var(--sebrae-lime);
 }
 
+.brand-concierge-popup-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.brand-concierge-popup-expand,
 .brand-concierge-popup-close {
   display: flex;
   align-items: center;
@@ -106,6 +114,11 @@
   cursor: pointer;
 }
 
+.brand-concierge-popup-expand:any-link {
+  color: #fff;
+}
+
+.brand-concierge-popup-expand:hover,
 .brand-concierge-popup-close:hover {
   background-color: rgb(255 255 255 / 15%);
 }
