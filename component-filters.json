@@ -29,7 +29,9 @@
       "stats",
       "cta-banner",
       "form",
-      "product-details"
+      "product-details",
+      "product-list-page",
+      "commerce-cart"
     ]
   },
   {

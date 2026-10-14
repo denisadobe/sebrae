@@ -16,6 +16,29 @@ export const IS_UE = /\.(stage-ue|ue)\.da\.live$/.test(window.location.hostname)
 
 // pt-BR labels for the drop-ins (defaults are en_US)
 export const LABELS = {
+  // shared UI components (cart items, quantity, pagination)
+  Dropin: {
+    CartItem: {
+      each: { label: 'cada' },
+      pricePerItem: { label: 'preço por item' },
+      quantity: { label: 'Quantidade' },
+      remove: { label: 'Remover {product} do carrinho' },
+      removeDefault: { label: 'Remover item do carrinho' },
+      taxIncluded: { label: 'com impostos' },
+      taxExcluded: { label: 'sem impostos' },
+      updating: { label: 'Atualizando {product}' },
+    },
+    Incrementer: {
+      decreaseLabel: 'Diminuir quantidade',
+      increaseLabel: 'Aumentar quantidade',
+      label: 'Quantidade',
+      errorMessage: 'Informe uma quantidade válida',
+    },
+    Pagination: {
+      backwardButton: { ariaLabel: 'Página anterior' },
+      forwardButton: { ariaLabel: 'Próxima página' },
+    },
+  },
   PDP: {
     Product: {
       Incrementer: { label: 'Quantidade' },
@@ -40,7 +63,85 @@ export const LABELS = {
     Overlay: { Close: { label: 'Fechar' } },
     Zoom: { Close: { label: 'Fechar' } },
   },
+  Search: {
+    PLP: {
+      noResults: 'Nenhum resultado encontrado.',
+      searchError: 'Ocorreu um erro na busca.',
+    },
+    Facet: {
+      showMore: 'Ver mais',
+      showLess: 'Ver menos',
+      clearAll: 'Limpar',
+      clearAllFilters: 'Limpar filtros',
+    },
+    SortBy: {
+      title: 'Ordenar por',
+      lowToHigh: 'Menor preço',
+      highToLow: 'Maior preço',
+      relevance: 'Relevância',
+      position: 'Destaques',
+      name: 'Nome',
+      price: 'Preço',
+    },
+  },
+  Cart: {
+    Cart: {
+      heading: 'Carrinho ({count})',
+      editCart: 'Editar',
+      viewAll: 'Ver tudo no carrinho',
+      viewMore: 'Ver mais',
+      loadingLabel: 'Carregando carrinho',
+    },
+    CartSummaryTable: {
+      item: 'Item', price: 'Preço', qty: 'Qtd.', subtotal: 'Subtotal', mobilePrice: 'Preço', mobileQty: 'Qtd.', mobileSubtotal: 'Subtotal',
+    },
+    MiniCart: {
+      heading: 'Carrinho ({count})',
+      subtotal: 'Subtotal',
+      subtotalExcludingTaxes: 'Subtotal sem impostos',
+      cartLink: 'Ver carrinho',
+      checkoutLink: 'Finalizar inscrição',
+      loadingLabel: 'Carregando carrinho',
+      cartUpdated: 'Carrinho atualizado, {count} itens',
+    },
+    EmptyCart: { heading: 'Seu carrinho está vazio', cta: 'Ver cursos' },
+    PriceSummary: {
+      checkout: 'Finalizar inscrição',
+      orderSummary: 'Resumo do pedido',
+      loadingLabel: 'Carregando resumo',
+      subTotal: { label: 'Subtotal', withTaxes: 'com impostos', withoutTaxes: 'sem impostos' },
+      total: {
+        estimated: 'Total estimado', free: 'Grátis', label: 'Total', withoutTax: 'Total sem impostos', saved: 'Economia',
+      },
+      taxes: { total: 'Impostos', totalOnly: 'Impostos', estimated: 'Impostos estimados' },
+      coupon: {
+        applyAction: 'Aplicar', placeholder: 'Código de desconto', title: 'Cupom de desconto', ariaLabelRemove: 'Remover cupom',
+      },
+    },
+    CartItem: {
+      includingTax: 'com impostos',
+      excludingTax: 'sem impostos',
+      regularPrice: 'Preço normal',
+      discountedPrice: 'Preço com desconto',
+      itemBeingRemoved: 'Removendo "{product}"',
+      itemRemoved: '"{product}" foi removido',
+      itemRemovedDescription: 'Mudou de ideia? Você pode desfazer.',
+      undoAction: 'Desfazer',
+      dismissAction: 'Fechar',
+      confirmDeleteHeading: 'Remover "{product}" do carrinho?',
+      confirmAction: 'Remover',
+      cancelAction: 'Cancelar',
+    },
+  },
 };
+
+// Demo pages (commerce branch)
+export const PRODUCT_PAGE = '/produto';
+export const CART_PAGE = '/carrinho';
+export const CATALOG_PAGE = '/cursos';
+
+/** Link to the generic product page for a given SKU. */
+export const getProductLink = (sku) => `${PRODUCT_PAGE}?sku=${encodeURIComponent(sku)}`;
 
 const CONFIG_KEY = 'commerce-config';
 
@@ -83,18 +184,33 @@ export function initializeCart() {
       await initializeCommerce();
       const { initialize, setEndpoint } = await import('@dropins/storefront-cart/api.js');
       setEndpoint(CORE_FETCH_GRAPHQL);
-      await initializers.mountImmediately(initialize, {});
+      await initializers.mountImmediately(initialize, { langDefinitions: { default: LABELS } });
     })();
   }
   return cartReady;
 }
 
 /**
- * Product SKU: authored on the block (defaultSku), page metadata (sku)
- * or the URL (/products/{url-key}/{sku}).
+ * Product SKU: ?sku= query parameter (generic /produto page), authored on the block
+ * (defaultSku), page metadata (sku) or the URL (/products/{url-key}/{sku}).
  */
 export function getProductSku(configuredSku) {
-  return configuredSku
+  return new URLSearchParams(window.location.search).get('sku')
+    || configuredSku
     || getMetadata('sku')
     || window.location.pathname.match(/\/products\/[\w-]+\/([\w-]+)$/)?.[1];
+}
+
+/** Product discovery drop-in (search / listing on the Catalog Service), initialized once. */
+let searchReady;
+export function initializeSearch() {
+  if (!searchReady) {
+    searchReady = (async () => {
+      await initializeCommerce();
+      const { initialize, setEndpoint } = await import('@dropins/storefront-product-discovery/api.js');
+      setEndpoint(CS_FETCH_GRAPHQL);
+      await initializers.mountImmediately(initialize, { langDefinitions: { default: LABELS } });
+    })();
+  }
+  return searchReady;
 }

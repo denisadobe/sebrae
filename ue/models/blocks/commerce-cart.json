@@ -1,0 +1,32 @@
+{
+  "definitions": [
+    {
+      "title": "Carrinho (Commerce)",
+      "id": "commerce-cart",
+      "model": "commerce-cart",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"commerce-cart\"><div><div>startShoppingUrl</div><div>/cursos</div></div></div>",
+          "fields": [
+            { "name": "startShoppingUrl", "selector": "div>div:nth-child(2)" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "commerce-cart",
+      "fields": [
+        {
+          "component": "text",
+          "name": "startShoppingUrl",
+          "label": "Link do botão de carrinho vazio",
+          "valueType": "string",
+          "value": "/cursos"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

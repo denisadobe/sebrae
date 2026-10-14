@@ -1,0 +1,40 @@
+{
+  "definitions": [
+    {
+      "title": "Lista de produtos (Commerce)",
+      "id": "product-list-page",
+      "model": "product-list-page",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"product-list-page\"><div><div>category</div><div></div></div><div><div>pageSize</div><div>9</div></div></div>",
+          "fields": [
+            { "name": "category", "selector": "div:nth-child(1)>div:nth-child(2)" },
+            { "name": "pageSize", "selector": "div:nth-child(2)>div:nth-child(2)" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "product-list-page",
+      "fields": [
+        {
+          "component": "text",
+          "name": "category",
+          "label": "Categoria",
+          "valueType": "string",
+          "description": "Caminho da categoria no catálogo (ex.: apparel, office, lifestyle). Vazio = catálogo inteiro."
+        },
+        {
+          "component": "text",
+          "name": "pageSize",
+          "label": "Produtos por página",
+          "valueType": "string",
+          "value": "9"
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

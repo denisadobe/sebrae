@@ -1,0 +1,111 @@
+.product-list-page {
+  color: var(--sebrae-navy);
+}
+
+.product-list-page .product-list-page-wrapper {
+  display: grid;
+  grid-template-areas:
+    "info"
+    "toggle"
+    "facets"
+    "sort"
+    "list"
+    "pagination";
+  gap: var(--spacing-small);
+}
+
+.product-list-page .product-list-page-info {
+  grid-area: info;
+  align-self: center;
+  color: var(--sebrae-gray);
+  font-size: 16px;
+}
+
+.product-list-page .product-list-page-toggle {
+  grid-area: toggle;
+}
+
+.product-list-page .product-list-page-toggle button {
+  width: 100%;
+  justify-content: flex-start;
+}
+
+.product-list-page .product-list-page-facets {
+  grid-area: facets;
+  display: none;
+}
+
+.product-list-page .product-list-page-facets.is-visible {
+  display: block;
+}
+
+.product-list-page .product-list-page-sort {
+  grid-area: sort;
+}
+
+.product-list-page .product-list-page-list {
+  grid-area: list;
+  min-width: 0;
+}
+
+.product-list-page .product-list-page-pagination {
+  grid-area: pagination;
+}
+
+.product-list-page .product-list-page-card-action,
+.product-list-page .product-list-page-card-action .dropin-button {
+  width: 100%;
+}
+
+.product-list-page .product-list-page-alert {
+  border-radius: var(--radius-s);
+  padding: 12px 16px;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.product-list-page .product-list-page-alert:empty {
+  display: none;
+}
+
+.product-list-page .product-list-page-alert.is-success {
+  margin-bottom: var(--spacing-small);
+  background-color: var(--sebrae-mint);
+}
+
+.product-list-page .product-list-page-alert.is-error {
+  margin-bottom: var(--spacing-small);
+  background-color: #ffebeb;
+  color: #c4161c;
+}
+
+.product-list-page.is-empty .product-list-page-toggle,
+.product-list-page.is-empty .product-list-page-facets,
+.product-list-page.is-empty .product-list-page-sort,
+.product-list-page.is-empty .product-list-page-pagination {
+  display: none;
+}
+
+@media (width >= 900px) {
+  .product-list-page .product-list-page-wrapper {
+    grid-template-areas:
+      "info sort"
+      "facets list"
+      ". pagination";
+    grid-template-columns: 260px minmax(0, 1fr);
+    column-gap: var(--spacing-big);
+  }
+
+  .product-list-page .product-list-page-toggle {
+    display: none;
+  }
+
+  .product-list-page .product-list-page-facets {
+    display: block;
+  }
+
+  .product-list-page .product-list-page-sort {
+    display: flex;
+    justify-content: flex-end;
+  }
+}

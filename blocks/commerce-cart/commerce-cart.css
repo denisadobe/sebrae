@@ -1,0 +1,39 @@
+.commerce-cart {
+  color: var(--sebrae-navy);
+}
+
+.commerce-cart .commerce-cart-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-big);
+}
+
+.commerce-cart .commerce-cart-list,
+.commerce-cart .commerce-cart-summary {
+  min-width: 0;
+}
+
+.commerce-cart .commerce-cart-summary {
+  align-self: start;
+  border-radius: var(--radius-m);
+  padding: var(--spacing-medium);
+  background-color: var(--sebrae-card-bg);
+}
+
+.commerce-cart .commerce-cart-message {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: #ffebeb;
+  color: #c4161c;
+}
+
+@media (width >= 900px) {
+  .commerce-cart .commerce-cart-wrapper {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+
+  .commerce-cart.is-empty .commerce-cart-wrapper {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

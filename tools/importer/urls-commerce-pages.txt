@@ -1,0 +1,3 @@
+https://main--aem-boilerplate-commerce--hlxsites.aem.live/search
+https://main--aem-boilerplate-commerce--hlxsites.aem.live/cart
+https://main--aem-boilerplate-commerce--hlxsites.aem.live/products/tee-shirt/teeshirt

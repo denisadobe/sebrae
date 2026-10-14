@@ -305,6 +305,18 @@
     ]
   },
   {
+    "id": "commerce-cart",
+    "fields": [
+      {
+        "component": "text",
+        "name": "startShoppingUrl",
+        "label": "Link do botão de carrinho vazio",
+        "valueType": "string",
+        "value": "/cursos"
+      }
+    ]
+  },
+  {
     "id": "cta-banner",
     "fields": [
       {
@@ -535,6 +547,25 @@
         "label": "SKU do produto",
         "valueType": "string",
         "description": "SKU do produto no catálogo Adobe Commerce (ex.: TEESHIRT). Os dados do produto são carregados do catálogo."
+      }
+    ]
+  },
+  {
+    "id": "product-list-page",
+    "fields": [
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Categoria",
+        "valueType": "string",
+        "description": "Caminho da categoria no catálogo (ex.: apparel, office, lifestyle). Vazio = catálogo inteiro."
+      },
+      {
+        "component": "text",
+        "name": "pageSize",
+        "label": "Produtos por página",
+        "valueType": "string",
+        "value": "9"
       }
     ]
   },

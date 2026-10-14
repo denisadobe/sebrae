@@ -367,6 +367,12 @@ export default async function decorate(block) {
   wrapper.append(nav);
   block.replaceChildren(wrapper);
 
+  // commerce branch: header mini-cart (cart drop-in)
+  import('../../scripts/mini-cart.js')
+    .then(({ default: addMiniCart }) => addMiniCart(main))
+    // eslint-disable-next-line no-console
+    .catch((e) => console.error('mini-cart:', e));
+
   hamburger.addEventListener('click', () => toggleMenu(header));
   toggleMenu(header, false);
 
