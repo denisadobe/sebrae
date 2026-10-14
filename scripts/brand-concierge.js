@@ -30,7 +30,10 @@ async function loadStyling() {
       .then((config) => {
         const behavior = merge(config.behavior || {}, STYLE_OVERRIDES.behavior);
         const disclaimer = { ...(config.disclaimer || {}), ...STYLE_OVERRIDES.disclaimer };
-        return { ...config, behavior, disclaimer };
+        const text = { ...STYLE_OVERRIDES.text, ...(config.text || {}) };
+        return {
+          ...config, behavior, disclaimer, text,
+        };
       });
   }
   return styling;

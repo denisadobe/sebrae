@@ -34,4 +34,7 @@ export const STYLE_OVERRIDES = {
   disclaimer: {
     links: [{ text: 'Termos de Uso', url: 'https://sebrae.com.br/termos-de-uso' }],
   },
+  text: {
+    'error.general': 'Desculpe, algo deu errado. Tente novamente.',
+  },
 };
