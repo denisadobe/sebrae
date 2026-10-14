@@ -33,7 +33,8 @@ body.assistente > main {
   min-height: 0;
 }
 
-body.assistente > footer {
+body.assistente > footer,
+body.assistente main > .section:not(:has(.brand-concierge)) {
   display: none;
 }
 
