@@ -26,6 +26,7 @@ export default {
         ['Metadata'],
         ['Title', 'Assistente Sebrae | Sebrae'],
         ['Description', 'Converse com o assistente virtual do Sebrae.'],
+        ['Template', 'assistente'],
       ], document),
     );
     return [{ element: main, path: '/assistente' }];

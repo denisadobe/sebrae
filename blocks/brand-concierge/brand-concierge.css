@@ -12,3 +12,67 @@
   background-color: #fff;
   box-shadow: 0 2px 4px 0 rgb(20 46 82 / 20%);
 }
+
+/* "assistente" template (metadata template: assistente): the page is a chat window —
+   header, compact title and the chat filling the rest of the screen; only the chat scrolls */
+body.assistente {
+  display: flex;
+  flex-direction: column;
+  height: 100svh;
+  overflow: hidden;
+}
+
+body.assistente > header {
+  flex: 0 0 auto;
+}
+
+body.assistente > main {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-height: 0;
+}
+
+body.assistente > footer {
+  display: none;
+}
+
+body.assistente main > .section:has(.brand-concierge) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 12px;
+  min-height: 0;
+  margin: 0;
+  padding: 16px 0;
+}
+
+body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
+body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper h1 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 36px;
+}
+
+body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper p {
+  margin: 4px 0 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+body.assistente main > .section:has(.brand-concierge) > .brand-concierge-wrapper {
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 0;
+}
+
+body.assistente .brand-concierge,
+body.assistente .brand-concierge .brand-concierge-panel {
+  height: 100%;
+  min-height: 0;
+  max-height: none;
+}
