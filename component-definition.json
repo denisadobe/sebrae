@@ -368,6 +368,56 @@
           }
         },
         {
+          "title": "Formulário",
+          "id": "form",
+          "model": "form",
+          "filter": "form",
+          "plugins": {
+            "da": {
+              "name": "form",
+              "rows": 1,
+              "columns": 6
+            }
+          }
+        },
+        {
+          "title": "Campo do formulário",
+          "id": "form-field",
+          "model": "form-field",
+          "plugins": {
+            "da": {
+              "rows": 1,
+              "columns": 6,
+              "fields": [
+                {
+                  "name": "type",
+                  "selector": "div:nth-child(1)"
+                },
+                {
+                  "name": "label",
+                  "selector": "div:nth-child(2)"
+                },
+                {
+                  "name": "name",
+                  "selector": "div:nth-child(3)"
+                },
+                {
+                  "name": "placeholder",
+                  "selector": "div:nth-child(4)"
+                },
+                {
+                  "name": "options",
+                  "selector": "div:nth-child(5)"
+                },
+                {
+                  "name": "required",
+                  "selector": "div:nth-child(6)"
+                }
+              ]
+            }
+          }
+        },
+        {
           "title": "Fragmento",
           "id": "fragment",
           "model": "fragment",

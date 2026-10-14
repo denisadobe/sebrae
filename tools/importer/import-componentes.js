@@ -162,10 +162,17 @@ export default {
       ]]),
     );
 
-    // 11. pointer to the home components
+    // 11. embed (external page in an iframe) — the original "Seu interesse" form, now native on the home
+    add(
+      h(document, 'h2', 'Conteúdo incorporado (embed)'),
+      h(document, 'p', 'Página externa exibida dentro do site. Na home, este mesmo formulário foi recriado com o componente de formulário nativo.'),
+      block(document, 'Embed Iframe', [[link(document, 'https://cloud.cliente.sebrae.com.br/seuinteressev2', 'https://cloud.cliente.sebrae.com.br/seuinteressev2')]]),
+    );
+
+    // 12. pointer to the home components
     add(
       h(document, 'h2', 'Componentes da home'),
-      h(document, 'p', 'Hero com atalhos rápidos, cards com ícone, cards compactos, carrossel de destaques, abas de artigos, cards com etiqueta e o formulário incorporado estão na página inicial.'),
+      h(document, 'p', 'Hero com atalhos rápidos, cards com ícone, cards compactos, carrossel de destaques, abas de artigos, cards com etiqueta e o formulário estão na página inicial.'),
       h(document, 'p', link(document, '/', 'Ver a página inicial', true)),
     );
 

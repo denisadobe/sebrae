@@ -56,6 +56,10 @@
           {
             "name": "Fundo claro (lavanda)",
             "value": "light"
+          },
+          {
+            "name": "Formulário em duas colunas",
+            "value": "form-split"
           }
         ]
       }
@@ -356,6 +360,101 @@
         "label": "URL da página incorporada",
         "valueType": "string",
         "required": true
+      }
+    ]
+  },
+  {
+    "id": "form-field",
+    "fields": [
+      {
+        "component": "select",
+        "name": "type",
+        "label": "Tipo de campo",
+        "valueType": "string",
+        "value": "text",
+        "options": [
+          {
+            "name": "Texto",
+            "value": "text"
+          },
+          {
+            "name": "E-mail",
+            "value": "email"
+          },
+          {
+            "name": "Telefone",
+            "value": "tel"
+          },
+          {
+            "name": "Texto longo",
+            "value": "textarea"
+          },
+          {
+            "name": "Lista de seleção",
+            "value": "select"
+          },
+          {
+            "name": "Múltipla escolha (lista)",
+            "value": "multiselect"
+          },
+          {
+            "name": "Opções (radio)",
+            "value": "radio"
+          },
+          {
+            "name": "Caixa de seleção (aceite)",
+            "value": "checkbox"
+          },
+          {
+            "name": "Título",
+            "value": "heading"
+          },
+          {
+            "name": "Botão de envio",
+            "value": "submit"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Rótulo",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "name",
+        "label": "Nome técnico do campo",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "placeholder",
+        "label": "Placeholder (no botão: mensagem de confirmação)",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "options",
+        "label": "Opções (separadas por vírgula)",
+        "valueType": "string"
+      },
+      {
+        "component": "select",
+        "name": "required",
+        "label": "Obrigatório",
+        "valueType": "string",
+        "value": "",
+        "options": [
+          {
+            "name": "Não",
+            "value": ""
+          },
+          {
+            "name": "Sim",
+            "value": "sim"
+          }
+        ]
       }
     ]
   },

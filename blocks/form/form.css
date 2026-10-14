@@ -1,0 +1,219 @@
+/* values measured on the embedded "Seu interesse" form (cloud.cliente.sebrae.com.br) */
+.form {
+  --form-panel-bg: #f0f4ff;
+  --form-border: #95acff;
+  --form-button-bg: #006ec7;
+
+  box-sizing: border-box;
+  border-radius: var(--radius-s);
+  padding: 20px;
+  background-color: var(--form-panel-bg);
+  color: var(--sebrae-navy);
+}
+
+.form .form-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form .form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.form .form-label {
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.form .form-required {
+  color: var(--sebrae-blue);
+}
+
+.form .form-heading {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+.form input:not([type='checkbox'], [type='radio']),
+.form select,
+.form textarea,
+.form .form-multiselect-summary {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 43px;
+  margin: 0;
+  border: 2px solid var(--form-border);
+  border-radius: 6px;
+  padding: 8px 10px;
+  background-color: #fff;
+  color: var(--sebrae-navy);
+  font: inherit;
+  font-size: 18px;
+  line-height: 24px;
+}
+
+.form input::placeholder,
+.form textarea::placeholder {
+  color: #757575;
+}
+
+.form details.form-multiselect > .form-multiselect-summary {
+  overflow: hidden;
+  color: #757575;
+  list-style: none;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.form details.form-multiselect > .form-multiselect-summary.has-value {
+  color: var(--sebrae-navy);
+}
+
+.form .form-multiselect-summary::-webkit-details-marker {
+  display: none;
+}
+
+.form input:focus-visible,
+.form select:focus-visible,
+.form textarea:focus-visible,
+.form details.form-multiselect > .form-multiselect-summary:focus-visible {
+  border-color: var(--sebrae-blue);
+  outline: none;
+}
+
+.form .form-validated :invalid,
+.form .form-validated .form-multiselect:has(:invalid) .form-multiselect-summary {
+  border-color: #c4161c;
+}
+
+/* multi select (dropdown with checkboxes) */
+.form .form-multiselect {
+  position: relative;
+}
+
+.form .form-multiselect-options {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 5;
+  max-height: 260px;
+  overflow-y: auto;
+  border: 1px solid var(--form-border);
+  border-radius: 6px;
+  padding: 4px 0;
+  background-color: #fff;
+  box-shadow: var(--sebrae-shadow);
+}
+
+.form .form-multiselect-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  font-size: 16px;
+  line-height: 22px;
+  cursor: pointer;
+}
+
+.form .form-multiselect-option:hover {
+  background-color: var(--sebrae-lavender);
+}
+
+/* checkbox / radio */
+.form .form-choice {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.form .form-choice input {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 4px 0 0;
+  accent-color: var(--sebrae-blue);
+}
+
+.form .form-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* submit */
+.form .form-submit {
+  align-self: flex-start;
+  margin: 0;
+  border: 0;
+  border-radius: 5px;
+  padding: 12px;
+  background-color: var(--form-button-bg);
+  color: var(--sebrae-lime);
+  font: inherit;
+  font-size: 18px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.form .form-submit:hover {
+  background-color: var(--sebrae-blue-dark);
+}
+
+.form .form-success {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: #fff;
+  color: var(--sebrae-navy);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 28px;
+}
+
+/* "form-split" section style: intro (heading + image) beside the form, as on sebrae.com.br */
+main > .section.form-split > .default-content-wrapper h2 {
+  font-size: 32px;
+  line-height: 40px;
+  text-align: left;
+}
+
+main > .section.form-split > .default-content-wrapper img {
+  display: block;
+  width: 100%;
+  max-width: 400px;
+  height: auto;
+  margin: 24px auto 0;
+}
+
+@media (width >= 900px) {
+  main > .section.form-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 448px;
+    gap: 40px;
+    max-width: var(--content-max-width);
+    margin-left: auto;
+    margin-right: auto;
+    padding: 0 var(--content-padding);
+  }
+
+  main > .section.form-split > div {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  main > .section.form-split > .default-content-wrapper h2 {
+    font-size: 48px;
+    line-height: 52px;
+  }
+}

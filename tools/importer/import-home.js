@@ -9,7 +9,7 @@ import cardsCompactParser from './parsers/cards-compact.js';
 import carouselHighlightParser from './parsers/carousel-highlight.js';
 import tabsArticlesParser from './parsers/tabs-articles.js';
 import cardsTaggedParser from './parsers/cards-tagged.js';
-import embedIframeParser from './parsers/embed-iframe.js';
+import formParser from './parsers/form.js';
 
 // TRANSFORMER IMPORTS
 import sebraeCleanupTransformer from './transformers/sebrae-cleanup.js';
@@ -24,7 +24,7 @@ const parsers = {
   'carousel-highlight': carouselHighlightParser,
   'tabs-articles': tabsArticlesParser,
   'cards-tagged': cardsTaggedParser,
-  'embed-iframe': embedIframeParser,
+  'form': formParser,
 };
 
 // PAGE TEMPLATE CONFIGURATION - Embedded from page-templates.json
@@ -79,7 +79,7 @@ const PAGE_TEMPLATE ={
       ]
     },
     {
-      "name": "embed-iframe",
+      "name": "form",
       "instances": [
         ".embed__wrapper"
       ]
@@ -193,9 +193,9 @@ const PAGE_TEMPLATE ={
         ".embed__wrapper",
         "#spa-root > div.sc-beySbL.cLUhAP.styled-page-template > div > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(2) > div.aem-container.aem-Grid.aem-Grid--12.aem-Grid--tablet--12.aem-Grid--default--12 > div.aem-GridColumn.aem-GridColumn--default--12:nth-of-type(10)"
       ],
-      "style": null,
+      "style": "form-split",
       "blocks": [
-        "embed-iframe"
+        "form"
       ],
       "defaultContent": []
     }

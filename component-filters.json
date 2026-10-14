@@ -27,7 +27,8 @@
       "video",
       "table",
       "stats",
-      "cta-banner"
+      "cta-banner",
+      "form"
     ]
   },
   {
@@ -81,6 +82,12 @@
     "components": [
       "text",
       "image"
+    ]
+  },
+  {
+    "id": "form",
+    "components": [
+      "form-field"
     ]
   },
   {

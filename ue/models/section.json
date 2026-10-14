@@ -28,6 +28,10 @@
             {
               "name": "Fundo claro (lavanda)",
               "value": "light"
+            },
+            {
+              "name": "Formulário em duas colunas",
+              "value": "form-split"
             }
           ]
         }
@@ -57,7 +61,8 @@
         "video",
         "table",
         "stats",
-        "cta-banner"
+        "cta-banner",
+        "form"
       ]
     }
   ]
