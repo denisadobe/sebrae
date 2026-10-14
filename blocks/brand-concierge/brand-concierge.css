@@ -50,7 +50,6 @@ body.assistente main > .section:has(.brand-concierge) {
 
 body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper {
   flex: 0 0 auto;
-  width: 100%;
 }
 
 body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper h1 {
@@ -60,14 +59,20 @@ body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper
 }
 
 body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper p {
+  display: none;
   margin: 4px 0 0;
   font-size: 16px;
   line-height: 24px;
 }
 
+@media (width >= 600px) {
+  body.assistente main > .section:has(.brand-concierge) > .default-content-wrapper p {
+    display: block;
+  }
+}
+
 body.assistente main > .section:has(.brand-concierge) > .brand-concierge-wrapper {
   flex: 1 1 auto;
-  width: 100%;
   min-height: 0;
 }
 
