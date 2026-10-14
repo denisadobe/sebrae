@@ -1,0 +1,8 @@
+.brand-concierge .brand-concierge-panel {
+  height: min(760px, calc(100vh - 160px));
+  min-height: 520px;
+  overflow: hidden;
+  border-radius: var(--radius-m);
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgb(20 46 82 / 20%);
+}

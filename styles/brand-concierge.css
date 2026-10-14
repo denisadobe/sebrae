@@ -1,0 +1,140 @@
+/* Adobe Brand Concierge: popup launcher/panel + overrides from the install script */
+/* stylelint-disable-next-line selector-class-pattern -- Web Client class */
+.bc-card__image {
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+}
+
+#brand-concierge-mount {
+  height: 100%;
+  min-height: 0;
+}
+
+.brand-concierge-icon {
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  background-color: currentcolor;
+  mask: var(--icon) center / contain no-repeat;
+}
+
+.brand-concierge-icon-sparkle { --icon: url('../icons/sparkle.svg'); }
+.brand-concierge-icon-close { --icon: url('../icons/close.svg'); }
+
+.brand-concierge-launcher {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 900;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  border: 0;
+  border-radius: 999px;
+  padding: 14px 20px;
+  background-color: var(--sebrae-blue);
+  box-shadow: var(--sebrae-shadow);
+  color: var(--sebrae-lime);
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+  cursor: pointer;
+}
+
+.brand-concierge-launcher:hover {
+  background-color: var(--sebrae-blue-dark);
+}
+
+.brand-concierge-launcher[hidden] {
+  display: none;
+}
+
+.brand-concierge-popup {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background-color: #fff;
+  box-shadow: 0 16px 48px rgb(27 36 75 / 25%);
+}
+
+.brand-concierge-popup[hidden] {
+  display: none;
+}
+
+.brand-concierge-popup-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 12px 16px;
+  background-color: var(--sebrae-navy);
+  color: #fff;
+}
+
+.brand-concierge-popup-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.brand-concierge-popup-title .brand-concierge-icon {
+  color: var(--sebrae-lime);
+}
+
+.brand-concierge-popup-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.brand-concierge-popup-close:hover {
+  background-color: rgb(255 255 255 / 15%);
+}
+
+.brand-concierge-popup-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+.brand-concierge-error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  color: var(--sebrae-navy);
+  text-align: center;
+}
+
+@media (width >= 600px) {
+  .brand-concierge-launcher {
+    right: 24px;
+    bottom: 24px;
+  }
+
+  .brand-concierge-popup {
+    inset: auto 24px 24px auto;
+    width: 420px;
+    height: min(680px, calc(100vh - 48px));
+    border-radius: var(--radius-m);
+  }
+}

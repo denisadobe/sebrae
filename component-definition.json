@@ -95,6 +95,22 @@
           }
         },
         {
+          "title": "Assistente (Brand Concierge)",
+          "id": "brand-concierge",
+          "model": "brand-concierge",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"brand-concierge\"><div><div>Assistente Sebrae</div></div></div>",
+              "fields": [
+                {
+                  "name": "label",
+                  "selector": "div>div"
+                }
+              ]
+            }
+          }
+        },
+        {
           "title": "Cards compactos",
           "id": "cards-compact",
           "model": "cards-compact",

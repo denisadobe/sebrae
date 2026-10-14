@@ -8,6 +8,7 @@ import {
   loadSection,
   loadSections,
   loadCSS,
+  getMetadata,
   buildBlock,
   readBlockConfig,
   toCamelCase,
@@ -257,6 +258,13 @@ async function loadLazy(doc) {
 function loadDelayed() {
   import('./consent-check.js');
   // load anything that can be postponed to the latest here
+
+  // commerce branch: Adobe Brand Concierge popup (the chat itself loads on first open);
+  // skipped on pages with the full-page block, with "brand-concierge: off" and in the editor
+  const conciergeOff = getMetadata('brand-concierge').toLowerCase() === 'off'
+    || document.querySelector('.brand-concierge')
+    || /\.(stage-ue|ue)\.da\.live$/.test(window.location.hostname);
+  if (!conciergeOff) import('./brand-concierge.js').then(({ addLauncher }) => addLauncher());
 }
 
 async function loadPage() {

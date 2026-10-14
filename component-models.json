@@ -87,6 +87,18 @@
     ]
   },
   {
+    "id": "brand-concierge",
+    "fields": [
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Nome do assistente (interno)",
+        "valueType": "string",
+        "description": "Apenas para identificar o bloco no editor. O chat ocupa o bloco inteiro."
+      }
+    ]
+  },
+  {
     "id": "card-compact",
     "fields": [
       {

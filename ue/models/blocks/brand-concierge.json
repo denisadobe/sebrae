@@ -1,0 +1,32 @@
+{
+  "definitions": [
+    {
+      "title": "Assistente (Brand Concierge)",
+      "id": "brand-concierge",
+      "model": "brand-concierge",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"brand-concierge\"><div><div>Assistente Sebrae</div></div></div>",
+          "fields": [
+            { "name": "label", "selector": "div>div" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "brand-concierge",
+      "fields": [
+        {
+          "component": "text",
+          "name": "label",
+          "label": "Nome do assistente (interno)",
+          "valueType": "string",
+          "description": "Apenas para identificar o bloco no editor. O chat ocupa o bloco inteiro."
+        }
+      ]
+    }
+  ],
+  "filters": []
+}
