@@ -20,10 +20,9 @@ export default function decorate(block) {
 
     if (iconCell) {
       iconCell.className = 'cards-compact-card-icon';
-      if (decorateIconCell(iconCell, 96)) {
-        li.append(iconCell);
-        li.classList.add('cards-compact-card-has-icon');
-      }
+      if (decorateIconCell(iconCell, 96)) li.classList.add('cards-compact-card-has-icon');
+      else iconCell.classList.add('cards-compact-card-icon-empty');
+      li.append(iconCell);
     }
 
     const [body, ...extra] = bodyCells;

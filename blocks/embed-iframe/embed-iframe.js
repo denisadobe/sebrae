@@ -52,11 +52,14 @@ const loadEmbed = (block, link, height, autoplay) => {
     return;
   }
   const config = EMBEDS_CONFIG.find((e) => e.match.some((match) => url.hostname.includes(match)));
+  // keep the hidden authored source; replace only the placeholder
+  const placeholder = block.querySelector('.embed-iframe-placeholder');
+  if (placeholder) placeholder.remove();
   if (config) {
-    block.innerHTML = config.render(url, autoplay);
+    block.insertAdjacentHTML('beforeend', config.render(url, autoplay));
     block.classList.add(`embed-iframe-${config.match[0].replace('.', '-')}`);
   } else {
-    block.innerHTML = getDefaultEmbed(url, height);
+    block.insertAdjacentHTML('beforeend', getDefaultEmbed(url, height));
   }
   block.classList.add('embed-iframe-is-loaded');
 };
@@ -72,7 +75,13 @@ export default function decorate(block) {
   const height = heightCell ? parseInt(heightCell.textContent, 10) : DEFAULT_HEIGHT;
 
   const placeholder = block.querySelector('picture');
+  // keep the authored rows (hidden) so the editor's URL field stays instrumented
+  const source = document.createElement('div');
+  source.className = 'embed-iframe-source';
+  source.hidden = true;
+  source.append(...block.children);
   block.textContent = '';
+  block.append(source);
 
   if (placeholder) {
     const wrapper = document.createElement('div');

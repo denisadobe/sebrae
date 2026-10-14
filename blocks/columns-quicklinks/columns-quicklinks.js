@@ -1,35 +1,40 @@
-import { moveInstrumentation } from '../../scripts/ue-utils.js';
-
 /**
  * Columns Quicklinks: columns variant rendering a single bar of quick links.
- * Authored as one row per link (one cell each); a single row with N cells also works.
+ * Authored as ONE cell holding a bulleted list of links (one list item per quick link), so the
+ * whole bar is a single rich text field in Universal Editor (add/remove links in the list).
+ * The authored cell is kept in place; only classes are added so editor instrumentation survives.
+ * Legacy content (one link per row or per cell) is folded into that list.
  * @param {Element} block
  */
 export default function decorate(block) {
-  const list = document.createElement('ul');
-  list.className = 'columns-quicklinks-row';
+  const rows = [...block.children];
+  const cell = rows[0] && rows[0].firstElementChild;
+  if (!cell) return;
 
-  [...block.children].forEach((row) => {
-    const cells = [...row.children];
-    cells.forEach((cell) => {
-      // drop empty cells authors may leave behind
-      if (!cell.textContent.trim() && !cell.querySelector('picture, img')) return;
-      const item = document.createElement('li');
-      item.className = 'columns-quicklinks-item';
-      // one cell per row: the row is the editable item; otherwise the cell is
-      moveInstrumentation(cells.length === 1 ? row : cell, item);
-      item.append(cell);
-      const link = cell.querySelector('a');
-      if (link) {
-        link.classList.add('columns-quicklinks-link');
-        // unwrap button styling — this is a plain link bar
-        link.classList.remove('button', 'primary', 'secondary', 'accent');
-        link.closest('.button-wrapper, .button-container')?.classList.remove('button-wrapper', 'button-container');
-      }
-      list.append(item);
+  let list = cell.querySelector('ul, ol');
+  if (!list) {
+    list = document.createElement('ul');
+    block.querySelectorAll('a').forEach((a) => {
+      const li = document.createElement('li');
+      li.append(a);
+      list.append(li);
     });
+    cell.replaceChildren(list);
+    rows.slice(1).forEach((row) => row.remove());
+  }
+
+  cell.classList.add('columns-quicklinks-cell');
+  list.classList.add('columns-quicklinks-row');
+  [...list.children].forEach((li) => li.classList.add('columns-quicklinks-item'));
+  list.querySelectorAll('a').forEach((a) => {
+    a.classList.add('columns-quicklinks-link');
+    // plain link bar: undo button styling from decorateButtons
+    a.classList.remove('button', 'primary', 'secondary', 'accent');
+    const wrapper = a.closest('.button-wrapper, .button-container');
+    if (wrapper) wrapper.classList.remove('button-wrapper', 'button-container');
   });
 
   block.classList.add(`columns-quicklinks-${list.children.length}-cols`);
-  block.replaceChildren(list);
+  // keep an empty bar visible so it can still be selected (and deleted) in the editor
+  if (!list.querySelector('a')) block.classList.add('columns-quicklinks-empty');
 }

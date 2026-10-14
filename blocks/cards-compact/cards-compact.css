@@ -117,3 +117,8 @@ main .section.cards-compact-container > .default-content-wrapper h2 {
     line-height: 28px;
   }
 }
+
+/* no icon chosen yet: keep the (editable) cell in the DOM but out of the layout */
+.cards-compact .cards-compact-card-icon-empty {
+  display: none;
+}

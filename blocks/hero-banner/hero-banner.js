@@ -11,7 +11,7 @@ import { optimizePicture } from '../../scripts/dm-images.js';
 export default function decorate(block) {
   const cells = [...block.querySelectorAll(':scope > div > div')];
   const imageCell = cells.find((cell) => cell.querySelector('picture') && !cell.textContent.trim());
-  const textCells = cells.filter((cell) => cell !== imageCell && (cell.textContent.trim() || cell.querySelector('picture')));
+  const textCells = cells.filter((cell) => cell !== imageCell);
 
   const inner = document.createElement('div');
   inner.className = 'hero-banner-inner';

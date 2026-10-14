@@ -14,7 +14,8 @@ export default function decorate(block) {
     li.className = 'cards-tagged-card';
     moveInstrumentation(row, li);
 
-    const cells = [...row.children].filter((cell) => cell.textContent.trim() || cell.querySelector('picture'));
+    // keep empty cells: new items added in the editor start empty and must stay selectable
+    const cells = [...row.children];
     const imageCell = cells.find((cell) => cell.querySelector('picture') && !cell.textContent.trim());
     const textCells = cells.filter((cell) => cell !== imageCell);
 
@@ -52,7 +53,7 @@ export default function decorate(block) {
       }
       li.append(body);
     }
-    if (li.children.length) ul.append(li);
+    ul.append(li);
   });
   block.replaceChildren(ul);
 }

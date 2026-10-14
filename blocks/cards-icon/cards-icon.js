@@ -19,7 +19,8 @@ export default function decorate(block) {
 
     if (iconCell) {
       iconCell.className = 'cards-icon-card-icon';
-      if (decorateIconCell(iconCell, 160)) li.append(iconCell);
+      if (!decorateIconCell(iconCell, 160)) iconCell.classList.add('cards-icon-card-icon-empty');
+      li.append(iconCell);
     }
 
     const [body, ...extra] = bodyCells;

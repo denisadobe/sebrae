@@ -105,10 +105,13 @@ function createSlide(row, slideIndex, carouselId) {
   let content = null;
   let image = null;
 
-  // authored cells are kept as-is so their editor instrumentation survives
-  [...row.querySelectorAll(':scope > div')].forEach((column) => {
+  // authored cells are kept as-is so their editor instrumentation survives.
+  // Two cells = [image | text] by position (a new, still empty slide has no picture yet).
+  const columns = [...row.querySelectorAll(':scope > div')];
+  columns.forEach((column, i) => {
     const isImageOnly = column.querySelector('picture') && !column.textContent.trim();
-    if (isImageOnly && !image) {
+    const isImageSlot = columns.length > 1 && i === 0 && !column.textContent.trim();
+    if ((isImageOnly || isImageSlot) && !image) {
       image = column;
       image.className = 'carousel-highlight-slide-image';
     } else if (!content) {
@@ -126,7 +129,7 @@ function createSlide(row, slideIndex, carouselId) {
   slide.append(content);
   if (image) {
     slide.append(image);
-    slide.classList.add('carousel-highlight-slide-has-image');
+    if (image.querySelector('picture')) slide.classList.add('carousel-highlight-slide-has-image');
   }
 
   const labeledBy = slide.querySelector('h1, h2, h3, h4, h5, h6');
@@ -141,8 +144,8 @@ let carouselId = 0;
 export default function decorate(block) {
   carouselId += 1;
   block.setAttribute('id', `carousel-highlight-${carouselId}`);
-  const rows = [...block.querySelectorAll(':scope > div')]
-    .filter((row) => row.textContent.trim() || row.querySelector('picture'));
+  // keep every authored row: a freshly added (still empty) slide must stay selectable in the editor
+  const rows = [...block.querySelectorAll(':scope > div')];
   const isSingleSlide = rows.length < 2;
 
   block.setAttribute('role', 'region');

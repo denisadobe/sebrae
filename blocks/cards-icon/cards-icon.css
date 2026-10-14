@@ -257,3 +257,8 @@ main .section.blue .cards-icon .cards-icon-card-cta a:any-link:hover {
     line-height: 28px;
   }
 }
+
+/* no icon chosen yet: keep the (editable) cell in the DOM but out of the layout */
+.cards-icon .cards-icon-card-icon-empty {
+  display: none;
+}

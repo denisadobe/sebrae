@@ -273,14 +273,14 @@
     ]
   },
   {
-    "id": "quicklink",
+    "id": "columns-quicklinks",
     "fields": [
       {
         "component": "richtext",
-        "name": "link",
-        "label": "Link",
-        "valueType": "string",
-        "value": ""
+        "name": "links",
+        "value": "",
+        "label": "Atalhos (lista de links — um item por atalho)",
+        "valueType": "string"
       }
     ]
   },

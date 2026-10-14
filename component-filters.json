@@ -67,12 +67,6 @@
     ]
   },
   {
-    "id": "columns-quicklinks",
-    "components": [
-      "quicklink"
-    ]
-  },
-  {
     "id": "columns",
     "components": [
       "columns-row"

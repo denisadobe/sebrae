@@ -4,27 +4,13 @@
       "title": "Atalhos rápidos",
       "id": "columns-quicklinks",
       "model": "columns-quicklinks",
-      "filter": "columns-quicklinks",
       "plugins": {
         "da": {
-          "name": "columns-quicklinks",
-          "rows": 1,
-          "columns": 1
-        }
-      }
-    },
-    {
-      "title": "Atalho",
-      "id": "quicklink",
-      "model": "quicklink",
-      "plugins": {
-        "da": {
-          "rows": 1,
-          "columns": 1,
+          "unsafeHTML": "<div class=\"columns-quicklinks\"><div><div><ul><li><a href=\"#\">Atalho 1</a></li><li><a href=\"#\">Atalho 2</a></li><li><a href=\"#\">Atalho 3</a></li><li><a href=\"#\">Atalho 4</a></li></ul></div></div></div>",
           "fields": [
             {
-              "name": "link",
-              "selector": "div"
+              "name": "links",
+              "selector": "div>div"
             }
           ]
         }
@@ -33,24 +19,17 @@
   ],
   "models": [
     {
-      "id": "quicklink",
+      "id": "columns-quicklinks",
       "fields": [
         {
           "component": "richtext",
-          "name": "link",
-          "label": "Link",
-          "valueType": "string",
-          "value": ""
+          "name": "links",
+          "value": "",
+          "label": "Atalhos (lista de links — um item por atalho)",
+          "valueType": "string"
         }
       ]
     }
   ],
-  "filters": [
-    {
-      "id": "columns-quicklinks",
-      "components": [
-        "quicklink"
-      ]
-    }
-  ]
+  "filters": []
 }
