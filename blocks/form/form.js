@@ -32,13 +32,20 @@ function el(tag, attrs = {}, ...children) {
   return e;
 }
 
-function labelFor(id, text, required) {
-  return el('label', { for: id, class: 'form-label' }, text, required ? el('span', { class: 'form-required', 'aria-hidden': 'true' }, ' *') : null);
+// the required "*" is drawn by CSS so the label text equals the authored text (what agents read)
+function labelFor(id, text, required, tag = 'label') {
+  return el(tag, {
+    for: tag === 'label' ? id : null,
+    id: `${id}-label`,
+    class: `form-label${required ? ' form-label-required' : ''}`,
+  }, text);
 }
 
 function buildMultiselect(id, def) {
-  const summary = el('summary', { class: 'form-multiselect-summary', id: `${id}-summary` }, def.placeholder || 'Selecione...');
-  const list = el('div', { class: 'form-multiselect-options', role: 'group', 'aria-labelledby': `${id}-label` });
+  const summary = el('summary', {
+    class: 'form-multiselect-summary', id: `${id}-summary`, 'aria-labelledby': `${id}-label ${id}-summary`,
+  }, def.placeholder || 'Selecione...');
+  const list = el('div', { class: 'form-multiselect-options' });
   def.options.forEach((opt, i) => {
     const optId = `${id}-${i}`;
     list.append(el(
@@ -81,7 +88,7 @@ function buildControl(id, def) {
     case 'multiselect':
       return buildMultiselect(id, def);
     case 'radio': {
-      const group = el('div', { class: 'form-radio-group', role: 'radiogroup' });
+      const group = el('div', { class: 'form-radio-group' });
       def.options.forEach((o, i) => group.append(el('label', { class: 'form-choice', for: `${id}-${i}` }, el('input', {
         type: 'radio', id: `${id}-${i}`, name: def.name || id, value: o, required: def.required,
       }), el('span', {}, o))));
@@ -93,7 +100,9 @@ function buildControl(id, def) {
 }
 
 function buildField(def, id) {
-  const wrapper = el('div', { class: `form-field form-field-${def.type}` });
+  // option groups are fieldsets named by their legend; other controls get a label[for]
+  const group = ['multiselect', 'radio'].includes(def.type);
+  const wrapper = el(group ? 'fieldset' : 'div', { class: `form-field form-field-${def.type}` });
   if (def.type === 'heading') {
     wrapper.append(el('p', { class: 'form-heading' }, def.label));
   } else if (def.type === 'submit') {
@@ -103,9 +112,7 @@ function buildField(def, id) {
       type: 'checkbox', id, name: def.name || id, value: 'sim', required: def.required,
     }), el('span', {}, def.label)));
   } else {
-    const label = labelFor(id, def.label, def.required);
-    label.id = `${id}-label`;
-    wrapper.append(label, buildControl(id, def));
+    wrapper.append(labelFor(id, def.label, def.required, group ? 'legend' : 'label'), buildControl(id, def));
   }
   return wrapper;
 }

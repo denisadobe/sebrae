@@ -28,7 +28,20 @@
   line-height: 24px;
 }
 
-.form .form-required {
+.form fieldset.form-field {
+  min-width: 0;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.form legend.form-label {
+  margin-bottom: 4px;
+  padding: 0;
+}
+
+.form .form-label-required::after {
+  content: ' *';
   color: var(--sebrae-blue);
 }
 
