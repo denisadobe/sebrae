@@ -5,7 +5,7 @@
  * Commerce demo pages (commerce branch). Each page of Adobe's reference storefront
  * (aem-boilerplate-commerce) maps to a thin Sebrae shell: a short intro plus the commerce
  * block configuration — product data loads at runtime from the Adobe Commerce catalog.
- *   /search                     → /cursos   (product-list-page)
+ *   /search                     → /cursos   (product-showcase x3 + product-list-page)
  *   /cart                       → /carrinho (commerce-cart)
  *   /products/{url-key}/{sku}   → /produto  (product-details; any product via ?sku=)
  */
@@ -26,6 +26,12 @@ function link(document, href, text) {
 
 const table = (document, rows) => WebImporter.DOMUtils.createTable(rows, document);
 
+function showcase(document, title, category, limit, label) {
+  return table(document, [
+    ['Product Showcase'], ['title', title], ['category', category], ['skus', ''], ['limit', limit], ['label', label],
+  ]);
+}
+
 function metadata(document, title, description) {
   return table(document, [['Metadata'], ['Title', title], ['Description', description]]);
 }
@@ -41,15 +47,23 @@ function getSku(document, url) {
 }
 
 const PAGES = {
+  // layout of sp.loja.sebrae.com.br/cursos/cursos-online: showcases on top, catalog below
   search: (document) => ({
     path: '/cursos',
     content: [
-      h(document, 'h1', 'Cursos e soluções'),
-      h(document, 'p', 'Encontre cursos, eventos e materiais para o seu negócio. Use a busca e os filtros para chegar mais rápido ao que você precisa — muitos conteúdos são gratuitos.'),
+      h(document, 'h1', 'Cursos online'),
+      h(document, 'p', 'Aprenda no seu ritmo com cursos para quem quer começar, gerenciar ou expandir o seu negócio. Muitos são gratuitos.'),
       'hr',
-      table(document, [['Product List Page'], ['category', ''], ['pageSize', '9']]),
+      showcase(document, 'Top 10 cursos mais acessados', '', '10', 'Curso online'),
       'hr',
-      metadata(document, 'Cursos e soluções | Sebrae', 'Catálogo de cursos e soluções do Sebrae.'),
+      showcase(document, 'Marketing', 'apparel', '10', 'Curso online / Marketing'),
+      'hr',
+      showcase(document, 'Finanças', 'office', '10', 'Curso online / Finanças'),
+      'hr',
+      h(document, 'h2', 'Todos os cursos'),
+      table(document, [['Product List Page'], ['category', ''], ['pageSize', '9'], ['label', 'Curso online']]),
+      'hr',
+      metadata(document, 'Cursos online | Sebrae', 'Cursos online do Sebrae para começar, gerenciar e expandir o seu negócio.'),
     ],
   }),
   cart: (document) => ({

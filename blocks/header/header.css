@@ -221,7 +221,7 @@ header .nav-main .nav-hamburger {
 header .nav-mobile-actions {
   display: flex;
   justify-self: end;
-  gap: 8px;
+  gap: 4px;
 }
 
 header .nav-wrapper .nav-search-toggle,
@@ -475,6 +475,10 @@ header .nav-cart-button[data-count]::after {
 
 header .nav-cart {
   list-style: none;
+}
+
+header .nav-wrapper .nav-mobile-actions .nav-cart-button {
+  width: 40px;
 }
 
 header .nav-cart-panel {

@@ -1,0 +1,138 @@
+/* values measured on loja.sebrae.com.br (cursos online showcases) */
+.product-showcase {
+  color: var(--sebrae-navy);
+}
+
+.product-showcase .product-showcase-title {
+  margin: 0 0 24px;
+  color: var(--sebrae-blue);
+  font-family: var(--display-font-family);
+  font-size: 24px;
+  line-height: 30px;
+  text-align: center;
+}
+
+.product-showcase .product-showcase-track {
+  display: grid;
+  grid-auto-columns: 82%;
+  grid-auto-flow: column;
+  gap: 21px;
+  margin: 0;
+  padding: 4px 4px 12px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+
+.product-showcase .product-showcase-track::-webkit-scrollbar {
+  display: none;
+}
+
+.product-showcase .product-showcase-item {
+  scroll-snap-align: start;
+}
+
+.product-showcase .product-showcase-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.product-showcase .product-showcase-dots {
+  display: flex;
+  gap: 8px;
+}
+
+.product-showcase .product-showcase-dot {
+  width: 10px;
+  height: 10px;
+  margin: 0;
+  border: 1px solid var(--sebrae-blue);
+  border-radius: 50%;
+  padding: 0;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.product-showcase .product-showcase-dot[aria-current='true'] {
+  background-color: var(--sebrae-blue);
+}
+
+.product-showcase .product-showcase-pager {
+  display: flex;
+  align-items: center;
+  align-self: flex-end;
+  gap: 8px;
+}
+
+.product-showcase .product-showcase-counter {
+  margin-right: 8px;
+  color: #243342;
+  font-size: 16px;
+}
+
+.product-showcase .product-showcase-prev,
+.product-showcase .product-showcase-next {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  margin: 0;
+  border: 1px solid var(--sebrae-blue);
+  border-radius: 6px;
+  padding: 0;
+  background-color: #fff;
+  color: var(--sebrae-blue);
+  cursor: pointer;
+}
+
+.product-showcase .product-showcase-prev::before,
+.product-showcase .product-showcase-next::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 8px;
+  height: 8px;
+  border-top: 2px solid currentcolor;
+  border-right: 2px solid currentcolor;
+  transform: translateX(-2px) rotate(45deg);
+}
+
+.product-showcase .product-showcase-prev::before {
+  transform: translateX(2px) rotate(-135deg);
+}
+
+.product-showcase .product-showcase-prev:disabled,
+.product-showcase .product-showcase-next:disabled {
+  border-color: #d5dbe5;
+  color: #b3bdcc;
+  cursor: default;
+}
+
+.product-showcase .product-showcase-empty {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: var(--sebrae-card-bg);
+  text-align: center;
+}
+
+@media (width >= 600px) {
+  .product-showcase .product-showcase-track {
+    grid-auto-columns: calc((100% - 21px) / 2);
+  }
+}
+
+@media (width >= 900px) {
+  .product-showcase .product-showcase-title {
+    font-size: 28px;
+    line-height: 36px;
+  }
+
+  .product-showcase .product-showcase-track {
+    grid-auto-columns: calc((100% - 3 * 21px) / 4);
+  }
+}

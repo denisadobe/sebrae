@@ -326,22 +326,6 @@
           }
         },
         {
-          "title": "Carrinho (Commerce)",
-          "id": "commerce-cart",
-          "model": "commerce-cart",
-          "plugins": {
-            "da": {
-              "unsafeHTML": "<div class=\"commerce-cart\"><div><div>startShoppingUrl</div><div>/cursos</div></div></div>",
-              "fields": [
-                {
-                  "name": "startShoppingUrl",
-                  "selector": "div>div:nth-child(2)"
-                }
-              ]
-            }
-          }
-        },
-        {
           "title": "Chamada para ação",
           "id": "cta-banner",
           "model": "cta-banner",
@@ -502,42 +486,6 @@
           }
         },
         {
-          "title": "Detalhe de produto (Commerce)",
-          "id": "product-details",
-          "model": "product-details",
-          "plugins": {
-            "da": {
-              "unsafeHTML": "<div class=\"product-details\"><div><div>defaultSku</div><div>TEESHIRT</div></div></div>",
-              "fields": [
-                {
-                  "name": "defaultSku",
-                  "selector": "div>div:nth-child(2)"
-                }
-              ]
-            }
-          }
-        },
-        {
-          "title": "Lista de produtos (Commerce)",
-          "id": "product-list-page",
-          "model": "product-list-page",
-          "plugins": {
-            "da": {
-              "unsafeHTML": "<div class=\"product-list-page\"><div><div>category</div><div></div></div><div><div>pageSize</div><div>9</div></div></div>",
-              "fields": [
-                {
-                  "name": "category",
-                  "selector": "div:nth-child(1)>div:nth-child(2)"
-                },
-                {
-                  "name": "pageSize",
-                  "selector": "div:nth-child(2)>div:nth-child(2)"
-                }
-              ]
-            }
-          }
-        },
-        {
           "title": "Citação / depoimento",
           "id": "quote",
           "model": "quote",
@@ -667,6 +615,96 @@
                 {
                   "name": "posterImage",
                   "selector": "div>div>picture>img[src]"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "title": "Commerce",
+      "id": "commerce",
+      "components": [
+        {
+          "title": "Carrinho (Commerce)",
+          "id": "commerce-cart",
+          "model": "commerce-cart",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"commerce-cart\"><div><div>startShoppingUrl</div><div>/cursos</div></div></div>",
+              "fields": [
+                {
+                  "name": "startShoppingUrl",
+                  "selector": "div>div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Detalhe de produto (Commerce)",
+          "id": "product-details",
+          "model": "product-details",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"product-details\"><div><div>defaultSku</div><div>TEESHIRT</div></div></div>",
+              "fields": [
+                {
+                  "name": "defaultSku",
+                  "selector": "div>div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Lista de produtos (Commerce)",
+          "id": "product-list-page",
+          "model": "product-list-page",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"product-list-page\"><div><div>category</div><div></div></div><div><div>pageSize</div><div>9</div></div></div>",
+              "fields": [
+                {
+                  "name": "category",
+                  "selector": "div:nth-child(1)>div:nth-child(2)"
+                },
+                {
+                  "name": "pageSize",
+                  "selector": "div:nth-child(2)>div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "title": "Vitrine de produtos (Commerce)",
+          "id": "product-showcase",
+          "model": "product-showcase",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"product-showcase\"><div><div>title</div><div>Top 10 cursos mais acessados</div></div><div><div>category</div><div></div></div><div><div>skus</div><div></div></div><div><div>limit</div><div>10</div></div><div><div>label</div><div>Curso online</div></div></div>",
+              "fields": [
+                {
+                  "name": "title",
+                  "selector": "div:nth-child(1)>div:nth-child(2)"
+                },
+                {
+                  "name": "category",
+                  "selector": "div:nth-child(2)>div:nth-child(2)"
+                },
+                {
+                  "name": "skus",
+                  "selector": "div:nth-child(3)>div:nth-child(2)"
+                },
+                {
+                  "name": "limit",
+                  "selector": "div:nth-child(4)>div:nth-child(2)"
+                },
+                {
+                  "name": "label",
+                  "selector": "div:nth-child(5)>div:nth-child(2)"
                 }
               ]
             }

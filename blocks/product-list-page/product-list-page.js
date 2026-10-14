@@ -4,12 +4,14 @@
  * Authoring (key-value table, all optional):
  *   category  | catalog category path (e.g. apparel) — empty = whole catalog
  *   pageSize  | products per page (default 9)
+ *   label     | card eyebrow, e.g. "Curso online / Marketing" (default "Curso online")
  * The search phrase comes from ?q= (header search can link here).
  */
 import { readBlockConfig } from '../../scripts/aem.js';
 import {
   getProductLink, initializeCart, initializeSearch,
 } from '../../scripts/commerce.js';
+import { availability, eyebrow, priceTag } from '../../scripts/product-card.js';
 
 const div = (name) => {
   const d = document.createElement('div');
@@ -124,6 +126,26 @@ export default async function decorate(block) {
       render.render(SearchResults, {
         routeProduct: (product) => getProductLink(product.sku),
         slots: {
+          // Sebrae card content: eyebrow + bold title, availability + price
+          ProductName: (ctx) => {
+            const title = document.createElement('h3');
+            title.className = 'product-card-title';
+            const a = document.createElement('a');
+            a.className = 'product-card-name';
+            a.href = getProductLink(ctx.product.sku);
+            a.textContent = ctx.product.name;
+            title.append(a);
+            const wrap = document.createElement('div');
+            wrap.className = 'product-list-page-card-heading';
+            wrap.append(eyebrow(config.label), title);
+            ctx.replaceWith(wrap);
+          },
+          ProductPrice: (ctx) => {
+            const footer = document.createElement('div');
+            footer.className = 'product-card-footer';
+            footer.append(availability(ctx.product), priceTag(ctx.product));
+            ctx.replaceWith(footer);
+          },
           ProductActions: (ctx) => ctx.replaceWith(cartButton(ctx.product)),
         },
       })(list),

@@ -1,0 +1,64 @@
+{
+  "definitions": [
+    {
+      "title": "Vitrine de produtos (Commerce)",
+      "id": "product-showcase",
+      "model": "product-showcase",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"product-showcase\"><div><div>title</div><div>Top 10 cursos mais acessados</div></div><div><div>category</div><div></div></div><div><div>skus</div><div></div></div><div><div>limit</div><div>10</div></div><div><div>label</div><div>Curso online</div></div></div>",
+          "fields": [
+            { "name": "title", "selector": "div:nth-child(1)>div:nth-child(2)" },
+            { "name": "category", "selector": "div:nth-child(2)>div:nth-child(2)" },
+            { "name": "skus", "selector": "div:nth-child(3)>div:nth-child(2)" },
+            { "name": "limit", "selector": "div:nth-child(4)>div:nth-child(2)" },
+            { "name": "label", "selector": "div:nth-child(5)>div:nth-child(2)" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "product-showcase",
+      "fields": [
+        {
+          "component": "text",
+          "name": "title",
+          "label": "Título da vitrine",
+          "valueType": "string"
+        },
+        {
+          "component": "text",
+          "name": "category",
+          "label": "Categoria",
+          "valueType": "string",
+          "description": "Caminho da categoria no catálogo (ex.: apparel, office, lifestyle). Usada quando não há SKUs."
+        },
+        {
+          "component": "text",
+          "name": "skus",
+          "label": "SKUs (opcional)",
+          "valueType": "string",
+          "description": "Lista de SKUs separados por vírgula, na ordem de exibição (ex.: ADB228, ADB150)."
+        },
+        {
+          "component": "text",
+          "name": "limit",
+          "label": "Quantidade máxima",
+          "valueType": "string",
+          "value": "10"
+        },
+        {
+          "component": "text",
+          "name": "label",
+          "label": "Rótulo do card",
+          "valueType": "string",
+          "value": "Curso online",
+          "description": "Ex.: \"Curso online / Marketing\" — o texto após a barra aparece colorido."
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

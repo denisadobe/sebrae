@@ -115,3 +115,103 @@
   --type-details-overline-font: normal normal 700 12px/20px var(--type-base-font-family);
   --type-details-overline-letter-spacing: 0.08em;
 }
+
+/* Sebrae product card (showcase + catalog), as on loja.sebrae.com.br */
+.product-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgb(20 46 82 / 20%);
+  color: #617385;
+  transition: box-shadow 0.2s ease;
+}
+
+.product-card:hover {
+  box-shadow: 0 8px 20px 0 rgb(20 46 82 / 20%);
+}
+
+.product-card-image {
+  aspect-ratio: 16 / 9;
+  background-color: var(--sebrae-card-bg);
+}
+
+.product-card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 24px;
+}
+
+.product-card-eyebrow {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 16px;
+}
+
+.product-card-topic { font-weight: 700; }
+.product-card-topic-blue { color: var(--sebrae-blue); }
+.product-card-topic-green { color: #83bf30; }
+.product-card-topic-purple { color: #9b51e0; }
+.product-card-topic-red { color: #e5484d; }
+.product-card-topic-orange { color: #ff8040; }
+.product-card-topic-teal { color: #00a3a3; }
+
+.product-card-title {
+  margin: 0;
+  color: #394d60;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 20px;
+}
+
+.product-card-name:any-link {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* the whole card is clickable */
+.product-card-name::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+
+.product-card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: auto;
+}
+
+.product-card-meta {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 16px;
+}
+
+.product-card-meta.is-out {
+  color: #c4161c;
+}
+
+.product-card-price {
+  color: #005eb8;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 16px;
+  white-space: nowrap;
+}

@@ -13,5 +13,8 @@
   },
   {
     "...": "./blocks/*.json#/models"
+  },
+  {
+    "...": "./blocks/commerce/*.json#/models"
   }
 ]

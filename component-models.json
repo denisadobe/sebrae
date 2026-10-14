@@ -305,18 +305,6 @@
     ]
   },
   {
-    "id": "commerce-cart",
-    "fields": [
-      {
-        "component": "text",
-        "name": "startShoppingUrl",
-        "label": "Link do botão de carrinho vazio",
-        "valueType": "string",
-        "value": "/cursos"
-      }
-    ]
-  },
-  {
     "id": "cta-banner",
     "fields": [
       {
@@ -539,37 +527,6 @@
     ]
   },
   {
-    "id": "product-details",
-    "fields": [
-      {
-        "component": "text",
-        "name": "defaultSku",
-        "label": "SKU do produto",
-        "valueType": "string",
-        "description": "SKU do produto no catálogo Adobe Commerce (ex.: TEESHIRT). Os dados do produto são carregados do catálogo."
-      }
-    ]
-  },
-  {
-    "id": "product-list-page",
-    "fields": [
-      {
-        "component": "text",
-        "name": "category",
-        "label": "Categoria",
-        "valueType": "string",
-        "description": "Caminho da categoria no catálogo (ex.: apparel, office, lifestyle). Vazio = catálogo inteiro."
-      },
-      {
-        "component": "text",
-        "name": "pageSize",
-        "label": "Produtos por página",
-        "valueType": "string",
-        "value": "9"
-      }
-    ]
-  },
-  {
     "id": "quote",
     "fields": [
       {
@@ -661,6 +618,89 @@
         "name": "posterImage",
         "label": "Imagem de capa",
         "valueType": "string"
+      }
+    ]
+  },
+  {
+    "id": "commerce-cart",
+    "fields": [
+      {
+        "component": "text",
+        "name": "startShoppingUrl",
+        "label": "Link do botão de carrinho vazio",
+        "valueType": "string",
+        "value": "/cursos"
+      }
+    ]
+  },
+  {
+    "id": "product-details",
+    "fields": [
+      {
+        "component": "text",
+        "name": "defaultSku",
+        "label": "SKU do produto",
+        "valueType": "string",
+        "description": "SKU do produto no catálogo Adobe Commerce (ex.: TEESHIRT). Os dados do produto são carregados do catálogo."
+      }
+    ]
+  },
+  {
+    "id": "product-list-page",
+    "fields": [
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Categoria",
+        "valueType": "string",
+        "description": "Caminho da categoria no catálogo (ex.: apparel, office, lifestyle). Vazio = catálogo inteiro."
+      },
+      {
+        "component": "text",
+        "name": "pageSize",
+        "label": "Produtos por página",
+        "valueType": "string",
+        "value": "9"
+      }
+    ]
+  },
+  {
+    "id": "product-showcase",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Título da vitrine",
+        "valueType": "string"
+      },
+      {
+        "component": "text",
+        "name": "category",
+        "label": "Categoria",
+        "valueType": "string",
+        "description": "Caminho da categoria no catálogo (ex.: apparel, office, lifestyle). Usada quando não há SKUs."
+      },
+      {
+        "component": "text",
+        "name": "skus",
+        "label": "SKUs (opcional)",
+        "valueType": "string",
+        "description": "Lista de SKUs separados por vírgula, na ordem de exibição (ex.: ADB228, ADB150)."
+      },
+      {
+        "component": "text",
+        "name": "limit",
+        "label": "Quantidade máxima",
+        "valueType": "string",
+        "value": "10"
+      },
+      {
+        "component": "text",
+        "name": "label",
+        "label": "Rótulo do card",
+        "valueType": "string",
+        "value": "Curso online",
+        "description": "Ex.: \"Curso online / Marketing\" — o texto após a barra aparece colorido."
       }
     ]
   }
