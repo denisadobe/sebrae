@@ -10,7 +10,7 @@ import {
 } from './brand-concierge-config.js';
 
 const MOUNT_ID = 'brand-concierge-mount';
-const FULL_PAGE = '/assistente';
+const FULL_PAGE = '/loja/assistente';
 let runtime;
 let styling;
 let mounted = false;

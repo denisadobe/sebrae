@@ -6,7 +6,7 @@
       "model": "commerce-cart",
       "plugins": {
         "da": {
-          "unsafeHTML": "<div class=\"commerce-cart\"><div><div>startShoppingUrl</div><div>/cursos</div></div></div>",
+          "unsafeHTML": "<div class=\"commerce-cart\"><div><div>startShoppingUrl</div><div>/loja/cursos</div></div></div>",
           "fields": [
             { "name": "startShoppingUrl", "selector": "div>div:nth-child(2)" }
           ]
@@ -23,7 +23,7 @@
           "name": "startShoppingUrl",
           "label": "Link do botão de carrinho vazio",
           "valueType": "string",
-          "value": "/cursos"
+          "value": "/loja/cursos"
         }
       ]
     }

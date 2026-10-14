@@ -135,10 +135,10 @@ export const LABELS = {
   },
 };
 
-// Demo pages (commerce branch)
-export const PRODUCT_PAGE = '/produto';
-export const CART_PAGE = '/carrinho';
-export const CATALOG_PAGE = '/cursos';
+// Demo pages (commerce branch) — all under /loja so the DA folder opens in the branch's editor
+export const PRODUCT_PAGE = '/loja/produto';
+export const CART_PAGE = '/loja/carrinho';
+export const CATALOG_PAGE = '/loja/cursos';
 
 /** Link to the generic product page for a given SKU. */
 export const getProductLink = (sku) => `${PRODUCT_PAGE}?sku=${encodeURIComponent(sku)}`;
@@ -191,7 +191,7 @@ export function initializeCart() {
 }
 
 /**
- * Product SKU: ?sku= query parameter (generic /produto page), authored on the block
+ * Product SKU: ?sku= query parameter (generic /loja/produto page), authored on the block
  * (defaultSku), page metadata (sku) or the URL (/products/{url-key}/{sku}).
  */
 export function getProductSku(configuredSku) {

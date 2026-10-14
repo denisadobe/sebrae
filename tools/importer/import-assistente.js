@@ -2,7 +2,7 @@
 /* global WebImporter */
 
 /**
- * /assistente (commerce branch): full-page Adobe Brand Concierge.
+ * /loja/assistente (commerce branch): full-page Adobe Brand Concierge.
  * Source: https://sebrae.com.br/ (only used as the import entry point — the page is a thin
  * shell: intro copy + the brand-concierge block; the chat itself loads at runtime).
  */
@@ -29,6 +29,6 @@ export default {
         ['Template', 'assistente'],
       ], document),
     );
-    return [{ element: main, path: '/assistente' }];
+    return [{ element: main, path: '/loja/assistente' }];
   },
 };

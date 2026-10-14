@@ -5,9 +5,11 @@
  * Commerce demo pages (commerce branch). Each page of Adobe's reference storefront
  * (aem-boilerplate-commerce) maps to a thin Sebrae shell: a short intro plus the commerce
  * block configuration — product data loads at runtime from the Adobe Commerce catalog.
- *   /search                     → /cursos   (product-showcase x3 + product-list-page)
- *   /cart                       → /carrinho (commerce-cart)
- *   /products/{url-key}/{sku}   → /produto  (product-details; any product via ?sku=)
+ *   /search                     → /loja/cursos    (product-showcase x3 + product-list-page)
+ *   /cart                       → /loja/carrinho  (commerce-cart)
+ *   /products/{url-key}/{sku}   → /loja/produto   (product-details; any product via ?sku=)
+ * Pages live under /loja: in DA the editor is chosen per folder (editor.path), so the folder
+ * opens in the commerce branch's Universal Editor.
  */
 
 function h(document, tag, text) {
@@ -49,7 +51,7 @@ function getSku(document, url) {
 const PAGES = {
   // layout of sp.loja.sebrae.com.br/cursos/cursos-online: showcases on top, catalog below
   search: (document) => ({
-    path: '/cursos',
+    path: '/loja/cursos',
     content: [
       h(document, 'h1', 'Cursos online'),
       h(document, 'p', 'Aprenda no seu ritmo com cursos para quem quer começar, gerenciar ou expandir o seu negócio. Muitos são gratuitos.'),
@@ -67,23 +69,23 @@ const PAGES = {
     ],
   }),
   cart: (document) => ({
-    path: '/carrinho',
+    path: '/loja/carrinho',
     content: [
       h(document, 'h1', 'Seu carrinho'),
       h(document, 'p', 'Revise os itens escolhidos antes de concluir a sua inscrição.'),
       'hr',
-      table(document, [['Commerce Cart'], ['startShoppingUrl', '/cursos']]),
+      table(document, [['Commerce Cart'], ['startShoppingUrl', '/loja/cursos']]),
       'hr',
       metadata(document, 'Carrinho | Sebrae', 'Itens escolhidos para inscrição.'),
     ],
   }),
   product: (document, url) => ({
-    path: '/produto',
+    path: '/loja/produto',
     content: [
       table(document, [['Product Details'], ['defaultSku', getSku(document, url)]]),
       'hr',
       h(document, 'h2', 'Continue explorando'),
-      link(document, '/cursos', 'Ver todos os cursos e soluções'),
+      link(document, '/loja/cursos', 'Ver todos os cursos e soluções'),
       'hr',
       metadata(document, 'Produto | Sebrae', 'Detalhes do curso ou solução.'),
     ],

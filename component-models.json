@@ -641,7 +641,7 @@
         "name": "startShoppingUrl",
         "label": "Link do botão de carrinho vazio",
         "valueType": "string",
-        "value": "/cursos"
+        "value": "/loja/cursos"
       }
     ]
   },

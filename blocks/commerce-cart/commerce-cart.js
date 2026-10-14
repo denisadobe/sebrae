@@ -2,7 +2,7 @@
  * Cart: Adobe Commerce cart drop-in — items (quantity update, remove), order summary with
  * coupon, empty state. Checkout is out of scope for the demo.
  * Authoring (key-value table, optional):
- *   startShoppingUrl | link of the empty-cart button (default /cursos)
+ *   startShoppingUrl | link of the empty-cart button (default /loja/cursos)
  */
 import { readBlockConfig } from '../../scripts/aem.js';
 import { CATALOG_PAGE, getProductLink, initializeCart } from '../../scripts/commerce.js';
