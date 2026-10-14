@@ -17,4 +17,8 @@ export default async function decorate(block) {
   block.replaceChildren(panel, source);
 
   await mountConcierge(panel);
+
+  // continuing a conversation (e.g. expanded from the popup): bring the whole chat into view
+  const hasTranscript = Object.keys(localStorage).some((k) => k.startsWith('bc_chat_transcript_'));
+  if (hasTranscript) setTimeout(() => block.scrollIntoView({ block: 'start' }), 600);
 }

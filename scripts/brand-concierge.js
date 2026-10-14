@@ -32,8 +32,9 @@ async function loadStyling() {
         const behavior = merge(config.behavior || {}, STYLE_OVERRIDES.behavior);
         const disclaimer = { ...(config.disclaimer || {}), ...STYLE_OVERRIDES.disclaimer };
         const text = { ...STYLE_OVERRIDES.text, ...(config.text || {}) };
+        const theme = { ...(config.theme || {}), ...STYLE_OVERRIDES.theme };
         return {
-          ...config, behavior, disclaimer, text,
+          ...config, behavior, disclaimer, text, theme,
         };
       });
   }

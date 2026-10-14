@@ -1,6 +1,12 @@
+.brand-concierge {
+  scroll-margin-top: calc(var(--nav-height) + 16px);
+}
+
+/* tall enough to use the whole screen below the sticky header, without scrolling the page */
 .brand-concierge .brand-concierge-panel {
-  height: min(760px, calc(100vh - 160px));
-  min-height: 520px;
+  height: calc(100svh - var(--nav-height) - 48px);
+  min-height: 480px;
+  max-height: 860px;
   overflow: hidden;
   border-radius: var(--radius-m);
   background-color: #fff;

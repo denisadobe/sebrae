@@ -41,4 +41,10 @@ export const STYLE_OVERRIDES = {
   text: {
     'error.general': 'Desculpe, algo deu errado. Tente novamente.',
   },
+  theme: {
+    // same typeface as the site (Figtree is already loaded by styles/fonts.css)
+    '--font-family': "figtree, figtree-fallback, 'Helvetica Neue', Helvetica, Arial, sans-serif",
+    // wider conversation on the full-page chat (the popup is limited by its own width)
+    '--chat-interface-max-width': '1040px',
+  },
 };
