@@ -25,6 +25,10 @@ export const STYLE_URL = '/scripts/brand-concierge-style.json';
 
 export const STYLE_OVERRIDES = {
   behavior: {
+    // keep the conversation when moving from the popup to the full-page chat
+    chatTranscript: {
+      enabled: true, maxSessions: 1, maxMessagesPerSession: 50, cleanupInterval: 24,
+    },
     privacyNotice: {
       title: 'Aviso de privacidade',
       text: 'Ao usar este assistente virtual, você concorda que as informações fornecidas na conversa podem ser coletadas, usadas e armazenadas pelo Sebrae e por seus prestadores de serviço, conforme a {Política de Privacidade}. Não compartilhe dados pessoais sensíveis (como informações financeiras ou de saúde).',

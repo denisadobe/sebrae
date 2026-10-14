@@ -91,7 +91,7 @@ export async function mountConcierge(container) {
       instanceName: 'alloy',
       stylingConfigurations,
       selector: `#${MOUNT_ID}`,
-      stickySession: false,
+      stickySession: true,
     });
   } catch (error) {
     // eslint-disable-next-line no-console
