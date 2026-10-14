@@ -18,6 +18,23 @@
 }
 
 .form .form-field {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+/* authored cells: type / name / required (and unused ones) are metadata only */
+.form .form-cell-type,
+.form .form-cell-name,
+.form .form-cell-required,
+.form .form-cell-extra,
+.form .form-field:where(:not(.form-field-multiselect, .form-field-submit)) > .form-cell-placeholder,
+.form .form-field:where(:not(.form-field-multiselect, .form-field-radio)) > .form-cell-options {
+  display: none;
+}
+
+.form .form-cell-label {
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -26,18 +43,6 @@
 .form .form-label {
   font-size: 18px;
   line-height: 24px;
-}
-
-.form fieldset.form-field {
-  min-width: 0;
-  margin: 0;
-  border: 0;
-  padding: 0;
-}
-
-.form legend.form-label {
-  margin-bottom: 4px;
-  padding: 0;
 }
 
 .form .form-label-required::after {
@@ -75,47 +80,89 @@
   color: #757575;
 }
 
-.form details.form-multiselect > .form-multiselect-summary {
+.form select:invalid {
+  color: #757575;
+}
+
+.form .form-multiselect-summary {
   overflow: hidden;
   color: #757575;
-  list-style: none;
   text-overflow: ellipsis;
   white-space: nowrap;
   cursor: pointer;
 }
 
-.form details.form-multiselect > .form-multiselect-summary.has-value {
+.form .form-multiselect-summary.has-value {
   color: var(--sebrae-navy);
 }
 
-.form .form-multiselect-summary::-webkit-details-marker {
+.form .form-multiselect-placeholder:empty::before {
+  content: attr(data-placeholder);
+}
+
+.form .form-multiselect-summary.has-value .form-multiselect-placeholder,
+.form .form-multiselect-value:empty {
   display: none;
 }
 
 .form input:focus-visible,
 .form select:focus-visible,
 .form textarea:focus-visible,
-.form details.form-multiselect > .form-multiselect-summary:focus-visible {
+.form .form-multiselect-summary:focus-visible {
   border-color: var(--sebrae-blue);
   outline: none;
 }
 
 .form .form-validated :invalid,
-.form .form-validated .form-multiselect:has(:invalid) .form-multiselect-summary {
+.form .form-validated .form-field-multiselect:has(:invalid) .form-multiselect-summary {
   border-color: #c4161c;
 }
 
-/* multi select (dropdown with checkboxes) */
-.form .form-multiselect {
-  position: relative;
+.form .form-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
 }
 
-.form .form-multiselect-options {
+/* checkbox / radio */
+.form .form-choice,
+.form .form-field-radio .form-option {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.form .form-choice input,
+.form .form-option input {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  margin: 4px 0 0;
+  accent-color: var(--sebrae-blue);
+}
+
+.form .form-multiselect-options .form-option input {
+  margin: 0;
+}
+
+.form .form-field-radio > .form-cell-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* multi select (dropdown with checkboxes) */
+.form .form-field-multiselect > .form-multiselect-options {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
   right: 0;
   z-index: 5;
+  display: none;
   max-height: 260px;
   overflow-y: auto;
   border: 1px solid var(--form-border);
@@ -125,42 +172,28 @@
   box-shadow: var(--sebrae-shadow);
 }
 
-.form .form-multiselect-option {
-  display: flex;
-  align-items: center;
-  gap: 8px;
+.form .form-field-multiselect.is-open > .form-multiselect-options {
+  display: block;
+}
+
+.form .form-option-sep {
+  display: none;
+}
+
+.form .form-multiselect-options .form-option {
   padding: 8px 12px;
   font-size: 16px;
   line-height: 22px;
-  cursor: pointer;
 }
 
-.form .form-multiselect-option:hover {
+.form .form-multiselect-options .form-option:hover {
   background-color: var(--sebrae-lavender);
 }
 
-/* checkbox / radio */
-.form .form-choice {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
-  font-size: 16px;
-  line-height: 24px;
-  cursor: pointer;
-}
-
-.form .form-choice input {
-  flex: 0 0 auto;
-  width: 16px;
-  height: 16px;
-  margin: 4px 0 0;
-  accent-color: var(--sebrae-blue);
-}
-
-.form .form-radio-group {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+.form .form-multiselect-options :where(ul, ol, p) {
+  margin: 0;
+  padding: 0;
+  list-style: none;
 }
 
 /* submit */
@@ -182,7 +215,8 @@
   background-color: var(--sebrae-blue-dark);
 }
 
-.form .form-success {
+.form .form-field-submit > .form-success {
+  display: none;
   margin: 0;
   border-radius: var(--radius-s);
   padding: 24px;
@@ -191,6 +225,16 @@
   font-size: 18px;
   font-weight: 700;
   line-height: 28px;
+}
+
+/* demo "sent" state: only the authored confirmation message stays visible */
+.form .form-sent > .form-field:not(.form-field-submit),
+.form .form-sent > .form-field-submit > .form-cell-label {
+  display: none;
+}
+
+.form .form-sent > .form-field-submit > .form-success {
+  display: block;
 }
 
 /* "form-split" section style: intro (heading + image) beside the form, as on sebrae.com.br */
