@@ -1,8 +1,8 @@
 /*
  * Adobe Brand Concierge (commerce branch): loads the Web SDK + Web Client on demand and
- * mounts the chat once per page — inside the brand-concierge block (full page) or in a
- * floating popup opened from a launcher button. Nothing is downloaded until it is needed.
- * Per page, the popup can be turned off with the metadata "brand-concierge: off".
+ * mounts the chat inside the brand-concierge block (full-page assistant). Other pages get a
+ * floating launcher that links to that page; nothing is downloaded until the chat is shown.
+ * Per page, the launcher can be turned off with the metadata "brand-concierge: off".
  */
 import { loadCSS, loadScript } from './aem.js';
 import {
@@ -111,68 +111,15 @@ function icon(name) {
   return span;
 }
 
-/** Floating launcher + popup panel (chat mounted on first open, kept alive afterwards). */
+/** Floating launcher: a link to the full-page assistant (the chat itself loads there). */
 export function addLauncher() {
   if (document.querySelector('.brand-concierge-launcher')) return;
   loadCSS(`${window.hlx.codeBasePath}/styles/brand-concierge.css`);
-
-  const launcher = document.createElement('button');
-  launcher.type = 'button';
+  const launcher = document.createElement('a');
   launcher.className = 'brand-concierge-launcher';
-  launcher.setAttribute('aria-haspopup', 'dialog');
-  launcher.setAttribute('aria-expanded', 'false');
-  launcher.setAttribute('aria-controls', 'brand-concierge-popup');
+  launcher.href = FULL_PAGE;
   const label = document.createElement('span');
   label.textContent = 'Assistente Sebrae';
   launcher.append(icon('sparkle'), label);
-
-  const panel = document.createElement('div');
-  panel.className = 'brand-concierge-popup';
-  panel.id = 'brand-concierge-popup';
-  panel.setAttribute('role', 'dialog');
-  panel.setAttribute('aria-label', 'Assistente Sebrae');
-  panel.hidden = true;
-  const header = document.createElement('div');
-  header.className = 'brand-concierge-popup-header';
-  const title = document.createElement('p');
-  title.className = 'brand-concierge-popup-title';
-  title.append(icon('sparkle'), 'Assistente Sebrae');
-  const close = document.createElement('button');
-  close.type = 'button';
-  close.className = 'brand-concierge-popup-close';
-  close.setAttribute('aria-label', 'Fechar assistente');
-  close.append(icon('close'));
-  // continue the same conversation on the full-page chat (sticky session + transcript)
-  const expand = document.createElement('a');
-  expand.className = 'brand-concierge-popup-expand';
-  expand.href = FULL_PAGE;
-  expand.setAttribute('aria-label', 'Abrir em tela cheia');
-  expand.title = 'Abrir em tela cheia';
-  expand.append(icon('expand'));
-  const actions = document.createElement('div');
-  actions.className = 'brand-concierge-popup-actions';
-  actions.append(expand, close);
-  header.append(title, actions);
-  const body = document.createElement('div');
-  body.className = 'brand-concierge-popup-body';
-  panel.append(header, body);
-  document.body.append(panel, launcher);
-
-  const toggle = (open) => {
-    panel.hidden = !open;
-    launcher.hidden = open;
-    launcher.setAttribute('aria-expanded', open);
-    document.body.classList.toggle('brand-concierge-open', open);
-    if (open) {
-      mountConcierge(body);
-      close.focus();
-    } else {
-      launcher.focus();
-    }
-  };
-  launcher.addEventListener('click', () => toggle(true));
-  close.addEventListener('click', () => toggle(false));
-  window.addEventListener('keydown', (e) => {
-    if (e.code === 'Escape' && !panel.hidden) toggle(false);
-  });
+  document.body.append(launcher);
 }

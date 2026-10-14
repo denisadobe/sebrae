@@ -259,7 +259,7 @@ function loadDelayed() {
   import('./consent-check.js');
   // load anything that can be postponed to the latest here
 
-  // commerce branch: Adobe Brand Concierge popup (the chat itself loads on first open);
+  // commerce branch: Adobe Brand Concierge launcher (links to the full-page assistant);
   // skipped on pages with the full-page block, with "brand-concierge: off" and in the editor
   const conciergeOff = getMetadata('brand-concierge').toLowerCase() === 'off'
     || document.querySelector('.brand-concierge')
