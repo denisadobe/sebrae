@@ -6,12 +6,35 @@
  */
 import { loadCSS, loadScript } from './aem.js';
 import {
-  ALLOY_CONFIG, ALLOY_SRC, STYLE_CONFIGURATION, WEB_CLIENT_SRC,
+  ALLOY_CONFIG, ALLOY_SRC, STYLE_OVERRIDES, STYLE_URL, WEB_CLIENT_SRC,
 } from './brand-concierge-config.js';
 
 const MOUNT_ID = 'brand-concierge-mount';
 let runtime;
+let styling;
 let mounted = false;
+
+// shallow-by-section merge: overrides replace keys inside each top-level section
+const merge = (base, extra) => Object.entries(extra).reduce((acc, [key, value]) => ({
+  ...acc,
+  [key]: value && typeof value === 'object' && !Array.isArray(value)
+    ? { ...(acc[key] || {}), ...value }
+    : value,
+}), { ...base });
+
+async function loadStyling() {
+  if (!styling) {
+    styling = fetch(`${window.hlx.codeBasePath}${STYLE_URL}`)
+      .then((resp) => (resp.ok ? resp.json() : {}))
+      .catch(() => ({}))
+      .then((config) => {
+        const behavior = merge(config.behavior || {}, STYLE_OVERRIDES.behavior);
+        const disclaimer = { ...(config.disclaimer || {}), ...STYLE_OVERRIDES.disclaimer };
+        return { ...config, behavior, disclaimer };
+      });
+  }
+  return styling;
+}
 
 // Web SDK command queue (same as the "alloy" base code of the install script)
 function installAlloyStub() {
@@ -60,10 +83,10 @@ export async function mountConcierge(container) {
   mount.id = MOUNT_ID;
   container.append(mount);
   try {
-    await loadRuntime();
+    const [stylingConfigurations] = await Promise.all([loadStyling(), loadRuntime()]);
     window.adobe.concierge.bootstrap({
       instanceName: 'alloy',
-      stylingConfigurations: STYLE_CONFIGURATION,
+      stylingConfigurations,
       selector: `#${MOUNT_ID}`,
       stickySession: false,
     });

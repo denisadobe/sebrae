@@ -1,0 +1,313 @@
+{
+  "id": "11248d31-dbbc-4832-afdd-af360194f393",
+  "name": "SEBRAE_26-10-14_11248d31-dbbc-4832-afdd-af360194f393",
+  "metadata": {
+    "brandName": "SEBRAE",
+    "version": "1.0.0",
+    "language": "pt-BR",
+    "namespace": "brand-concierge"
+  },
+  "behavior": {
+    "multimodalCarousel": {
+      "cardClickAction": "openLink"
+    },
+    "input": {
+      "enableVoiceInput": false,
+      "continuousVoiceMode": false,
+      "disableMultiline": true,
+      "showAiChatIcon": {
+        "icon": ""
+      }
+    },
+    "chat": {
+      "messageAlignment": "normal",
+      "messageWidth": "100%"
+    },
+    "privacyNotice": {
+      "title": "Privacy Notice",
+      "text": "Your use of this automated chatbot constitutes your consent that the personal information you provide in the chat session can be collected, used, disclosed, and retained by YourBrand and service providers acting on YourBrand's behalf in accordance with the YourBrand {Privacy Policy}. Please do not provide sensitive personal information (such as financial or health information) in the chatbot.",
+      "links": [
+        {
+          "text": "Privacy Policy",
+          "url": "<your-privacy-policy-url>"
+        }
+      ]
+    },
+    "meetingForm": {
+      "fieldsPerRow": 2,
+      "fieldLayoutRules": {
+        "textInputs": {
+          "allowTwoColumns": true,
+          "fieldTypes": [
+            "string",
+            "email",
+            "tel",
+            "number"
+          ],
+          "identifyBy": null
+        },
+        "dropdowns": {
+          "allowTwoColumns": false,
+          "fieldTypes": [
+            "select"
+          ],
+          "identifyBy": "hasOptions"
+        },
+        "checkboxes": {
+          "allowTwoColumns": false,
+          "fieldTypes": [
+            "boolean",
+            "checkbox"
+          ],
+          "identifyBy": null
+        }
+      },
+      "title": {
+        "text": "Agende uma reunião",
+        "alignment": "left"
+      },
+      "subtitle": {
+        "text": "Entre em contato com nossos especialistas para impulsionar seu negócio.",
+        "alignment": "left"
+      },
+      "buttons": {
+        "submit": {
+          "text": "Enviar solicitação",
+          "alignment": "left"
+        },
+        "cancel": {
+          "text": "Cancelar",
+          "alignment": "left"
+        }
+      }
+    },
+    "calendarWidget": {
+      "title": {
+        "text": "Escolha um horário",
+        "alignment": "left"
+      },
+      "subtitle": {
+        "text": "Selecione um horário para sua reunião com o Sebrae.",
+        "alignment": "left"
+      },
+      "postTitle": {
+        "text": "Uma vez confirmado, você receberá um convite de calendário com todos os detalhes. O especialista já terá o contexto desta conversa, então não será necessário repetir nada. Estamos ansiosos para conectá-lo ao especialista certo!",
+        "alignment": "left"
+      },
+      "buttons": {
+        "confirm": {
+          "text": "Confirmar horário",
+          "alignment": "left"
+        },
+        "cancel": {
+          "text": "Cancelar",
+          "alignment": "left"
+        }
+      }
+    },
+    "productCard": {
+      "actionButtonSize": "S"
+    },
+    "b2bLiveChat": {
+      "enabled": true
+    }
+  },
+  "disclaimer": {
+    "text": "Os serviços e informações fornecidos pelo SEBRAE estão sujeitos aos nossos Termos de Uso.",
+    "links": [
+      {
+        "text": "Terms of Use",
+        "url": "https://sebrae.com.br/termos-de-uso"
+      }
+    ]
+  },
+  "text": {
+    "welcome.heading": "Bem-vindo ao SEBRAE",
+    "welcome.subheading": "Estamos aqui para ajudar você a começar, crescer ou transformar seu negócio.",
+    "input.placeholder": "Exemplo: Como formalizar minha empresa?",
+    "input.messageInput.aria": "Digite sua mensagem",
+    "input.send.aria": "Enviar mensagem",
+    "input.aiChatIcon.tooltip": "Assistente virtual do Sebrae",
+    "input.mic.aria": "Ativar entrada de voz",
+    "card.aria.select": "Selecionar esta opção",
+    "carousel.prev.aria": "Anterior",
+    "carousel.next.aria": "Próximo",
+    "scroll.bottom.aria": "Ir para o final do chat",
+    "error.network": "Erro de conexão. Tente novamente.",
+    "loading.message": "Carregando resposta...",
+    "feedback.dialog.title.positive": "Feedback positivo",
+    "feedback.dialog.title.negative": "Feedback negativo",
+    "feedback.dialog.question.positive": "O que você gostou?",
+    "feedback.dialog.question.negative": "O que podemos melhorar?",
+    "feedback.dialog.notes": "Notas adicionais",
+    "feedback.dialog.submit": "Enviar",
+    "feedback.dialog.cancel": "Cancelar",
+    "feedback.dialog.notes.placeholder": "Digite suas observações aqui...",
+    "feedback.toast.success": "Obrigado pelo seu feedback!",
+    "feedback.thumbsUp.aria": "Gostei",
+    "feedback.thumbsDown.aria": "Não gostei",
+    "feedback.title": "Nos envie seu feedback",
+    "feedback.positive.title": "O que você gostou?",
+    "feedback.negative.title": "O que podemos melhorar?",
+    "feedback.submitButton": "Enviar feedback",
+    "feedback.positive.options": "",
+    "feedback.negative.options": ""
+  },
+  "arrays": {
+    "welcome.examples": [
+      {
+        "text": "Como formalizar minha empresa?",
+        "systemPrompt": "Explique como formalizar uma empresa no Brasil.",
+        "backgroundColor": "#2a4fda",
+        "image": "https://sebrae.com.br/content/dam/portal-sebrae/na/pt/imagens/modal-pop-up/premio-reclame-aqui-2026.png"
+      },
+      {
+        "text": "Quais são as obrigações legais do MEI?",
+        "systemPrompt": "Liste as obrigações legais de um MEI no Brasil.",
+        "backgroundColor": "#4a69e0",
+        "image": "https://sebrae.scene7.com/is/image/sebrae/banner_home?bfc=webp&fmt=png-alpha&crop=185.68%2C94.07%2C293.93%2C293.93"
+      },
+      {
+        "text": "Como fazer marketing digital?",
+        "systemPrompt": "Dê dicas de marketing digital para pequenos negócios.",
+        "backgroundColor": "#6a84e5",
+        "image": "https://sebrae.scene7.com/is/image/sebrae/imagem-destaque-02-15?bfc=webp&fmt=png-alpha&crop=70.55%2C20.93%2C275.67%2C275.67"
+      },
+      {
+        "text": "Como obter financiamento?",
+        "systemPrompt": "Explique como pequenos negócios podem obter financiamento.",
+        "backgroundColor": "#8a9eeb",
+        "image": "https://sebrae.scene7.com/is/image/sebrae/hero-banner?bfc=webp&fmt=png-alpha&wid=480&hei=378"
+      }
+    ],
+    "feedback.positive.options": [
+      "Interface intuitiva",
+      "Informações úteis",
+      "Rapidez nas respostas",
+      "Atendimento personalizado",
+      "Outro"
+    ],
+    "feedback.negative.options": [
+      "Dificuldade de navegação",
+      "Informações insuficientes",
+      "Respostas pouco claras",
+      "Problemas técnicos",
+      "Outro"
+    ]
+  },
+  "assets": {
+    "icons": {
+      "company": "https://sebrae.com.br/favicon.ico"
+    }
+  },
+  "visualProfile": {
+    "sendIconIconColor": "#ffffff",
+    "sendIconBackgroundColor": "#522752"
+  },
+  "theme": {
+    "--welcome-input-order": "3",
+    "--welcome-cards-order": "2",
+    "--welcome-heading-size-desktop": "2rem",
+    "--welcome-heading-size-mobile": "1.5rem",
+    "--welcome-heading-weight": "700",
+    "--welcome-heading-text-align": "center",
+    "--welcome-subheading-size-desktop": "1.25rem",
+    "--welcome-subheading-size-mobile": "1rem",
+    "--welcome-subheading-text-align": "center",
+    "--welcome-padding": "2rem",
+    "--prompt-suggestion-background": "#522752",
+    "--prompt-suggestion-background-hover": "#522752",
+    "--prompt-suggestion-text-color": "#522752",
+    "--prompt-suggestion-border-color": "#522752",
+    "--font-family": "Nunito Sans, sans-serif",
+    "--color-primary": "#2a4fda",
+    "--color-text": "#522752",
+    "--line-height-body": "1.6",
+    "--main-container-background": "#ffffff",
+    "--input-height": "48px",
+    "--input-height-mobile": "40px",
+    "--input-border-radius": "8px",
+    "--input-border-radius-mobile": "6px",
+    "--input-background": "#ffffff",
+    "--input-outline-color": "#d9d9d9",
+    "--input-outline-width": "1px",
+    "--input-box-shadow": "0 2px 4px rgba(0, 0, 0, 0.1)",
+    "--input-focus-outline-width": "2px",
+    "--input-focus-outline-color": "#2a4fda",
+    "--input-font-size": "1rem",
+    "--input-font-weight": "400",
+    "--input-text-color": "#001152",
+    "--input-button-height": "36px",
+    "--input-button-width": "36px",
+    "--submit-button-fill-color": "#ffffff",
+    "--submit-button-fill-color-disabled": "#CCCCCC",
+    "--color-button-submit": "#2a4fda",
+    "--color-button-submit-hover": "#522752",
+    "--input-button-border-radius": "8px",
+    "--button-disabled-background": "#F0F0F0",
+    "--disclaimer-color": "#001152",
+    "--disclaimer-font-size": "0.875rem",
+    "--disclaimer-font-weight": "400",
+    "--message-user-background": "#2a4fda",
+    "--message-user-text": "#ffffff",
+    "--message-border-radius": "8px",
+    "--message-padding": "1rem",
+    "--message-concierge-background": "#f3f3f3",
+    "--message-concierge-text": "#000000",
+    "--message-max-width": "100%",
+    "--chat-interface-max-width": "768px",
+    "--message-blocker-height": "48px",
+    "--loading-message-background": "#d9d9d9",
+    "--loading-dot-background": "#626262",
+    "--color-text-muted": "#626262",
+    "--citations-text-font-weight": "400",
+    "--citations-desktop-button-font-size": "0.875rem",
+    "--feedback-icon-btn-background": "#f7f9ff",
+    "--feedback-icon-btn-hover-background": "#e3e9ff",
+    "--feedback-icon-btn-size-desktop": "40px",
+    "--feedback-container-gap": "1rem",
+    "--multimodal-card-box-shadow": "0 2px 4px rgba(0, 0, 0, 0.1)",
+    "--border-radius-card": "8px",
+    "--button-height-s": "36px",
+    "--button-primary-background": "#2a4fda",
+    "--button-primary-text": "#ffffff",
+    "--button-primary-hover": "#522752",
+    "--button-secondary-border": "1px solid #193ab8",
+    "--button-secondary-text": "#193ab8",
+    "--button-secondary-hover": "#001152",
+    "--color-button-secondary-hover-text": "#ffffff",
+    "--privacy-notice-background": "#f1f4ff",
+    "--privacy-notice-padding": "1rem",
+    "--privacy-notice-title-color": "#626262",
+    "--privacy-notice-text-color": "#626262",
+    "--privacy-notice-text-font-size": "0.875rem",
+    "--privacy-notice-title-font-size": "1rem",
+    "--message-concierge-link-decoration": "underline",
+    "--color-secondary": "#193ab8",
+    "--prompt-suggestion-button-background": "#d9d9d9",
+    "--prompt-pill-background": "#2a4fda",
+    "--button-primary-mobile-background": "#522752",
+    "--button-primary-mobile-hover": "#522752",
+    "--main-container-mobile-background": "#ffffff",
+    "--message-concierge-border-width": "1px",
+    "--message-concierge-link-color": "#2a4fda",
+    "--prompt-suggestion-button-border-radius": "8px",
+    "--prompt-suggestion-button-padding": "0.5rem 1rem",
+    "--prompt-suggestions-container-gap": "0.5rem",
+    "--card-background": "#2a4fda",
+    "--card-text-font-size": "1rem",
+    "--card-text-padding": "1rem",
+    "--chat-container-background": "#ffffff",
+    "--message-blocker-background": "#ffffff",
+    "--card-text-color": "#ffffff",
+    "--prompt-pill-border-color": "#2a4fda",
+    "--prompt-pill-text-color": "#ffffff",
+    "--prompt-suggestion-button-text-color": "#626262",
+    "--prompt-suggestion-button-background-hover": "#d9d9d9",
+    "--welcome-heading-text-color": "#000000",
+    "--welcome-subheading-text-color": "#000000",
+    "--welcome-header-order": "1",
+    "--prompt-suggestions-flex-direction": "row",
+    "--prompt-suggestions-flex-wrap": "wrap"
+  }
+}
