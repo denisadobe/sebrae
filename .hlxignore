@@ -8,4 +8,4 @@ test/*
 sync-block-collection.sh
 ue/models/*
 migration-work/
-tools/
+/tools/
