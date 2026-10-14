@@ -11,37 +11,47 @@ import {
 
 const IMAGE_PARAMS = { width: 960, height: 1191 };
 
-function message(block, text, type = 'info') {
+const PARTS = ['header', 'price', 'short-description', 'options', 'quantity', 'add-to-cart',
+  'description', 'attributes'];
+
+const div = (name, ...children) => {
+  const d = document.createElement('div');
+  d.className = `product-details-${name}`;
+  d.append(...children);
+  return d;
+};
+
+function message(content, text, type = 'info') {
   const p = document.createElement('p');
   p.className = `product-details-message product-details-message-${type}`;
   p.textContent = text;
-  block.replaceChildren(p);
+  content.replaceChildren(p);
 }
 
 export default async function decorate(block) {
   const config = readBlockConfig(block);
   const sku = getProductSku(config.defaultsku);
+
+  // the authored rows (defaultSku) stay in the DOM, hidden, so the block keeps its
+  // Universal Editor instrumentation and the SKU stays editable
+  const source = div('source', ...block.children);
+  source.hidden = true;
+  const content = div('content');
+  block.replaceChildren(content, source);
+
   if (!sku) {
-    message(block, IS_UE ? 'Informe o SKU do produto nas propriedades do bloco.' : 'Produto não encontrado.');
+    message(content, IS_UE ? 'Informe o SKU do produto nas propriedades do bloco.' : 'Produto não encontrado.');
     return;
   }
 
-  block.innerHTML = `
-    <div class="product-details-alert" role="status" aria-live="polite"></div>
-    <div class="product-details-wrapper">
-      <div class="product-details-gallery"></div>
-      <div class="product-details-info">
-        <div class="product-details-header"></div>
-        <div class="product-details-price"></div>
-        <div class="product-details-short-description"></div>
-        <div class="product-details-options"></div>
-        <div class="product-details-quantity"></div>
-        <div class="product-details-add-to-cart"></div>
-        <div class="product-details-description"></div>
-        <div class="product-details-attributes"></div>
-      </div>
-    </div>`;
-  const $ = (name) => block.querySelector(`.product-details-${name}`);
+  const alert = div('alert');
+  alert.setAttribute('role', 'status');
+  alert.setAttribute('aria-live', 'polite');
+  content.append(
+    alert,
+    div('wrapper', div('gallery'), div('info', ...PARTS.map((name) => div(name)))),
+  );
+  const $ = (name) => content.querySelector(`.product-details-${name}`);
 
   try {
     await initializeCommerce();
@@ -59,7 +69,7 @@ export default async function decorate(block) {
     pdpApi.setEndpoint(CS_FETCH_GRAPHQL);
     const product = await pdpApi.fetchProductData(sku, { skipTransform: true });
     if (!product?.sku) {
-      message(block, `Produto "${sku}" não encontrado no catálogo.`, 'error');
+      message(content, `Produto "${sku}" não encontrado no catálogo.`, 'error');
       return;
     }
     await initializers.mountImmediately(pdpApi.initialize, {
@@ -124,6 +134,6 @@ export default async function decorate(block) {
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('product-details:', error);
-    message(block, 'Não foi possível carregar o produto no momento.', 'error');
+    message(content, 'Não foi possível carregar o produto no momento.', 'error');
   }
 }
