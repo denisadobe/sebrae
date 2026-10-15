@@ -1,4 +1,4 @@
-/* Adobe Brand Concierge: floating launcher (link to the assistant page) + install-script overrides */
+/* Adobe Brand Concierge: floating launcher + drawer / expanded window + install-script overrides */
 /* stylelint-disable-next-line selector-class-pattern -- Web Client class */
 .bc-card__image {
   background-size: contain !important;
@@ -20,8 +20,12 @@
 }
 
 .brand-concierge-icon-sparkle { --icon: url('../icons/sparkle.svg'); }
+.brand-concierge-icon-close { --icon: url('../icons/close.svg'); }
+.brand-concierge-icon-expand { --icon: url('../icons/expand.svg'); }
+.brand-concierge-icon-collapse { --icon: url('../icons/collapse.svg'); }
 
-.brand-concierge-launcher:any-link {
+/* ---------- floating launcher ---------- */
+.brand-concierge-launcher {
   position: fixed;
   right: 16px;
   bottom: 16px;
@@ -40,18 +44,162 @@
   font-size: 16px;
   font-weight: 700;
   line-height: 20px;
-  text-decoration: none;
   cursor: pointer;
 }
 
-.brand-concierge-launcher::after {
+.brand-concierge-launcher::after,
+.bc-drawer .bc-drawer-title::after {
   content: attr(data-label);
 }
 
-.brand-concierge-launcher:any-link:hover {
+.brand-concierge-launcher:hover {
   background-color: var(--sebrae-blue-dark);
+}
+
+.brand-concierge-launcher[hidden] {
+  display: none;
+}
+
+/* ---------- drawer (native <dialog> in the top layer, above the sticky header) ---------- */
+.bc-drawer {
+  position: fixed;
+  inset: 0 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  width: 420px;
+  max-width: 100vw;
+  height: 100dvh;
+  max-height: 100dvh;
+  margin: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: 0;
+  padding: 0;
+  background-color: #fff;
+  box-shadow: -4px 0 24px rgb(27 36 75 / 18%);
+  color: var(--sebrae-navy);
+  opacity: 0;
+  transform: translateX(100%);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.bc-drawer:not([open]) {
+  display: none;
+}
+
+.bc-drawer[open] {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+@starting-style {
+  .bc-drawer[open] {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+}
+
+.bc-drawer::backdrop {
+  background: transparent;
+}
+
+/* expanded: large centred window over a dimmed page */
+.bc-drawer.is-expanded {
+  inset: 0;
+  width: min(80vw, 1400px);
+  height: 90dvh;
+  margin: auto;
+  border-radius: var(--radius-m);
+  box-shadow: 0 8px 40px rgb(27 36 75 / 30%);
+  transform: none;
+}
+
+.bc-drawer.is-expanded::backdrop {
+  background: rgb(27 36 75 / 55%);
+}
+
+.bc-drawer .bc-drawer-header {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  height: 56px;
+  box-sizing: border-box;
+  padding: 0 12px 0 20px;
+  background-color: var(--sebrae-navy);
+  color: #fff;
+}
+
+.bc-drawer .bc-drawer-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.bc-drawer .bc-drawer-title .brand-concierge-icon {
   color: var(--sebrae-lime);
-  text-decoration: none;
+}
+
+.bc-drawer .bc-drawer-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bc-drawer .bc-drawer-expand,
+.bc-drawer .bc-drawer-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  margin: 0;
+  border: 0;
+  border-radius: 50%;
+  padding: 0;
+  background: transparent;
+  color: #fff;
+  cursor: pointer;
+}
+
+.bc-drawer .bc-drawer-expand:hover,
+.bc-drawer .bc-drawer-close:hover {
+  background-color: rgb(255 255 255 / 15%);
+}
+
+.bc-drawer .bc-drawer-body {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+}
+
+/* the chat uses the panel's full width (drawer and expanded) instead of a fixed max width,
+   so the expanded window doesn't keep a narrow "mobile" column */
+.bc-drawer #brand-concierge-mount {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+
+  --chat-history-padding: 24px max(24px, 8%);
+  --chat-history-padding-mobile: 16px 20px;
+  --chat-history-padding-tablet: 20px 5%;
+}
+
+.bc-drawer #brand-concierge-mount .brand-concierge-container,
+.bc-drawer #brand-concierge-mount .chat-interface {
+  --content-width-desktop: 100%;
+  --chat-interface-max-width: 100%;
+}
+
+.bc-drawer.is-expanded #brand-concierge-mount {
+  --chat-history-padding: 24px max(40px, 12%);
 }
 
 .brand-concierge-error {
@@ -64,8 +212,23 @@
 }
 
 @media (width >= 600px) {
-  .brand-concierge-launcher:any-link {
+  .brand-concierge-launcher {
     right: 24px;
     bottom: 24px;
+  }
+}
+
+/* small screens: the drawer takes the whole screen; no expand needed */
+@media (width < 768px) {
+  .bc-drawer,
+  .bc-drawer.is-expanded {
+    inset: 0;
+    width: 100vw;
+    height: 100dvh;
+    border-radius: 0;
+  }
+
+  .bc-drawer .bc-drawer-expand {
+    display: none;
   }
 }

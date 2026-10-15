@@ -1,7 +1,9 @@
 /*
- * Adobe Brand Concierge (commerce branch): loads the Web SDK + Web Client on demand and
- * mounts the chat inside the brand-concierge block (full-page assistant). Other pages get a
- * floating launcher that links to that page; nothing is downloaded until the chat is shown.
+ * Adobe Brand Concierge: loads the Web SDK + Web Client on demand and mounts the chat once
+ * per page — inside the brand-concierge block (full-page assistant) or in a drawer opened from
+ * the floating launcher (same pattern as Experience League): a native <dialog> in the top
+ * layer (above the sticky header), sliding in on the right, that expands to a large centred
+ * window. Nothing is downloaded until the chat is opened.
  * Per page, the launcher can be turned off with the metadata "brand-concierge: off".
  */
 import { loadCSS, loadScript } from './aem.js';
@@ -10,7 +12,6 @@ import {
 } from './brand-concierge-config.js';
 
 const MOUNT_ID = 'brand-concierge-mount';
-const FULL_PAGE = '/loja/assistente';
 let runtime;
 let styling;
 let mounted = false;
@@ -111,17 +112,89 @@ function icon(name) {
   return span;
 }
 
-/** Floating launcher: a link to the full-page assistant (the chat itself loads there). */
+function iconButton(className, label, iconName) {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = className;
+  button.setAttribute('aria-label', label);
+  button.title = label;
+  button.append(icon(iconName));
+  return button;
+}
+
+/** Drawer (right side, full height) that can expand to a large centred window. */
+function buildDrawer() {
+  const dialog = document.createElement('dialog');
+  dialog.id = 'bc-dialog';
+  dialog.className = 'bc-drawer';
+  dialog.setAttribute('aria-label', 'Assistente Sebrae');
+
+  const header = document.createElement('div');
+  header.className = 'bc-drawer-header';
+  // header label drawn by CSS (data-label): no text added to the page content
+  const title = document.createElement('p');
+  title.className = 'bc-drawer-title';
+  title.dataset.label = 'Assistente Sebrae';
+  title.append(icon('sparkle'));
+  const expand = iconButton('bc-drawer-expand', 'Expandir', 'expand');
+  expand.setAttribute('aria-pressed', 'false');
+  const close = iconButton('bc-drawer-close', 'Fechar assistente', 'close');
+  const actions = document.createElement('div');
+  actions.className = 'bc-drawer-actions';
+  actions.append(expand, close);
+  header.append(title, actions);
+
+  const body = document.createElement('div');
+  body.className = 'bc-drawer-body';
+  dialog.append(header, body);
+  document.body.append(dialog);
+
+  const setExpanded = (expanded) => {
+    dialog.classList.toggle('is-expanded', expanded);
+    expand.setAttribute('aria-pressed', String(expanded));
+    expand.setAttribute('aria-label', expanded ? 'Recolher' : 'Expandir');
+    expand.title = expand.getAttribute('aria-label');
+    expand.replaceChildren(icon(expanded ? 'collapse' : 'expand'));
+  };
+  expand.addEventListener('click', () => setExpanded(!dialog.classList.contains('is-expanded')));
+  close.addEventListener('click', () => dialog.close());
+  // click on the backdrop (outside the panel) closes
+  dialog.addEventListener('click', (e) => {
+    if (e.target === dialog) dialog.close();
+  });
+  return { dialog, body, setExpanded };
+}
+
+/** Floating launcher that opens the assistant drawer. */
 export function addLauncher() {
   if (document.querySelector('.brand-concierge-launcher')) return;
   loadCSS(`${window.hlx.codeBasePath}/styles/brand-concierge.css`);
-  const launcher = document.createElement('a');
+  const launcher = document.createElement('button');
+  launcher.type = 'button';
   launcher.className = 'brand-concierge-launcher';
-  launcher.href = FULL_PAGE;
   // the visible label is drawn by CSS (data-label): no text is added to the page content,
-  // so AI agents read the same text as the server HTML; the link is named by aria-label
+  // so AI agents read the same text as the server HTML; the button is named by aria-label
   launcher.setAttribute('aria-label', 'Assistente Sebrae');
+  launcher.setAttribute('aria-haspopup', 'dialog');
+  launcher.setAttribute('aria-controls', 'bc-dialog');
+  launcher.setAttribute('aria-expanded', 'false');
   launcher.dataset.label = 'Assistente Sebrae';
   launcher.append(icon('sparkle'));
   document.body.append(launcher);
+
+  let drawer;
+  launcher.addEventListener('click', () => {
+    if (!drawer) {
+      drawer = buildDrawer();
+      drawer.dialog.addEventListener('close', () => {
+        launcher.setAttribute('aria-expanded', 'false');
+        launcher.hidden = false;
+        launcher.focus();
+      });
+    }
+    drawer.dialog.showModal();
+    launcher.setAttribute('aria-expanded', 'true');
+    launcher.hidden = true;
+    mountConcierge(drawer.body);
+  });
 }
