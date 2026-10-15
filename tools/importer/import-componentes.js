@@ -169,11 +169,14 @@ export default {
       block(document, 'Embed Iframe', [[link(document, 'https://cloud.cliente.sebrae.com.br/seuinteressev2', 'https://cloud.cliente.sebrae.com.br/seuinteressev2')]]),
     );
 
-    // 12. pointer to the home components
+    // 12. pointers to the components used on other pages
     add(
-      h(document, 'h2', 'Componentes da home'),
+      h(document, 'h2', 'Componentes em outras páginas'),
       h(document, 'p', 'Hero com atalhos rápidos, cards com ícone, cards compactos, carrossel de destaques, abas de artigos, cards com etiqueta e o formulário estão na página inicial.'),
       h(document, 'p', link(document, '/', 'Ver a página inicial', true)),
+      h(document, 'p', 'Os componentes de Commerce (vitrine de produtos, lista de produtos, detalhe de produto e carrinho) estão na loja, e o assistente virtual (Adobe Brand Concierge) tem uma página própria.'),
+      h(document, 'p', link(document, '/loja/cursos', 'Ver a loja de cursos', true)),
+      h(document, 'p', link(document, '/loja/assistente', 'Conversar com o assistente', true)),
     );
 
     // metadata

@@ -4,8 +4,9 @@
   margin: 0 auto;
 }
 
-/* full-bleed: the lead form spans the viewport like on sebrae.com.br */
-main .section.embed-iframe-container > div {
+/* full-bleed: the embedded page spans the viewport like on sebrae.com.br
+   (only the block wrapper — intro text keeps the regular content width) */
+main .section.embed-iframe-container > .embed-iframe-wrapper {
   max-width: none;
   padding: 0;
 }
