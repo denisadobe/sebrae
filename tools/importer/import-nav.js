@@ -38,10 +38,17 @@ function imageForTitle(raw, title) {
   return m ? m[0].replace(/\\u002F/g, '/').replace(/ /g, '%20') : null;
 }
 
+// demo pages reached from existing menu entries (no new menu items)
+const DEMO_LINKS = {
+  'https://loja.sebrae.com.br/cursos/cursos-online': '/loja/cursos',
+  'https://sebrae.com.br/sobre-nos': '/componentes',
+};
+
 function link(document, href, label, base) {
   const a = document.createElement('a');
   // in-page hooks (#localizacao, #alto-contraste…) and the home link stay relative
-  a.setAttribute('href', /^[#/](?!\/)/.test(href) && (href.startsWith('#') || href === '/') ? href : abs(href, base));
+  const url = /^[#/](?!\/)/.test(href) && (href.startsWith('#') || href === '/') ? href : abs(href, base);
+  a.setAttribute('href', DEMO_LINKS[url.replace(/\/$/, '')] || url);
   a.textContent = label;
   return a;
 }
