@@ -1,11 +1,10 @@
 /*
- * Header mini-cart (commerce branch): cart button with item count + dropdown panel with the
- * cart drop-in MiniCart container. The button sits with the tools on desktop and with the
- * mobile actions on small screens.
+ * Header mini-cart: cart button with item count + dropdown panel with the cart drop-in
+ * MiniCart container. The button sits with the tools on desktop and with the mobile actions
+ * on small screens. Commerce code only loads when a cart exists (cookie), when another block
+ * creates one, or on the first click — regular pages don't pay for it.
  */
-import {
-  CART_PAGE, CATALOG_PAGE, getProductLink, initializeCart,
-} from './commerce.js';
+const CART_COOKIE = 'DROPIN__CART__CART-ID=';
 
 const isDesktop = window.matchMedia('(width >= 900px)');
 
@@ -47,12 +46,35 @@ export default async function addMiniCart(navMain) {
   place();
   isDesktop.addEventListener('change', place);
 
+  // cart count: connects to the cart drop-in once (commerce code loaded on demand)
+  let connected;
+  const connect = () => {
+    if (!connected) {
+      connected = (async () => {
+        const commerce = await import('./commerce.js');
+        await commerce.initializeCart();
+        const { events } = await import('@dropins/tools/event-bus.js');
+        events.on('cart/data', (cart) => {
+          const count = cart?.totalQuantity || 0;
+          if (count) button.dataset.count = count;
+          else delete button.dataset.count;
+          button.setAttribute('aria-label', count ? `Carrinho, ${count} ${count === 1 ? 'item' : 'itens'}` : 'Carrinho');
+        }, { eager: true });
+        return commerce;
+      })();
+    }
+    return connected;
+  };
+
   let rendered = false;
   const toggle = async (open = panel.hidden) => {
     panel.hidden = !open;
     button.setAttribute('aria-expanded', open);
     if (open && !rendered) {
       rendered = true;
+      const {
+        CART_PAGE, CATALOG_PAGE, getProductLink,
+      } = await connect();
       const [{ render }, MiniCart] = await Promise.all([
         import('@dropins/storefront-cart/render.js'),
         import('@dropins/storefront-cart/containers/MiniCart.js').then((m) => m.default),
@@ -80,12 +102,6 @@ export default async function addMiniCart(navMain) {
     }
   });
 
-  await initializeCart();
-  const { events } = await import('@dropins/tools/event-bus.js');
-  events.on('cart/data', (cart) => {
-    const count = cart?.totalQuantity || 0;
-    if (count) button.dataset.count = count;
-    else delete button.dataset.count;
-    button.setAttribute('aria-label', count ? `Carrinho, ${count} ${count === 1 ? 'item' : 'itens'}` : 'Carrinho');
-  }, { eager: true });
+  if (document.cookie.includes(CART_COOKIE)) connect();
+  else window.addEventListener('commerce:cart-ready', connect, { once: true });
 }

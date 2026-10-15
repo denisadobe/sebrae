@@ -6,7 +6,10 @@
 import { getHeaders, getConfigValue, initializeConfig } from '@dropins/tools/lib/aem/configs.js';
 import { FetchGraphQL } from '@dropins/tools/fetch-graphql.js';
 import { initializers } from '@dropins/tools/initializer.js';
-import { getMetadata } from './aem.js';
+import { getMetadata, loadCSS } from './aem.js';
+
+// drop-in design tokens (Sebrae brand) — only pages that use commerce code load them
+loadCSS(`${window.hlx.codeBasePath}/styles/commerce.css`);
 
 // Core (cart, checkout) and Catalog Service (product data) GraphQL clients
 export const CORE_FETCH_GRAPHQL = new FetchGraphQL();
@@ -185,6 +188,7 @@ export function initializeCart() {
       const { initialize, setEndpoint } = await import('@dropins/storefront-cart/api.js');
       setEndpoint(CORE_FETCH_GRAPHQL);
       await initializers.mountImmediately(initialize, { langDefinitions: { default: LABELS } });
+      window.dispatchEvent(new Event('commerce:cart-ready'));
     })();
   }
   return cartReady;

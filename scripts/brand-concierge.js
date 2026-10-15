@@ -118,8 +118,10 @@ export function addLauncher() {
   const launcher = document.createElement('a');
   launcher.className = 'brand-concierge-launcher';
   launcher.href = FULL_PAGE;
-  const label = document.createElement('span');
-  label.textContent = 'Assistente Sebrae';
-  launcher.append(icon('sparkle'), label);
+  // the visible label is drawn by CSS (data-label): no text is added to the page content,
+  // so AI agents read the same text as the server HTML; the link is named by aria-label
+  launcher.setAttribute('aria-label', 'Assistente Sebrae');
+  launcher.dataset.label = 'Assistente Sebrae';
+  launcher.append(icon('sparkle'));
   document.body.append(launcher);
 }

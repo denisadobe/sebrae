@@ -1,5 +1,5 @@
 /* Adobe Commerce drop-in design tokens, mapped to the Sebrae brand (px: this site uses a 16px root).
-   Loaded on the commerce branch only (head.html). Drop-in containers re-declare their defaults on
+   Loaded by scripts/commerce.js (only pages using commerce code). Drop-in containers re-declare their defaults on
    .dropin-design, so the tokens are set there too. */
 :root,
 .dropin-design {

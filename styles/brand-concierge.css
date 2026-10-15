@@ -44,6 +44,10 @@
   cursor: pointer;
 }
 
+.brand-concierge-launcher::after {
+  content: attr(data-label);
+}
+
 .brand-concierge-launcher:any-link:hover {
   background-color: var(--sebrae-blue-dark);
   color: var(--sebrae-lime);
