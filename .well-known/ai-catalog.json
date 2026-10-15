@@ -1,0 +1,153 @@
+{
+  "specVersion": "1.0",
+  "host": {
+    "displayName": "Sebrae (demo)",
+    "identifier": "did:web:main--sebrae--denisadobe.aem.live",
+    "documentationUrl": "https://main--sebrae--denisadobe.aem.live/llms.txt"
+  },
+  "entries": [
+    {
+      "identifier": "urn:air:main--sebrae--denisadobe.aem.live:webmcp:loja",
+      "displayName": "Loja Sebrae — ferramentas WebMCP",
+      "type": "application/mcp-server-card+json",
+      "description": "Ferramentas WebMCP registradas no navegador (document.modelContext) nas páginas do site: busca no catálogo de cursos, detalhes de um curso e uso do carrinho. Disponíveis em https://main--sebrae--denisadobe.aem.live/loja/cursos e demais páginas do site.",
+      "tags": [
+        "cursos",
+        "catalogo",
+        "carrinho",
+        "webmcp"
+      ],
+      "capabilities": [
+        "buscar-cursos",
+        "detalhes-do-curso",
+        "adicionar-ao-carrinho",
+        "ver-carrinho"
+      ],
+      "representativeQueries": [
+        "quais cursos gratuitos de finanças o Sebrae tem",
+        "detalhes do curso com SKU ADB228",
+        "adicionar um curso do Sebrae ao carrinho"
+      ],
+      "data": {
+        "name": "sebrae-loja-webmcp",
+        "description": "Ferramentas WebMCP da loja de cursos do Sebrae (demo).",
+        "tools": [
+          {
+            "name": "buscar-cursos",
+            "description": "Busca cursos e soluções no catálogo do Sebrae por palavra-chave e/ou categoria.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "termo": {
+                  "type": "string",
+                  "description": "Palavra-chave da busca."
+                },
+                "categoria": {
+                  "type": "string",
+                  "description": "Caminho da categoria no catálogo (opcional)."
+                },
+                "limite": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 20,
+                  "description": "Quantidade máxima de resultados."
+                }
+              }
+            }
+          },
+          {
+            "name": "detalhes-do-curso",
+            "description": "Detalhes de um curso ou solução a partir do SKU.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string",
+                  "description": "SKU do curso."
+                }
+              },
+              "required": [
+                "sku"
+              ]
+            }
+          },
+          {
+            "name": "adicionar-ao-carrinho",
+            "description": "Adiciona um curso ou solução ao carrinho do visitante.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {
+                "sku": {
+                  "type": "string",
+                  "description": "SKU do curso."
+                },
+                "quantidade": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10,
+                  "description": "Quantidade."
+                }
+              },
+              "required": [
+                "sku"
+              ]
+            }
+          },
+          {
+            "name": "ver-carrinho",
+            "description": "Lista os itens do carrinho do visitante.",
+            "inputSchema": {
+              "type": "object",
+              "properties": {}
+            }
+          }
+        ]
+      }
+    },
+    {
+      "identifier": "urn:air:main--sebrae--denisadobe.aem.live:webmcp:receber-novidades",
+      "displayName": "Formulário Receba novidades (WebMCP declarativo)",
+      "type": "text/html",
+      "url": "https://main--sebrae--denisadobe.aem.live/",
+      "description": "Formulário da página inicial anotado com WebMCP (toolname=receber-novidades-sebrae): nome, e-mail, telefone, estado, temas de interesse, segmentos e consentimento.",
+      "tags": [
+        "formulario",
+        "newsletter",
+        "webmcp"
+      ],
+      "representativeQueries": [
+        "receber novidades do Sebrae por e-mail e WhatsApp",
+        "cadastrar meus interesses para receber conteúdos do Sebrae"
+      ]
+    },
+    {
+      "identifier": "urn:air:main--sebrae--denisadobe.aem.live:agent:assistente",
+      "displayName": "Assistente Sebrae (Adobe Brand Concierge)",
+      "type": "text/html",
+      "url": "https://main--sebrae--denisadobe.aem.live/loja/assistente",
+      "description": "Assistente virtual conversacional que responde dúvidas sobre abrir, gerenciar e expandir um negócio e indica cursos, conteúdos e soluções do Sebrae.",
+      "tags": [
+        "assistente",
+        "ia",
+        "mei",
+        "empreendedorismo"
+      ],
+      "representativeQueries": [
+        "como formalizar minha empresa",
+        "quais os cursos para MEI",
+        "como obter financiamento para pequenos negócios"
+      ]
+    },
+    {
+      "identifier": "urn:air:main--sebrae--denisadobe.aem.live:doc:llms-txt",
+      "displayName": "Sumário do site para LLMs",
+      "type": "text/markdown",
+      "url": "https://main--sebrae--denisadobe.aem.live/llms.txt",
+      "description": "Sumário do site em Markdown (llms.txt): páginas principais, loja, assistente e recursos para agentes.",
+      "tags": [
+        "llms.txt",
+        "documentacao"
+      ]
+    }
+  ]
+}

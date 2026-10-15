@@ -215,4 +215,17 @@ export default function decorate(block) {
   });
 
   block.replaceChildren(form);
+
+  // WebMCP (declarative): describe the form and each field for in-browser AI agents
+  // (after the form is in the document, so labels and group names resolve)
+  const formTitle = block.closest('.section')?.querySelector('h2')?.textContent.trim();
+  form.setAttribute('toolname', block.dataset.toolname || 'receber-novidades-sebrae');
+  form.setAttribute('tooldescription', `${formTitle || 'Formulário do Sebrae'} — preenche os dados de contato e as preferências de conteúdo do visitante.`);
+  form.querySelectorAll('input, select, textarea').forEach((control) => {
+    const own = control.labels?.[0]?.textContent.trim();
+    const group = document.getElementById(control.closest('[aria-labelledby]')?.getAttribute('aria-labelledby'))?.textContent.trim();
+    const hint = control.getAttribute('placeholder');
+    const description = control.type === 'checkbox' && group ? `${group}: ${own}` : own || group;
+    if (description) control.setAttribute('toolparamdescription', hint ? `${description} (${hint})` : description);
+  });
 }

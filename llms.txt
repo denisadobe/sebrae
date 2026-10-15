@@ -1,0 +1,31 @@
+# Sebrae
+
+> O Sebrae (Serviço Brasileiro de Apoio às Micro e Pequenas Empresas) apoia quem quer abrir, gerenciar e expandir um pequeno negócio no Brasil, com cursos (muitos gratuitos), consultorias, conteúdos e soluções para MEI, micro e pequenas empresas, estudantes, professores e agentes públicos.
+
+Este é um site de demonstração do Sebrae em Adobe Experience Manager (Edge Delivery Services). Os produtos da loja vêm de um catálogo genérico de demonstração da Adobe Commerce; preços e nomes de produtos não representam a oferta real do Sebrae.
+
+## Páginas principais
+
+- [Página inicial](/): atalhos para empreendedores (abrir empresa, MEI, crédito, cursos), destaques, conteúdos e formulário para receber novidades por e-mail e WhatsApp.
+- [Componentes](/componentes): vitrine dos componentes do site (FAQ, tabela, depoimento, vídeo, cards, chamadas).
+
+## Loja e cursos
+
+- [Cursos online](/loja/cursos): catálogo com busca, filtros, ordenação e vitrines por tema; cursos gratuitos aparecem como "Gratuito".
+- [Produto](/loja/produto?sku=ADB228): página de detalhe de um curso ou solução; troque o parâmetro `sku` pelo SKU desejado.
+- [Carrinho](/loja/carrinho): itens escolhidos para inscrição e resumo do pedido.
+
+## Assistente
+
+- [Assistente Sebrae](/loja/assistente): assistente virtual (Adobe Brand Concierge) que responde dúvidas sobre como abrir, gerenciar e expandir o negócio e indica cursos, conteúdos e soluções.
+
+## Para agentes de IA
+
+- O site registra ferramentas WebMCP no navegador (quando suportado): `buscar-cursos`, `detalhes-do-curso`, `adicionar-ao-carrinho` e `ver-carrinho`.
+- O formulário de novidades da página inicial é anotado com WebMCP (`receber-novidades-sebrae`).
+- [Catálogo de recursos para agentes (ARD)](/.well-known/ard.json)
+
+## Opcional
+
+- [Portal oficial do Sebrae](https://sebrae.com.br/): conteúdo completo e atendimento.
+- [Loja oficial do Sebrae](https://loja.sebrae.com.br/cursos/cursos-online): cursos online oficiais.

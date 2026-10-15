@@ -265,6 +265,11 @@ function loadDelayed() {
     || document.querySelector('.brand-concierge')
     || /\.(stage-ue|ue)\.da\.live$/.test(window.location.hostname);
   if (!conciergeOff) import('./brand-concierge.js').then(({ addLauncher }) => addLauncher());
+
+  // WebMCP tools for in-browser AI agents (only where the browser supports it)
+  if (document.modelContext || navigator.modelContext) {
+    import('./webmcp.js').then(({ default: registerWebMcpTools }) => registerWebMcpTools());
+  }
 }
 
 async function loadPage() {

@@ -27,7 +27,13 @@ export function formatPrice(product) {
     || product.priceRange?.minimum?.final?.amount;
   if (!price || typeof price.value !== 'number') return '';
   if (price.value === 0) return 'Gratuito';
-  const amount = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: price.currency || 'BRL' }).format(price.value);
+  let amount;
+  try {
+    amount = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: price.currency || 'BRL' }).format(price.value);
+  } catch (e) {
+    // catalog items without a valid currency code (e.g. "NONE")
+    amount = new Intl.NumberFormat('pt-BR', { minimumFractionDigits: 2 }).format(price.value);
+  }
   return product.priceRange && product.typename !== 'SimpleProductView' ? `A partir de ${amount}` : amount;
 }
 
