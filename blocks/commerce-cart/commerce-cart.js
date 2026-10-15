@@ -1,11 +1,13 @@
 /*
  * Cart: Adobe Commerce cart drop-in — items (quantity update, remove), order summary with
- * coupon, empty state. Checkout is out of scope for the demo.
+ * coupon, empty state, checkout button (signed-in checkout, login first).
  * Authoring (key-value table, optional):
  *   startShoppingUrl | link of the empty-cart button (default /loja/cursos)
  */
 import { readBlockConfig } from '../../scripts/aem.js';
-import { CATALOG_PAGE, getProductLink, initializeCart } from '../../scripts/commerce.js';
+import {
+  CATALOG_PAGE, CHECKOUT_PAGE, getProductLink, initializeCart,
+} from '../../scripts/commerce.js';
 
 const div = (name) => {
   const d = document.createElement('div');
@@ -45,6 +47,7 @@ export default async function decorate(block) {
         enableRemoveItem: true,
       })(list),
       render.render(OrderSummary, {
+        routeCheckout: () => CHECKOUT_PAGE,
         slots: {
           Coupons: (ctx) => {
             const coupons = document.createElement('div');

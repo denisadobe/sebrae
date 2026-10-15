@@ -1,0 +1,15 @@
+{
+  "definitions": [
+    {
+      "title": "Minha conta (Commerce)",
+      "id": "commerce-account",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"commerce-account\"><div><div></div></div></div>"
+        }
+      }
+    }
+  ],
+  "models": [],
+  "filters": []
+}

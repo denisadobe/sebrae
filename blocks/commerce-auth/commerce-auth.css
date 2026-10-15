@@ -1,0 +1,26 @@
+.commerce-auth {
+  color: var(--sebrae-navy);
+}
+
+.commerce-auth .commerce-auth-form {
+  max-width: 520px;
+  margin: 0 auto;
+  border-radius: var(--radius-m);
+  padding: var(--spacing-medium);
+  background-color: #fff;
+  box-shadow: var(--sebrae-shadow);
+}
+
+.commerce-auth .commerce-auth-message {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: #ffebeb;
+  color: #c4161c;
+}
+
+@media (width >= 600px) {
+  .commerce-auth .commerce-auth-form {
+    padding: var(--spacing-big);
+  }
+}

@@ -643,6 +643,35 @@
       "id": "commerce",
       "components": [
         {
+          "title": "Minha conta (Commerce)",
+          "id": "commerce-account",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"commerce-account\"><div><div></div></div></div>"
+            }
+          }
+        },
+        {
+          "title": "Login / cadastro (Commerce)",
+          "id": "commerce-auth",
+          "model": "commerce-auth",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"commerce-auth\"><div><div>form</div><div>sign-in</div></div><div><div>redirect</div><div>/loja/conta</div></div></div>",
+              "fields": [
+                {
+                  "name": "form",
+                  "selector": "div:nth-child(1)>div:nth-child(2)"
+                },
+                {
+                  "name": "redirect",
+                  "selector": "div:nth-child(2)>div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
           "title": "Carrinho (Commerce)",
           "id": "commerce-cart",
           "model": "commerce-cart",
@@ -655,6 +684,24 @@
                   "selector": "div>div:nth-child(2)"
                 }
               ]
+            }
+          }
+        },
+        {
+          "title": "Checkout sem pagamento (Commerce)",
+          "id": "commerce-checkout",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"commerce-checkout\"><div><div></div></div></div>"
+            }
+          }
+        },
+        {
+          "title": "Detalhes do pedido (Commerce)",
+          "id": "commerce-order",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"commerce-order\"><div><div></div></div></div>"
             }
           }
         },

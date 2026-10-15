@@ -339,6 +339,28 @@ function toggleMenu(header, force) {
 }
 
 /**
+ * commerce branch: a nav login link to the store login page (/loja/entrar) follows the
+ * customer session — "Minha conta" when signed in, back to the current page after sign in
+ */
+const STORE_LOGIN = '/loja/entrar';
+const STORE_ACCOUNT = '/loja/conta';
+function decorateAccountLinks(nav) {
+  const signedIn = document.cookie.split('; ').some((c) => c.startsWith('auth_dropin_user_token='));
+  const here = window.location.pathname + window.location.search;
+  nav.querySelectorAll('.nav-tool-login, .nav-drawer-login, .nav-account').forEach((a) => {
+    const url = new URL(a.href, window.location.href);
+    if (url.origin !== window.location.origin || url.pathname !== STORE_LOGIN) return;
+    if (signedIn) {
+      a.href = STORE_ACCOUNT;
+      if (a.classList.contains('nav-account')) a.setAttribute('aria-label', 'Minha conta');
+      else a.textContent = 'Minha conta';
+    } else if (window.location.pathname !== STORE_LOGIN) {
+      a.href = `${STORE_LOGIN}?redirect=${encodeURIComponent(here)}`;
+    }
+  });
+}
+
+/**
  * loads and decorates the header
  * @param {Element} block The header block element
  */
@@ -360,6 +382,7 @@ export default async function decorate(block) {
   const main = buildMain(sections[2], hamburger);
   buildDrawerExtras(utility, main, menu);
   nav.append(...[utility, main, menu].filter(Boolean));
+  decorateAccountLinks(nav);
 
   const wrapper = el('div', 'nav-wrapper');
   const notification = buildNotification(sections[0], header);

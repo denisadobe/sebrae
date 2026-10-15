@@ -1,0 +1,47 @@
+{
+  "definitions": [
+    {
+      "title": "Login / cadastro (Commerce)",
+      "id": "commerce-auth",
+      "model": "commerce-auth",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"commerce-auth\"><div><div>form</div><div>sign-in</div></div><div><div>redirect</div><div>/loja/conta</div></div></div>",
+          "fields": [
+            { "name": "form", "selector": "div:nth-child(1)>div:nth-child(2)" },
+            { "name": "redirect", "selector": "div:nth-child(2)>div:nth-child(2)" }
+          ]
+        }
+      }
+    }
+  ],
+  "models": [
+    {
+      "id": "commerce-auth",
+      "fields": [
+        {
+          "component": "select",
+          "name": "form",
+          "label": "Formulário",
+          "valueType": "string",
+          "value": "sign-in",
+          "options": [
+            { "name": "Entrar", "value": "sign-in" },
+            { "name": "Criar conta", "value": "sign-up" },
+            { "name": "Esqueci a senha", "value": "forgot-password" },
+            { "name": "Nova senha (link do e-mail)", "value": "update-password" }
+          ]
+        },
+        {
+          "component": "text",
+          "name": "redirect",
+          "label": "Página após entrar",
+          "valueType": "string",
+          "value": "/loja/conta",
+          "description": "Usada quando a URL não traz ?redirect= (ex.: vindo do checkout)."
+        }
+      ]
+    }
+  ],
+  "filters": []
+}

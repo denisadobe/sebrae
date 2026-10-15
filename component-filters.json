@@ -32,7 +32,11 @@
       "product-details",
       "product-list-page",
       "commerce-cart",
-      "product-showcase"
+      "product-showcase",
+      "commerce-auth",
+      "commerce-account",
+      "commerce-order",
+      "commerce-checkout"
     ]
   },
   {

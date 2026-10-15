@@ -142,9 +142,34 @@ export const LABELS = {
 export const PRODUCT_PAGE = '/loja/produto';
 export const CART_PAGE = '/loja/carrinho';
 export const CATALOG_PAGE = '/loja/cursos';
+export const CHECKOUT_PAGE = '/loja/checkout';
+// logged-in area
+export const LOGIN_PAGE = '/loja/entrar';
+export const SIGNUP_PAGE = '/loja/cadastro';
+export const FORGOT_PASSWORD_PAGE = '/loja/esqueci-senha';
+export const ACCOUNT_PAGE = '/loja/conta';
+export const ORDER_PAGE = '/loja/conta/pedido';
 
 /** Link to the generic product page for a given SKU. */
 export const getProductLink = (sku) => `${PRODUCT_PAGE}?sku=${encodeURIComponent(sku)}`;
+
+/** Link to an order of the signed-in customer. */
+export const getOrderLink = (orderNumber) => `${ORDER_PAGE}?orderRef=${encodeURIComponent(orderNumber)}`;
+
+// customer token set by the auth drop-in on sign in (cookie, so the header can read it cheaply)
+const AUTH_COOKIE = 'auth_dropin_user_token';
+const getUserToken = () => document.cookie.split('; ')
+  .find((c) => c.startsWith(`${AUTH_COOKIE}=`))?.slice(AUTH_COOKIE.length + 1);
+export const isAuthenticated = () => !!getUserToken();
+
+/** Same-site path from ?redirect= (after sign in), or the fallback. */
+export function getRedirect(fallback = ACCOUNT_PAGE) {
+  const redirect = new URLSearchParams(window.location.search).get('redirect');
+  return redirect && /^\/(?!\/)/.test(redirect) ? redirect : fallback;
+}
+
+/** Login page that comes back to the current page after sign in. */
+export const getLoginLink = (back = window.location.pathname + window.location.search) => `${LOGIN_PAGE}?redirect=${encodeURIComponent(back)}`;
 
 const CONFIG_KEY = 'commerce-config';
 
@@ -174,17 +199,76 @@ export function initializeCommerce() {
       CORE_FETCH_GRAPHQL.setFetchGraphQlHeaders((prev) => ({ ...prev, ...getHeaders('all') }));
       CS_FETCH_GRAPHQL.setEndpoint(getConfigValue('commerce-endpoint'));
       CS_FETCH_GRAPHQL.setFetchGraphQlHeaders((prev) => ({ ...prev, ...getHeaders('cs') }));
+
+      // signed-in customer: Core requests carry the customer token (cart, orders, account)
+      const setAuthHeader = (authenticated) => {
+        if (authenticated && getUserToken()) CORE_FETCH_GRAPHQL.setFetchGraphQlHeader('Authorization', `Bearer ${getUserToken()}`);
+        else CORE_FETCH_GRAPHQL.removeFetchGraphQlHeader('Authorization');
+      };
+      setAuthHeader(isAuthenticated());
+      const { events } = await import('@dropins/tools/event-bus.js');
+      events.on('authenticated', setAuthHeader);
     })();
   }
   return ready;
 }
 
-/** Cart drop-in (guest cart on the Core endpoint), initialized once. */
+/** Initializes a drop-in once: Core endpoint + pt-BR labels. */
+const dropins = {};
+function initializeDropin(name, loadApi, labels) {
+  if (!dropins[name]) {
+    dropins[name] = (async () => {
+      await initializeCommerce();
+      const [{ initialize, setEndpoint }, dictionary] = await Promise.all([loadApi(), labels?.()]);
+      setEndpoint(CORE_FETCH_GRAPHQL);
+      await initializers.mountImmediately(initialize, { langDefinitions: { default: dictionary } });
+    })();
+  }
+  return dropins[name];
+}
+
+const accountLabels = (key) => () => import('./commerce-account-labels.js').then((m) => m[key]);
+
+/** Auth drop-in (sign in, sign up, password) — needed before the cart for signed-in customers. */
+export const initializeAuth = () => initializeDropin('auth', () => import('@dropins/storefront-auth/api.js'), accountLabels('AUTH_LABELS'));
+/** Account drop-in (customer details, orders list, addresses). */
+export const initializeAccount = () => initializeDropin('account', () => import('@dropins/storefront-account/api.js'), accountLabels('ACCOUNT_LABELS'));
+/** Checkout drop-in (address, delivery, payment, place order). */
+export const initializeCheckout = () => initializeDropin('checkout', () => import('@dropins/storefront-checkout/api.js'), accountLabels('CHECKOUT_LABELS'));
+
+/**
+ * Order drop-in for one order: a signed-in customer's order number (orderRef) or the data of
+ * an order just placed (orderData).
+ */
+export async function initializeOrder({ orderRef, orderData } = {}) {
+  await initializeCommerce();
+  const [{ initialize, setEndpoint }, { ORDER_LABELS }] = await Promise.all([
+    import('@dropins/storefront-order/api.js'),
+    import('./commerce-account-labels.js'),
+  ]);
+  setEndpoint(CORE_FETCH_GRAPHQL);
+  await initializers.mountImmediately(initialize, {
+    langDefinitions: { default: ORDER_LABELS },
+    ...(orderData ? { orderData } : { orderRef }),
+  });
+}
+
+/** Signs the customer out (revokes the token) and goes to the given page. */
+export async function signOut(destination = '/') {
+  await initializeAuth();
+  const { revokeCustomerToken } = await import('@dropins/storefront-auth/api.js');
+  await revokeCustomerToken();
+  window.location.href = destination;
+}
+
+/** Cart drop-in (guest or customer cart on the Core endpoint), initialized once. */
 let cartReady;
 export function initializeCart() {
   if (!cartReady) {
     cartReady = (async () => {
       await initializeCommerce();
+      // a signed-in customer gets their own cart (the guest cart is merged by the drop-in)
+      if (isAuthenticated()) await initializeAuth();
       const { initialize, setEndpoint } = await import('@dropins/storefront-cart/api.js');
       setEndpoint(CORE_FETCH_GRAPHQL);
       await initializers.mountImmediately(initialize, { langDefinitions: { default: LABELS } });

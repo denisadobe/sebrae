@@ -1,0 +1,60 @@
+.commerce-checkout {
+  color: var(--sebrae-navy);
+}
+
+.commerce-checkout .commerce-checkout-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-big);
+}
+
+.commerce-checkout .commerce-checkout-main,
+.commerce-checkout .commerce-checkout-aside {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-medium);
+  min-width: 0;
+}
+
+.commerce-checkout .commerce-checkout-main > div:empty,
+.commerce-checkout .commerce-checkout-main.is-virtual .commerce-checkout-shipping,
+.commerce-checkout .commerce-checkout-main.is-virtual .commerce-checkout-bill-to-shipping,
+.commerce-checkout .commerce-checkout-main.is-virtual .commerce-checkout-delivery {
+  display: none;
+}
+
+.commerce-checkout .commerce-checkout-summary {
+  border-radius: var(--radius-m);
+  padding: var(--spacing-medium);
+  background-color: var(--sebrae-card-bg);
+}
+
+/* server error: only the error message is shown */
+.commerce-checkout .commerce-checkout-wrapper.has-error .commerce-checkout-main > :not(.commerce-checkout-error),
+.commerce-checkout .commerce-checkout-wrapper.has-error .commerce-checkout-aside {
+  display: none;
+}
+
+.commerce-checkout .commerce-checkout-wrapper.is-placing {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.commerce-checkout .commerce-checkout-message {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: var(--sebrae-card-bg);
+}
+
+@media (width >= 900px) {
+  .commerce-checkout .commerce-checkout-wrapper {
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+  }
+
+  .commerce-checkout .commerce-checkout-aside {
+    align-self: start;
+    position: sticky;
+    top: var(--spacing-medium);
+  }
+}

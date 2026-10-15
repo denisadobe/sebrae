@@ -1,0 +1,42 @@
+.commerce-account {
+  color: var(--sebrae-navy);
+}
+
+.commerce-account .commerce-account-wrapper {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-big);
+}
+
+.commerce-account .commerce-account-orders,
+.commerce-account .commerce-account-aside {
+  min-width: 0;
+}
+
+.commerce-account .commerce-account-aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-medium);
+}
+
+.commerce-account .commerce-account-details {
+  align-self: stretch;
+}
+
+.commerce-account .commerce-account-logout {
+  margin: 0;
+}
+
+.commerce-account .commerce-account-message {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: var(--sebrae-card-bg);
+}
+
+@media (width >= 900px) {
+  .commerce-account .commerce-account-wrapper {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  }
+}

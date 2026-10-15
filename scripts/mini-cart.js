@@ -73,7 +73,7 @@ export default async function addMiniCart(navMain) {
     if (open && !rendered) {
       rendered = true;
       const {
-        CART_PAGE, CATALOG_PAGE, getProductLink,
+        CART_PAGE, CATALOG_PAGE, CHECKOUT_PAGE, getProductLink,
       } = await connect();
       const [{ render }, MiniCart] = await Promise.all([
         import('@dropins/storefront-cart/render.js'),
@@ -82,6 +82,7 @@ export default async function addMiniCart(navMain) {
       await render.render(MiniCart, {
         routeEmptyCartCTA: () => CATALOG_PAGE,
         routeCart: () => CART_PAGE,
+        routeCheckout: () => CHECKOUT_PAGE,
         routeProduct: (item) => getProductLink(item.topLevelSku || item.sku),
         enableUpdateItemQuantity: true,
         enableRemoveItem: true,

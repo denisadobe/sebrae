@@ -1,0 +1,11 @@
+/* layout of the order view: styles/commerce.css (.commerce-order-layout), shared with checkout */
+.commerce-order {
+  color: var(--sebrae-navy);
+}
+
+.commerce-order .commerce-order-message {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: var(--sebrae-card-bg);
+}

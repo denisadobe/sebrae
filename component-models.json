@@ -634,6 +634,44 @@
     ]
   },
   {
+    "id": "commerce-auth",
+    "fields": [
+      {
+        "component": "select",
+        "name": "form",
+        "label": "Formulário",
+        "valueType": "string",
+        "value": "sign-in",
+        "options": [
+          {
+            "name": "Entrar",
+            "value": "sign-in"
+          },
+          {
+            "name": "Criar conta",
+            "value": "sign-up"
+          },
+          {
+            "name": "Esqueci a senha",
+            "value": "forgot-password"
+          },
+          {
+            "name": "Nova senha (link do e-mail)",
+            "value": "update-password"
+          }
+        ]
+      },
+      {
+        "component": "text",
+        "name": "redirect",
+        "label": "Página após entrar",
+        "valueType": "string",
+        "value": "/loja/conta",
+        "description": "Usada quando a URL não traz ?redirect= (ex.: vindo do checkout)."
+      }
+    ]
+  },
+  {
     "id": "commerce-cart",
     "fields": [
       {

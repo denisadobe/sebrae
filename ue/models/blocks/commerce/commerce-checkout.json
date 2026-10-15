@@ -1,0 +1,15 @@
+{
+  "definitions": [
+    {
+      "title": "Checkout sem pagamento (Commerce)",
+      "id": "commerce-checkout",
+      "plugins": {
+        "da": {
+          "unsafeHTML": "<div class=\"commerce-checkout\"><div><div></div></div></div>"
+        }
+      }
+    }
+  ],
+  "models": [],
+  "filters": []
+}
