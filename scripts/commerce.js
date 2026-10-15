@@ -158,7 +158,7 @@ export const getOrderLink = (orderNumber) => `${ORDER_PAGE}?orderRef=${encodeURI
 
 // customer token set by the auth drop-in on sign in (cookie, so the header can read it cheaply)
 const AUTH_COOKIE = 'auth_dropin_user_token';
-const getUserToken = () => document.cookie.split('; ')
+export const getUserToken = () => document.cookie.split('; ')
   .find((c) => c.startsWith(`${AUTH_COOKIE}=`))?.slice(AUTH_COOKIE.length + 1);
 export const isAuthenticated = () => !!getUserToken();
 

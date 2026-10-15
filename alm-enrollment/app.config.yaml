@@ -1,0 +1,45 @@
+application:
+  runtimeManifest:
+    packages:
+      sebrae-alm:
+        license: Apache-2.0
+        inputs:
+          # Adobe Learning Manager (Integration Admin > Applications) — set in .env, never committed
+          ALM_BASE_URL: $ALM_BASE_URL
+          ALM_CLIENT_ID: $ALM_CLIENT_ID
+          ALM_CLIENT_SECRET: $ALM_CLIENT_SECRET
+          ALM_REFRESH_TOKEN: $ALM_REFRESH_TOKEN
+          ALM_EXTERNAL_PROFILE_ID: $ALM_EXTERNAL_PROFILE_ID
+          ALM_COURSE_ATTRIBUTE: $ALM_COURSE_ATTRIBUTE
+          ALM_LOCALE: $ALM_LOCALE
+          # Adobe Commerce as a Cloud Service storefront GraphQL
+          COMMERCE_GRAPHQL_URL: $COMMERCE_GRAPHQL_URL
+          COMMERCE_WEBSITE_CODE: $COMMERCE_WEBSITE_CODE
+          COMMERCE_STORE_CODE: $COMMERCE_STORE_CODE
+          COMMERCE_STORE_VIEW_CODE: $COMMERCE_STORE_VIEW_CODE
+        actions:
+          enroll:
+            function: actions/enroll/index.js
+            runtime: nodejs:22
+            web: 'no'
+            limits:
+              timeout: 60000
+          my-courses:
+            function: actions/my-courses/index.js
+            runtime: nodejs:22
+            web: 'yes'
+            inputs:
+              # site origins allowed to call the action (comma-separated, *.domain allowed)
+              ALLOWED_ORIGINS: $ALLOWED_ORIGINS
+            annotations:
+              require-adobe-auth: false
+              final: true
+  events:
+    registrations:
+      Pedido Commerce para matricula ALM:
+        description: Commerce order placed -> ALM enrollment
+        events_of_interest:
+          - provider_metadata: dx_commerce_events
+            event_codes:
+              - com.adobe.commerce.observer.sales_order_place_after
+        runtime_action: sebrae-alm/enroll

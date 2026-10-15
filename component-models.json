@@ -634,6 +634,18 @@
     ]
   },
   {
+    "id": "alm-courses",
+    "fields": [
+      {
+        "component": "text",
+        "name": "title",
+        "label": "Título",
+        "valueType": "string",
+        "value": "Meus cursos"
+      }
+    ]
+  },
+  {
     "id": "commerce-auth",
     "fields": [
       {

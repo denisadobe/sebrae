@@ -643,6 +643,22 @@
       "id": "commerce",
       "components": [
         {
+          "title": "Meus cursos (Learning Manager)",
+          "id": "alm-courses",
+          "model": "alm-courses",
+          "plugins": {
+            "da": {
+              "unsafeHTML": "<div class=\"alm-courses\"><div><div>title</div><div>Meus cursos</div></div></div>",
+              "fields": [
+                {
+                  "name": "title",
+                  "selector": "div>div:nth-child(2)"
+                }
+              ]
+            }
+          }
+        },
+        {
           "title": "Minha conta (Commerce)",
           "id": "commerce-account",
           "plugins": {

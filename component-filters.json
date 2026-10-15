@@ -36,7 +36,8 @@
       "commerce-auth",
       "commerce-account",
       "commerce-order",
-      "commerce-checkout"
+      "commerce-checkout",
+      "alm-courses"
     ]
   },
   {

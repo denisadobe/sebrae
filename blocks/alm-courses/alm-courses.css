@@ -1,0 +1,165 @@
+.alm-courses {
+  color: var(--sebrae-navy);
+}
+
+.alm-courses .alm-courses-title {
+  margin: 0 0 var(--spacing-medium, 24px);
+}
+
+.alm-courses .alm-courses-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.alm-courses .alm-courses-card {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 16px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px 0 rgb(20 46 82 / 20%);
+}
+
+.alm-courses .alm-courses-card-image {
+  aspect-ratio: 16 / 9;
+  background-color: var(--sebrae-card-bg);
+}
+
+.alm-courses .alm-courses-card-image img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.alm-courses .alm-courses-card-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px 24px;
+}
+
+.alm-courses .alm-courses-card-title {
+  margin: 0;
+  color: #394d60;
+  font-family: var(--body-font-family);
+  font-size: 16px;
+  line-height: 20px;
+}
+
+.alm-courses .alm-courses-card-meta {
+  margin: 0;
+  color: #617385;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+.alm-courses .alm-courses-progress {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #617385;
+  font-size: 13px;
+}
+
+.alm-courses .alm-courses-progress progress {
+  flex: 1;
+  height: 6px;
+  overflow: hidden;
+  border: 0;
+  border-radius: 3px;
+  background-color: var(--sebrae-lavender);
+  appearance: none;
+}
+
+.alm-courses .alm-courses-progress progress::-webkit-progress-bar {
+  background-color: var(--sebrae-lavender);
+}
+
+.alm-courses .alm-courses-progress progress::-webkit-progress-value {
+  background-color: var(--sebrae-blue);
+}
+
+.alm-courses .alm-courses-progress progress::-moz-progress-bar {
+  background-color: var(--sebrae-blue);
+}
+
+.alm-courses .alm-courses-card-action {
+  align-self: flex-start;
+  margin: auto 0 0;
+}
+
+.alm-courses .alm-courses-message {
+  margin: 0;
+  border-radius: var(--radius-s);
+  padding: 24px;
+  background-color: var(--sebrae-card-bg);
+}
+
+/* player dialog (appended to body, outside the block) */
+.alm-courses-player {
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  margin: 0;
+  border: 0;
+  padding: 0;
+  background-color: #fff;
+}
+
+.alm-courses-player::backdrop {
+  background-color: rgb(20 46 82 / 60%);
+}
+
+.alm-courses-player[open] {
+  display: flex;
+  flex-direction: column;
+}
+
+.alm-courses-player-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 12px 24px;
+  background-color: var(--sebrae-blue);
+  color: #fff;
+}
+
+.alm-courses-player-title {
+  margin: 0;
+  overflow: hidden;
+  font-weight: 700;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.alm-courses-player-close {
+  flex-shrink: 0;
+  border: 2px solid #fff;
+  border-radius: var(--radius-s);
+  padding: 8px 16px;
+  background: transparent;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.alm-courses-player-close:hover,
+.alm-courses-player-close:focus-visible {
+  background-color: #fff;
+  color: var(--sebrae-blue);
+}
+
+.alm-courses-player-frame {
+  flex: 1;
+  width: 100%;
+  border: 0;
+}

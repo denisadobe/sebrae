@@ -11,3 +11,4 @@ sync-block-collection.sh
 ue/models/*
 migration-work/
 /tools/
+/alm-enrollment/

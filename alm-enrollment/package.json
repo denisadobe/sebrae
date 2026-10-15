@@ -1,0 +1,12 @@
+{
+  "name": "sebrae-alm-enrollment",
+  "version": "0.1.0",
+  "private": true,
+  "description": "App Builder actions: Adobe Commerce order -> Adobe Learning Manager enrollment, and the site's 'Meus cursos' API",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js"
+  }
+}

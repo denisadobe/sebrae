@@ -5,6 +5,7 @@
       "commerce-endpoint": "https://na1-sandbox.api.commerce.adobe.com/TcvPqpzQp1aRq3ohMQt2ct/graphql",
       "commerce-assets-enabled": false,
       "commerce-free-gifts-enabled": true,
+      "alm-my-courses-url": "",
       "headers": {
         "all": {
           "Store": "default"
