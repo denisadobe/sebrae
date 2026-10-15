@@ -34,6 +34,17 @@ function showcase(document, title, category, limit, label) {
   ]);
 }
 
+// cards block: one row per card — bold title + text
+function cards(document, items) {
+  return table(document, [['Cards'], ...items.map(([title, body]) => {
+    const cell = document.createElement('div');
+    const p1 = h(document, 'p');
+    p1.append(h(document, 'strong', title));
+    cell.append(p1, h(document, 'p', body));
+    return [cell];
+  })]);
+}
+
 function metadata(document, title, description) {
   return table(document, [['Metadata'], ['Title', title], ['Description', description]]);
 }
@@ -83,6 +94,17 @@ const PAGES = {
     path: '/loja/produto',
     content: [
       table(document, [['Product Details'], ['defaultSku', getSku(document, url)]]),
+      'hr',
+      // same structure as the reference product page: cards below the product, then more products
+      h(document, 'h2', 'Por que aprender com o Sebrae'),
+      cards(document, [
+        ['Muitos cursos gratuitos', 'Boa parte dos cursos online do Sebrae não tem custo: basta fazer um cadastro simples para começar.'],
+        ['No seu ritmo', 'Estude pelo computador, tablet ou celular, no horário que for melhor para você.'],
+        ['Feito para pequenos negócios', 'Conteúdos práticos para quem quer começar, gerenciar ou expandir a sua empresa.'],
+        ['Apoio além do curso', 'Consultorias, eventos e soluções do Sebrae para colocar o aprendizado em prática.'],
+      ]),
+      'hr',
+      showcase(document, 'Você também pode gostar', '', '8', 'Curso online'),
       'hr',
       h(document, 'h2', 'Continue explorando'),
       link(document, '/loja/cursos', 'Ver todos os cursos e soluções'),

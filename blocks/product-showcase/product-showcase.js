@@ -131,7 +131,11 @@ export default async function decorate(block) {
 
   try {
     await initializeCommerce();
-    const products = await fetchProducts({ category, skus, limit });
+    // on a product page, don't suggest the product being viewed
+    const current = new URLSearchParams(window.location.search).get('sku')?.toLowerCase();
+    const products = (await fetchProducts({ category, skus, limit: limit + 1 }))
+      .filter((p) => p.sku.toLowerCase() !== current)
+      .slice(0, limit);
     if (!products.length) {
       track.replaceWith(el('p', 'product-showcase-empty', 'Nenhum produto encontrado para esta vitrine.'));
       return;
