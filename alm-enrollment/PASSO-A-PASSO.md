@@ -261,7 +261,8 @@ Envie (nada disso é secreto):
 | `FALHA Commerce: atributo ... sem valor` | `alm_course_id` vazio no produto, sem *Visible on Catalog Pages on Storefront = Yes* (B.1), ou catálogo ainda sincronizando |
 | `FALHA Runtime credentials not found` | Falta o `workspace.json` (C.2) |
 | `FALHA PUT /packages... 401/403` | O `workspace.json` é de outro workspace ou sem Runtime: baixe de novo no workspace certo |
-| Depois do pedido, `npm run logs` diz "Nenhuma execução" | Confira D.2 (assinatura do evento ativa) e D.3 (evento ligado a `sebrae-alm/enroll`) |
+| Depois do pedido, `npm run logs` diz "Nenhuma execução" | O evento assinado no Commerce (D.2) precisa ser **o mesmo** registrado no Developer Console (D.3). Por exemplo, se o Commerce envia `sales_order_save_after`, o registro precisa ser desse evento. Confira em Developer Console → workspace → registro do evento → **Debug Tracing** se as entregas chegam e para qual ação vão |
+| Quer testar o ALM sem o evento | `npm run enroll-test -- <e-mail> <SKU>` chama a ação `enroll` direto, com um pedido de teste |
 | `npm run logs` mostra `"enrolled": []` | O produto do pedido não tem `alm_course_id` |
 | `npm run logs` mostra erro do ALM ao criar usuário | Perfil externo inválido ou e-mail já usado por outro tipo de usuário: mande a saída para quem cuida do site |
 
@@ -275,3 +276,4 @@ Envie (nada disso é secreto):
 | `npm run deploy -- --dry-run` | Mostra o que seria publicado |
 | `npm run deploy` | Publica as ações `sebrae-alm/enroll` e `sebrae-alm/my-courses` |
 | `npm run logs [enroll\|my-courses] [quantidade]` | Últimas execuções das ações |
+| `npm run enroll-test -- <e-mail> <SKU>` | Matricula na mão (testa o ALM sem o evento do Commerce) |
