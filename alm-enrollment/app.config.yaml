@@ -38,5 +38,5 @@ application:
         events_of_interest:
           - provider_metadata: dx_commerce_events
             event_codes:
-              - com.adobe.commerce.observer.sales_order_place_after
+              - com.adobe.commerce.observer.sales_order_save_after
         runtime_action: sebrae-alm/enroll

@@ -20,7 +20,7 @@ Site "Meus cursos" ──(token do cliente)──▶ ação my-courses ──▶
 
 | Ação (Adobe I/O Runtime) | O que faz |
 |---|---|
-| `sebrae-alm/enroll` | Recebe o evento `observer.sales_order_place_after`. Para cada produto do pedido com o atributo `alm_course_id`, garante que o cliente existe no ALM (cria como usuário externo) e o matricula no curso. É idempotente: o mesmo pedido de novo não duplica a matrícula. |
+| `sebrae-alm/enroll` | Recebe o evento `observer.sales_order_save_after`. Para cada produto do pedido com o atributo `alm_course_id`, garante que o cliente existe no ALM (cria como usuário externo) e o matricula no curso. Esse evento dispara a cada vez que o pedido é salvo (no Commerce SaaS não existe o `sales_order_place_after`). A ação é idempotente: o mesmo pedido de novo não duplica a matrícula. |
 | `sebrae-alm/my-courses` | Ação web chamada pelo site. Valida o token do cliente no Commerce e devolve os cursos dele no ALM, mais um token de aluno de 1 hora para abrir o player do ALM dentro do site. |
 
 O projeto do Developer Console é do tipo **Runtime functions**, não App Builder. Por isso a publicação usa `npm run deploy`, que fala direto com a API do Runtime; **não use `aio app deploy`**.
@@ -208,7 +208,7 @@ No mesmo workspace:
    - salve.
 2. Na mesma área, em **Commerce events**, deixe **Enabled = Yes**. Clique em **Create Event Provider**, se aparecer, e salve.
 3. **System → Events → Event Subscriptions → Add New Subscribed Event**:
-   - *Event name*: `observer.sales_order_place_after`;
+   - *Event name*: `observer.sales_order_save_after`;
    - *Fields*, um por linha: `increment_id`, `customer_email`, `customer_firstname`, `customer_lastname`, `items[].sku`;
    - *Enabled*: Yes. Salve.
 
@@ -217,7 +217,7 @@ No mesmo workspace:
 No workspace:
 
 1. **Add event**, escolha o provedor do **Commerce** (criado no D.2) e clique em **Next**.
-2. Marque **`observer.sales_order_place_after`** e clique em **Next**.
+2. Marque **`observer.sales_order_save_after`** e clique em **Next**.
 3. Escolha a credencial **OAuth Server-to-Server** e clique em **Next**.
 4. Nome: `Pedido para matrícula ALM`. Em *How to receive events*, escolha **Runtime action** e selecione **`sebrae-alm/enroll`**.
 5. Salve.

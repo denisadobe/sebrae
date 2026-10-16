@@ -33,7 +33,7 @@ No Integration Admin (Applications > Register):
 No projeto do Developer Console (workspace Stage):
 
 1. Adicione o serviço **I/O Events for Adobe Commerce** e configure o eventing no Commerce, apontando para este projeto.
-2. Assine o evento `observer.sales_order_place_after` com os campos `increment_id`, `customer_email`, `customer_firstname`, `customer_lastname` e `items[].sku`.
+2. Assine o evento `observer.sales_order_save_after` com os campos `increment_id`, `customer_email`, `customer_firstname`, `customer_lastname` e `items[].sku`.
 3. Nesta pasta:
 
 ```sh

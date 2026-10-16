@@ -1,5 +1,6 @@
 /*
- * enroll — consumer of the Adobe Commerce "order placed" event (Adobe I/O Events).
+ * enroll — consumer of the Adobe Commerce order event (Adobe I/O Events), observer.sales_order_save_after
+ * (ACCS has no sales_order_place_after; the event fires on every order save).
  * For every ordered product with an ALM course id (product attribute), makes sure the
  * customer exists in Adobe Learning Manager and enrolls them in the course.
  * Non-2xx responses make I/O Events retry the delivery; enrollment is idempotent.
