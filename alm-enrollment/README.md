@@ -12,6 +12,8 @@ Commerce: pedido feito ──(I/O Events)──▶ enroll ──▶ ALM: aluno +
 Site "Meus cursos" ──(token do cliente)──▶ my-courses ──▶ ALM: cursos + token de aluno ──▶ player no site
 ```
 
+> Para publicar, siga o **[passo a passo](PASSO-A-PASSO.md)**, com os comandos na ordem.
+
 ## 1. Commerce: ID do curso no produto
 
 1. Crie o atributo de produto **`alm_course_id`** (texto). Em *Storefront Properties*, deixe **Visible on Catalog Pages on Storefront = Yes**, para o Catalog Service devolver o valor.
