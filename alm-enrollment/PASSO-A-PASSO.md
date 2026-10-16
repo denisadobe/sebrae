@@ -21,7 +21,12 @@ Site "Meus cursos" ──(token do cliente)──▶ ação my-courses ──▶
 | Ação (Adobe I/O Runtime) | O que faz |
 |---|---|
 | `sebrae-alm/enroll` | Recebe o evento `observer.sales_order_save_after`. Para cada produto do pedido com o atributo `alm_course_id`, garante que o cliente existe no ALM (cria como usuário externo) e o matricula no curso. Esse evento dispara a cada vez que o pedido é salvo (no Commerce SaaS não existe o `sales_order_place_after`). A ação é idempotente: o mesmo pedido de novo não duplica a matrícula. |
-| `sebrae-alm/my-courses` | Ação web chamada pelo site. Valida o token do cliente no Commerce e devolve os cursos dele no ALM, mais um token de aluno de 1 hora para abrir o player do ALM dentro do site. |
+| `sebrae-alm/my-courses` | Ação web chamada pelo site. Valida o token do cliente no Commerce e devolve os cursos dele no ALM, mais um token de aluno para abrir o player do ALM dentro do site. |
+
+> **Curso dentro do site × no portal do ALM.** O token de aluno usa a *learner impersonation* do ALM (`/oauth/o/learnerToken`), que a Adobe só libera **a pedido** para a conta.
+> - **Sem a liberação:** tudo funciona pelo acesso de administrador (matrícula e lista de cursos), mas o botão do curso abre o **portal do ALM** em nova aba, e o aluno entra lá.
+> - **Com a liberação:** o mesmo código passa a abrir o curso **dentro do site**, sem novo deploy.
+> - **Como pedir:** abra um chamado no suporte da Adobe pedindo a "learner impersonation API" para a conta do ALM (account id na seção 3).
 
 O projeto do Developer Console é do tipo **Runtime functions**, não App Builder. Por isso a publicação usa `npm run deploy`, que fala direto com a API do Runtime; **não use `aio app deploy`**.
 
@@ -262,6 +267,7 @@ Envie (nada disso é secreto):
 | `FALHA Runtime credentials not found` | Falta o `workspace.json` (C.2) |
 | `FALHA PUT /packages... 401/403` | O `workspace.json` é de outro workspace ou sem Runtime: baixe de novo no workspace certo |
 | Depois do pedido, `npm run logs` diz "Nenhuma execução" | O evento assinado no Commerce (D.2) precisa ser **o mesmo** registrado no Developer Console (D.3). Por exemplo, se o Commerce envia `sales_order_save_after`, o registro precisa ser desse evento. Confira em Developer Console → workspace → registro do evento → **Debug Tracing** se as entregas chegam e para qual ação vão |
+| `npm run check` diz que o token de aluno está indisponível | Normal sem a *learner impersonation* liberada pela Adobe (veja a nota da seção 1): os cursos abrem no portal do ALM |
 | Quer testar o ALM sem o evento | `npm run enroll-test -- <e-mail> <SKU>` chama a ação `enroll` direto, com um pedido de teste |
 | `npm run logs` mostra `"enrolled": []` | O produto do pedido não tem `alm_course_id` |
 | `npm run logs` mostra erro do ALM ao criar usuário | Perfil externo inválido ou e-mail já usado por outro tipo de usuário: mande a saída para quem cuida do site |

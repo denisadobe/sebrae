@@ -65,12 +65,23 @@ async function main() {
   }
 
   if (email) {
-    await step(`ALM: token de aluno para ${email}`, async () => {
-      const token = await alm.getLearnerToken(params, email, 300);
-      if (!token) return 'usuário ainda não existe no ALM (será criado na primeira matrícula)';
-      const courses = await alm.listEnrollments(params, token, params.ALM_LOCALE || 'pt-BR');
+    await step(`ALM: token de aluno para ${email} (player dentro do site)`, async () => {
+      const learner = await alm.getLearnerToken(params, email);
+      if (!learner) {
+        return 'indisponível: usuário não existe no ALM ou a "learner impersonation" não está liberada '
+          + 'para a conta (os cursos abrem no portal do ALM)';
+      }
+      const courses = await alm.listEnrollments(params, learner.accessToken, params.ALM_LOCALE || 'pt-BR');
       return `${courses.length} curso(s) matriculado(s)`;
     });
+    if (adminToken) {
+      await step(`ALM: usuário ${email} (busca pelo administrador)`, async () => {
+        const userId = await alm.findUserIdByAdmin(params, adminToken, email);
+        if (!userId) return 'não existe no ALM (será criado na primeira matrícula)';
+        const courses = await alm.listUserEnrollments(params, adminToken, userId, params.ALM_LOCALE || 'pt-BR');
+        return `id ${userId}, ${courses.length} curso(s) matriculado(s)`;
+      });
+    }
   }
 
   if (sku) {
