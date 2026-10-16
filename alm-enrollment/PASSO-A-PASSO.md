@@ -148,7 +148,7 @@ Edite o `.env`:
 | `ALM_EXTERNAL_PROFILE_ID` | ID do perfil externo (A.2), ou vazio |
 | `ALM_REFRESH_TOKEN` | deixe vazio; o C.4 preenche |
 
-As outras variáveis (Commerce, idioma, origens do site) já vêm com os valores certos. A última linha (`AIO_events_...`) só é usada pelo `aio app` e pode ficar como está.
+As outras variáveis (Commerce e idioma) já vêm com os valores certos. A última linha (`AIO_events_...`) só é usada pelo `aio app` e pode ficar como está.
 
 ### C.4 Refresh token do ALM
 

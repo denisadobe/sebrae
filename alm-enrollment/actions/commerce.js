@@ -51,7 +51,9 @@ async function getCustomer(params, customerToken) {
     });
     return data.customer?.email ? data.customer : null;
   } catch (error) {
-    if (error.errors?.some((e) => e.extensions?.category === 'graphql-authorization') || error.status === 401) return null;
+    // invalid / expired token: graphql-authentication (unreadable token) or graphql-authorization
+    const AUTH_ERRORS = ['graphql-authorization', 'graphql-authentication'];
+    if (error.errors?.some((e) => AUTH_ERRORS.includes(e.extensions?.category)) || error.status === 401) return null;
     throw error;
   }
 }

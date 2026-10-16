@@ -9,23 +9,12 @@ const commerce = require('../commerce.js');
 
 const PLAYER_TOKEN_TTL = 3600; // seconds
 
-function cors(params) {
-  const allowed = (params.ALLOWED_ORIGINS || '').split(',').map((o) => o.trim()).filter(Boolean);
-  const origin = params.__ow_headers?.origin;
-  const match = origin && allowed.some((rule) => (rule.startsWith('*.')
-    ? new URL(origin).hostname.endsWith(rule.slice(1))
-    : origin === rule));
-  return {
-    'Access-Control-Allow-Origin': match ? origin : allowed[0] || '*',
-    'Access-Control-Allow-Headers': 'Authorization, Content-Type',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    Vary: 'Origin',
-  };
-}
-
+// CORS: Adobe I/O Runtime adds Access-Control-Allow-Origin: * and answers the preflight
+// (Authorization allowed) for web actions; adding our own header would duplicate it.
+// The customer token is what protects the data, not the origin.
 const response = (params, statusCode, body) => ({
   statusCode,
-  headers: { ...cors(params), 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
+  headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
   body,
 });
 

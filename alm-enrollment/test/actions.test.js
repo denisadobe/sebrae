@@ -12,7 +12,6 @@ const PARAMS = {
   ALM_REFRESH_TOKEN: 'refresh',
   ALM_EXTERNAL_PROFILE_ID: '42',
   COMMERCE_GRAPHQL_URL: 'https://commerce.test/graphql',
-  ALLOWED_ORIGINS: 'http://localhost:3000,*.aem.page',
 };
 
 const json = (body, status = 200) => new Response(JSON.stringify(body), { status });
@@ -132,6 +131,9 @@ test('my-courses: rejects missing or invalid customer token', async () => {
   on((url, body) => body.includes('customer {'), () => json({ errors: [{ message: 'not authorized', extensions: { category: 'graphql-authorization' } }] }));
   const res = await myCourses.main({ ...PARAMS, __ow_headers: { authorization: 'Bearer bad' } });
   assert.equal(res.statusCode, 401);
+  routes.length = 0;
+  on((url, body) => body.includes('customer {'), () => json({ data: null, errors: [{ message: 'Composite reader could not read a token', extensions: { category: 'graphql-authentication' } }] }));
+  assert.equal((await myCourses.main({ ...PARAMS, __ow_headers: { authorization: 'Bearer garbage' } })).statusCode, 401);
 });
 
 test('my-courses: lists the courses of the customer + player token', async () => {
@@ -156,7 +158,7 @@ test('my-courses: lists the courses of the customer + player token', async () =>
     __ow_headers: { authorization: 'Bearer good', origin: 'https://main--sebrae--denisadobe.aem.page' },
   });
   assert.equal(res.statusCode, 200);
-  assert.equal(res.headers['Access-Control-Allow-Origin'], 'https://main--sebrae--denisadobe.aem.page');
+  assert.equal(res.headers['Access-Control-Allow-Origin'], undefined);
   assert.equal(res.body.courses[0].name, 'Vendas');
   assert.equal(res.body.courses[0].progress, 40);
   assert.equal(res.body.player.accessToken, 'learner');

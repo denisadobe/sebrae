@@ -28,9 +28,6 @@ application:
             function: actions/my-courses/index.js
             runtime: nodejs:20
             web: 'yes'
-            inputs:
-              # site origins allowed to call the action (comma-separated, *.domain allowed)
-              ALLOWED_ORIGINS: $ALLOWED_ORIGINS
             annotations:
               require-adobe-auth: false
               final: true

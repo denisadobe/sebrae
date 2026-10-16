@@ -5,7 +5,7 @@
       "commerce-endpoint": "https://na1-sandbox.api.commerce.adobe.com/TcvPqpzQp1aRq3ohMQt2ct/graphql",
       "commerce-assets-enabled": false,
       "commerce-free-gifts-enabled": true,
-      "alm-my-courses-url": "",
+      "alm-my-courses-url": "https://285361-473chartreusepike.adobeioruntime.net/api/v1/web/sebrae-alm/my-courses",
       "headers": {
         "all": {
           "Store": "default"
