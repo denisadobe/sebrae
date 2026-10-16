@@ -20,13 +20,13 @@ application:
         actions:
           enroll:
             function: actions/enroll/index.js
-            runtime: nodejs:22
+            runtime: nodejs:20
             web: 'no'
             limits:
               timeout: 60000
           my-courses:
             function: actions/my-courses/index.js
-            runtime: nodejs:22
+            runtime: nodejs:20
             web: 'yes'
             inputs:
               # site origins allowed to call the action (comma-separated, *.domain allowed)

@@ -12,7 +12,7 @@ Commerce: pedido feito ──(I/O Events)──▶ enroll ──▶ ALM: aluno +
 Site "Meus cursos" ──(token do cliente)──▶ my-courses ──▶ ALM: cursos + token de aluno ──▶ player no site
 ```
 
-> Para publicar, siga o **[passo a passo](PASSO-A-PASSO.md)**, com os comandos na ordem.
+> Para publicar, siga o **[passo a passo](PASSO-A-PASSO.md)**. Ele publica direto no Adobe I/O Runtime (`npm run deploy`) e funciona em projetos com Runtime functions, sem App Builder. Em projetos App Builder, o `aio app deploy` (seção 3) também funciona.
 
 ## 1. Commerce: ID do curso no produto
 

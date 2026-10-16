@@ -21,6 +21,7 @@ migration-work/commerce-validation/
 
 # App Builder project (credentials and build output stay local)
 alm-enrollment/.env
+alm-enrollment/workspace.json
 alm-enrollment/.aio
 alm-enrollment/dist/
 alm-enrollment/node_modules/

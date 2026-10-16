@@ -4,11 +4,13 @@
   "private": true,
   "description": "App Builder actions: Adobe Commerce order -> Adobe Learning Manager enrollment, and the site's 'Meus cursos' API",
   "engines": {
-    "node": ">=22"
+    "node": ">=20"
   },
   "scripts": {
     "test": "node --test test/*.test.js",
     "check": "node scripts/check.js",
-    "refresh-token": "node scripts/refresh-token.js"
+    "refresh-token": "node scripts/refresh-token.js",
+    "deploy": "node scripts/deploy-runtime.js",
+    "logs": "node scripts/logs.js"
   }
 }
