@@ -40,6 +40,7 @@ aio login
 aio app use            # escolha o projeto/workspace do Sebrae
 cp .env.example .env   # preencha as credenciais do ALM (não commitar)
 npm test               # testes locais, sem chamadas externas
+npm run check -- 123 cliente@exemplo.com SKU-DO-CURSO   # confere ALM e Commerce com o .env
 aio app deploy
 ```
 
