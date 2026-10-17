@@ -261,6 +261,7 @@ export async function signOut(destination = '/') {
   // signed in with the identity provider (single sign-on, scripts/sso.js): end that session too
   const ssoDomain = localStorage.getItem('sso-session');
   localStorage.removeItem('sso-session');
+  localStorage.removeItem('alm-session');
   const clientId = getConfigValue('sso-client-id');
   if (ssoDomain && clientId) {
     const logout = new URL(`https://${ssoDomain}/v2/logout`);

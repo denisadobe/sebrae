@@ -21,13 +21,14 @@ const API = 'https://adobeioruntime.net/api/v1';
 const PACKAGE_PARAMS = [
   'ALM_BASE_URL', 'ALM_CLIENT_ID', 'ALM_CLIENT_SECRET', 'ALM_REFRESH_TOKEN', 'ALM_EXTERNAL_PROFILE_ID',
   'ALM_COURSE_ATTRIBUTE', 'ALM_LOCALE', 'ALM_ACCOUNT_ID', 'COMMERCE_GRAPHQL_URL', 'COMMERCE_WEBSITE_CODE', 'COMMERCE_STORE_CODE',
-  'COMMERCE_STORE_VIEW_CODE', 'SSO_DOMAIN', 'SSO_CLIENT_ID', 'SSO_COMMERCE_MODE', 'SSO_PASSWORD_SECRET', 'SSO_REQUIRE_VERIFIED_EMAIL',
+  'COMMERCE_STORE_VIEW_CODE', 'SSO_DOMAIN', 'SSO_CLIENT_ID', 'SSO_COMMERCE_MODE', 'SSO_PASSWORD_SECRET', 'SSO_REQUIRE_VERIFIED_EMAIL', 'ALM_SESSION_SECRET',
   'IMS_CLIENT_ID', 'IMS_CLIENT_SECRET', 'IMS_ORG_ID',
 ];
 const ACTIONS = {
   enroll: { web: false, timeout: 60000 },
   'my-courses': { web: true, timeout: 30000 },
   'sso-login': { web: true, timeout: 30000 },
+  'alm-connect': { web: true, timeout: 30000 },
 };
 
 function loadEnv() {
@@ -78,9 +79,9 @@ function getImsFromWorkspace() {
  */
 function bundle(name) {
   const read = (file) => fs.readFileSync(path.join(ROOT, 'actions', file), 'utf8');
-  const shared = ['alm.js', 'commerce.js', 'sso.js'];
+  const shared = ['alm.js', 'commerce.js', 'sso.js', 'learner-session.js'];
   const wrap = (id, source) => `  ${JSON.stringify(id)}: function (module, exports, require) {\n${source
-    .replace(/require\('\.\.\/(alm|commerce|sso)\.js'\)/g, (m, lib) => `require('${lib}.js')`)}\n  },`;
+    .replace(/require\('\.\.?\/(alm|commerce|sso|learner-session)\.js'\)/g, (m, lib) => `require('${lib}.js')`)}\n  },`;
   return `/* ${PACKAGE}/${name} — bundled by scripts/deploy-runtime.js, do not edit */
 const __sources = {
 ${shared.map((file) => wrap(file, read(file))).join('\n')}
@@ -120,6 +121,12 @@ async function request(runtime, method, url, body) {
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const env = { ...getImsFromWorkspace(), ...Object.fromEntries(Object.entries(loadEnv()).filter(([, v]) => v)) };
+  if (!env.ALM_SESSION_SECRET && !dryRun) {
+    // seals the ALM learner connection kept by the browser (changing it only asks to connect again)
+    env.ALM_SESSION_SECRET = crypto.randomBytes(32).toString('hex');
+    fs.appendFileSync(path.join(ROOT, '.env'), `\nALM_SESSION_SECRET=${env.ALM_SESSION_SECRET}\n`);
+    console.log('OK    ALM_SESSION_SECRET gerada e salva no .env');
+  }
   if (env.SSO_COMMERCE_MODE === 'password' && !env.SSO_PASSWORD_SECRET && !dryRun) {
     // interim SSO: generate the secret once and keep it in .env (changing it locks SSO accounts out)
     env.SSO_PASSWORD_SECRET = crypto.randomBytes(32).toString('hex');
@@ -180,6 +187,8 @@ async function main() {
 
   console.log('\nURL da ação my-courses (vai em alm-my-courses-url no config.json do site):');
   console.log(`  https://${runtime.namespace}.adobeioruntime.net/api/v1/web/${PACKAGE}/my-courses`);
+  console.log('\nURL da ação alm-connect (vai em alm-connect-url no config.json do site):');
+  console.log(`  https://${runtime.namespace}.adobeioruntime.net/api/v1/web/${PACKAGE}/alm-connect`);
   console.log('\nURL da ação sso-login (vai em sso-login-url no config.json do site):');
   console.log(`  https://${runtime.namespace}.adobeioruntime.net/api/v1/web/${PACKAGE}/sso-login`);
   console.log(`\nAção para ligar ao evento do Commerce no Developer Console: ${PACKAGE}/enroll`);
@@ -193,5 +202,5 @@ if (require.main === module) {
 }
 
 module.exports = {
-  PACKAGE, loadEnv, getRuntime, request,
+  PACKAGE, ACTIONS, bundle, loadEnv, getRuntime, request,
 };

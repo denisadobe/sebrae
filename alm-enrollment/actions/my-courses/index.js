@@ -1,12 +1,15 @@
 /*
  * my-courses — web action called by the site ("Meus cursos" block).
  * Authorization: Bearer {Commerce customer token}. The token is checked against Commerce;
- * the response has the customer's ALM courses and, when ALM allows learner impersonation, a
- * learner token used by the site to open the ALM player for that customer only; otherwise each
- * course has the URL of its page in the ALM learner app. Admin credentials stay here.
+ * the response has the customer's ALM courses and a learner token used by the site to open the
+ * ALM player for that customer only, from (1) learner impersonation, when ALM allows it, or
+ * (2) the learner connection made through single sign-on (POST { almSession }, sealed by
+ * alm-connect). Without either, courses come from the admin API with links to the ALM learner
+ * app and `connect: true` tells the site to offer the SSO connection. Admin credentials stay here.
  */
 const alm = require('../alm.js');
 const commerce = require('../commerce.js');
+const learnerSession = require('../learner-session.js');
 
 // CORS: Adobe I/O Runtime adds Access-Control-Allow-Origin: * and answers the preflight
 // (Authorization allowed) for web actions; adding our own header would duplicate it.
@@ -42,14 +45,30 @@ async function main(params) {
       });
     }
 
-    // no impersonation: courses through the admin API, opened in the ALM learner app
+    // learner connection made through single sign-on (sealed session kept by the browser)
+    const connected = await learnerSession.openSession(params, params.almSession, customer.email);
+    if (connected) {
+      const courses = await alm.listEnrollments(params, connected.accessToken, locale);
+      return response(params, 200, {
+        courses,
+        player: {
+          baseUrl: alm.baseUrl(params),
+          accessToken: connected.accessToken,
+          expiresIn: Math.round((connected.expiresAt - Date.now()) / 1000),
+        },
+        ...(connected.session && { session: connected.session }),
+      });
+    }
+
+    // no learner token: courses through the admin API, opened in the ALM learner app
     const admin = await alm.getAdminSession(params);
     const userId = await alm.findUserIdByAdmin(params, admin.token, customer.email);
     // not in ALM yet: no course ordered (or enrollment still being processed)
     if (!userId) return response(params, 200, { courses: [] });
     const courses = (await alm.listUserEnrollments(params, admin.token, userId, locale))
       .map((course) => ({ ...course, url: alm.courseUrl(params, course.loId, admin.accountId) }));
-    return response(params, 200, { courses });
+    // connect: the site can get a learner token through the SSO login (alm-connect)
+    return response(params, 200, { courses, connect: !!params.ALM_SESSION_SECRET });
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('my-courses failed', error.message, JSON.stringify(error.body || error.errors || {}));

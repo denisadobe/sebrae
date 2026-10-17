@@ -56,6 +56,42 @@ async function getAdminSession(params) {
 
 const getAdminToken = async (params) => (await getAdminSession(params)).token;
 
+/** Learner OAuth tokens from an authorization code (learner signed in at ALM, e.g. via SSO). */
+async function exchangeCode(params, code) {
+  const resp = await fetch(`${baseUrl(params)}/oauth/token`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ code, client_id: params.ALM_CLIENT_ID, client_secret: params.ALM_CLIENT_SECRET }),
+  });
+  const body = await readBody(resp);
+  if (!resp.ok || !body.access_token) throw new AlmError('ALM code exchange failed', resp.status, body);
+  return {
+    accessToken: body.access_token,
+    refreshToken: body.refresh_token,
+    expiresAt: Date.now() + (Number(body.expires_in) || 3600) * 1000,
+  };
+}
+
+/** New learner access token from the learner's refresh token. */
+async function refreshLearner(params, refreshToken) {
+  const resp = await fetch(`${baseUrl(params)}/oauth/token/refresh`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      client_id: params.ALM_CLIENT_ID,
+      client_secret: params.ALM_CLIENT_SECRET,
+      refresh_token: refreshToken,
+    }),
+  });
+  const body = await readBody(resp);
+  if (!resp.ok || !body.access_token) throw new AlmError('ALM learner token refresh failed', resp.status, body);
+  return {
+    accessToken: body.access_token,
+    refreshToken: body.refresh_token || refreshToken,
+    expiresAt: Date.now() + (Number(body.expires_in) || 3600) * 1000,
+  };
+}
+
 /**
  * Learner token for an e-mail (learner impersonation).
  * @returns {Promise<{accessToken: string, userId: string, expiresIn: number}|null>} null when
@@ -247,6 +283,8 @@ module.exports = {
   courseUrl,
   getAdminSession,
   getAdminToken,
+  exchangeCode,
+  refreshLearner,
   getLearnerToken,
   api,
   toLoId,

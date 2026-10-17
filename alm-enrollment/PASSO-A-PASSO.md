@@ -22,6 +22,7 @@ Site "Meus cursos" ──(token do cliente)──▶ ação my-courses ──▶
 |---|---|
 | `sebrae-alm/enroll` | Recebe o evento `observer.sales_order_save_after`. Para cada produto do pedido com o atributo `alm_course_id`, garante que o cliente existe no ALM (cria como usuário externo) e o matricula no curso. Esse evento dispara a cada vez que o pedido é salvo (no Commerce SaaS não existe o `sales_order_place_after`). A ação é idempotente: o mesmo pedido de novo não duplica a matrícula. |
 | `sebrae-alm/sso-login` | Ação web do login único: valida o login do Auth0 e abre a sessão do cliente na loja (cria o cliente no primeiro acesso). |
+| `sebrae-alm/alm-connect` | Ação web: troca o código de autorização do ALM (depois do login único) pelo token do aluno, confere o e-mail e devolve a conexão criptografada que o site guarda. |
 | `sebrae-alm/my-courses` | Ação web chamada pelo site. Valida o token do cliente no Commerce e devolve os cursos dele no ALM, mais um token de aluno para abrir o player do ALM dentro do site. |
 
 > **Curso dentro do site × no portal do ALM.** O token de aluno usa a *learner impersonation* do ALM (`/oauth/o/learnerToken`), que a Adobe só libera **a pedido** para a conta.
@@ -296,6 +297,49 @@ npm run sso-check -- <e-mail de teste novo>
 | `sso-check`: `You do not have permission` | A credencial S2S precisa de acesso de administrador ao Commerce. Confira no Admin Console o perfil de produto do Commerce |
 | Site: "confirme o seu e-mail" | O login só aceita e-mails confirmados no Auth0: use o link do e-mail de confirmação. Para uma demo sem confirmação, coloque `SSO_REQUIRE_VERIFIED_EMAIL=false` no `.env` e rode `npm run deploy` (risco: quem cadastrar um e-mail primeiro no Auth0 fica com a conta da loja desse e-mail) |
 | Auth0: "Callback URL mismatch" | O endereço do site não está em *Allowed Callback URLs* (F.1) |
+
+## 8c. Parte G: curso dentro do site com o login único (ALM via SAML)
+
+Enquanto a Adobe não libera a *learner impersonation*, o token do aluno vem do próprio login dele no ALM. Esse login acontece **sem tela**, porque ele já entrou no Auth0:
+
+```
+"Começar" no site ─▶ Auth0 (SAML, já logado) ─▶ ALM ─▶ autorização ─▶ site com ?code=
+   site ─▶ ação alm-connect (troca o code, confere o e-mail) ─▶ conexão guardada no navegador ─▶ player
+```
+
+### G.1 Auth0: aplicação SAML do ALM
+Aplicação **Regular Web Application** "Sebrae ALM", aba **Addons → SAML2 Web App**:
+- **Application Callback URL:** `https://learningmanager.adobe.com/saml/SSO`
+- **Settings:** `audience` `https://learningmanager.adobe.com`, `nameIdentifierFormat` emailAddress e `nameIdentifierProbes` com o claim de e-mail. Confira com o botão **Debug**: o `NameID` deve ser o e-mail.
+- **URL de login (IdP):** `https://dev-533cjwwlbzw8n64k.us.auth0.com/samlp/<Client ID da aplicação>`
+- **Metadados:** `https://dev-533cjwwlbzw8n64k.us.auth0.com/samlp/metadata/<Client ID da aplicação>`
+
+### G.2 ALM
+1. **Configurações → Métodos de login → Adicionar SSO**: nome `Sebrae SSO`, tipo **IDP iniciado**, a URL de login do G.1 e o XML de metadados.
+2. **Usuários externos**: Método de Logon Padrão = **Logon único** e Configuração de SSO = **Sebrae SSO**.
+3. **Campos ativos**: tire a obrigatoriedade do campo **Company** para usuários externos. Senão o ALM mostra "Complete seu perfil" no meio da conexão.
+4. **Integration Admin → Applications →** a aplicação do serviço → **Redirect Domains**: além de `https://main--sebrae--denisadobe.aem.page`, inclua `https://commerce-area-logada--sebrae--denisadobe.aem.page` e `http://localhost:3000`.
+
+### G.3 Publicar e testar
+```sh
+npm test
+npm run deploy
+```
+
+- **Primeira vez:** o deploy gera a `ALM_SESSION_SECRET` no `.env`, que criptografa a conexão guardada no navegador. Ele publica também a ação `sebrae-alm/alm-connect`.
+- **Teste no site:**
+  1. Numa janela anônima, entre pelo login único com um e-mail **sem `+`** que tenha curso matriculado.
+  2. Abra **Minha conta → Meus cursos → Começar**.
+  3. O navegador passa rapidamente pelo Auth0 e pelo ALM e volta. O curso abre **no player dentro do site**.
+  4. Das próximas vezes, o curso abre direto, sem a passagem.
+
+| Sintoma | O que fazer |
+|---|---|
+| ALM: "No user details found for the emailid" | O aluno ainda não existe no ALM (faça o pedido), o e-mail tem `+` (o ALM não aceita via SSO) ou o SSO não está nos usuários externos (G.2) |
+| ALM: "Complete seu perfil" | Campo ativo obrigatório (G.2 item 3) |
+| ALM: erro de redirect_uri | O endereço do site não está nos Redirect Domains da aplicação (G.2 item 4) |
+| Site: "a conta do Learning Manager é de outro e-mail" | O navegador estava logado no ALM com outra pessoa. Saia do ALM ou use uma janela anônima |
+| Curso volta a abrir no portal do ALM | A conexão expirou ou foi revogada. O próximo "Começar" conecta de novo |
 
 ## 9. O que devolver para quem cuida do site
 

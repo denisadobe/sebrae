@@ -104,6 +104,36 @@ async function commerceAdminHeaders(params) {
   };
 }
 
+/**
+ * Sealed value (AES-256-GCM): only the actions can read or forge it. Used for the ALM learner
+ * connection kept in the browser (no server-side storage needed).
+ */
+const sealKey = (secret) => crypto.createHash('sha256').update(String(secret)).digest();
+
+function seal(secret, value) {
+  const iv = crypto.randomBytes(12);
+  const cipher = crypto.createCipheriv('aes-256-gcm', sealKey(secret), iv);
+  const data = Buffer.concat([cipher.update(JSON.stringify(value), 'utf8'), cipher.final()]);
+  return Buffer.concat([iv, cipher.getAuthTag(), data]).toString('base64url');
+}
+
+/** @returns {Object|null} the value, or null when missing, tampered or sealed with another key */
+function unseal(secret, sealed) {
+  try {
+    const raw = Buffer.from(String(sealed), 'base64url');
+    const decipher = crypto.createDecipheriv('aes-256-gcm', sealKey(secret), raw.subarray(0, 12));
+    decipher.setAuthTag(raw.subarray(12, 28));
+    return JSON.parse(Buffer.concat([decipher.update(raw.subarray(28)), decipher.final()]).toString('utf8'));
+  } catch (e) {
+    return null;
+  }
+}
+
 module.exports = {
-  verifyIdToken, getNames, getImsToken, commerceAdminHeaders,
+  seal,
+  unseal,
+  verifyIdToken,
+  getNames,
+  getImsToken,
+  commerceAdminHeaders,
 };
