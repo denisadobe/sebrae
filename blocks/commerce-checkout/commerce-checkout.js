@@ -3,11 +3,14 @@
  * courses are free virtual products, so the store's "no payment information required"
  * method (or another offline method) is used and there is no shipping step.
  * Physical products (demo store) still get shipping address + delivery.
+ * Express checkout (free + virtual cart, e.g. free courses): only the contact, the summary and
+ * "Confirmar inscrição" — the billing address Commerce requires is filled in automatically
+ * (customer's default billing address, or a neutral address) and the "free" method is set.
  * After the order: confirmation in place, URL moves to the order details page.
  * Not signed in: login page and back. Empty cart: cart page. No authoring fields.
  */
 import {
-  CART_PAGE, IS_UE, getLoginLink, getOrderLink, getProductLink,
+  CART_PAGE, CORE_FETCH_GRAPHQL, IS_UE, getLoginLink, getOrderLink, getProductLink,
   initializeAccount, initializeCart, initializeCheckout, initializeOrder, isAuthenticated,
 } from '../../scripts/commerce.js';
 import renderOrder from '../../scripts/commerce-order.js';
@@ -15,6 +18,17 @@ import renderOrder from '../../scripts/commerce-order.js';
 const SHIPPING_FORM = 'selectedShippingAddress';
 const BILLING_FORM = 'selectedBillingAddress';
 const LOGIN_FORM = 'login-form';
+
+// Commerce always requires a billing address; free virtual orders get this one when the
+// customer has no saved billing address (no shipping, nothing to charge)
+const EXPRESS_BILLING_ADDRESS = {
+  street: ['Inscrição online'],
+  city: 'Brasília',
+  region: 'DF',
+  postcode: '70000-000',
+  countryCode: 'BR',
+  telephone: '0000000000',
+};
 
 // no online payment: Adobe Payment Services methods (card, wallets) are hidden even when
 // enabled on the store; offline methods (free, check, bank transfer...) are listed
@@ -43,10 +57,13 @@ export default async function decorate(block) {
 
   const $ = Object.fromEntries([
     'error', 'stock', 'login', 'shipping', 'bill-to-shipping', 'delivery', 'payment', 'billing',
-    'place-order', 'summary', 'items',
+    'express', 'place-order', 'summary', 'items',
   ].map((name) => [name, div(name)]));
+  $.express.textContent = 'Inscrição gratuita: não é preciso informar endereço nem dados de pagamento.';
+  $.express.hidden = true;
   const main = div('main');
-  main.append(...['error', 'stock', 'login', 'shipping', 'bill-to-shipping', 'delivery', 'payment', 'billing', 'place-order']
+  main.append(...['error', 'stock', 'login', 'shipping', 'bill-to-shipping', 'delivery', 'payment', 'billing', 'express',
+    'place-order']
     .map((name) => $[name]));
   const aside = div('aside');
   aside.append($.summary, $.items);
@@ -71,7 +88,7 @@ export default async function decorate(block) {
       { events },
       checkoutUtils,
       { placeOrder },
-      { getStoreConfigCache },
+      { getStoreConfigCache, setBillingAddress, setPaymentMethod },
       { render: checkout },
       { render: account },
       { render: cart },
@@ -111,6 +128,28 @@ export default async function decorate(block) {
       if (!authenticated) window.location.replace(getLoginLink());
     });
 
+    // free + virtual cart (courses): express checkout, no address or payment step
+    const isExpress = (data) => !!data && isVirtualCart(data)
+      && (data.availablePaymentMethods || []).some((method) => method.code === 'free');
+    let express = false;
+
+    // billing address + "free" method set automatically before placing an express order
+    const prepareExpressOrder = async () => {
+      const { data } = await CORE_FETCH_GRAPHQL.fetchGraphQl(`{
+        customer { firstname lastname default_billing addresses { id } }
+      }`);
+      const customer = data?.customer || {};
+      const savedId = Number(customer.default_billing) || customer.addresses?.[0]?.id;
+      await setBillingAddress(savedId ? { customerAddressId: Number(savedId) } : {
+        address: {
+          ...EXPRESS_BILLING_ADDRESS,
+          firstName: customer.firstname || 'Cliente',
+          lastName: customer.lastname || 'Sebrae',
+        },
+      });
+      await setPaymentMethod({ code: 'free' });
+    };
+
     const shippingRef = { current: null };
     const billingRef = { current: null };
 
@@ -148,7 +187,20 @@ export default async function decorate(block) {
     const showAddresses = async (data) => {
       if (!data) return;
       const virtual = isVirtualCart(data);
+      express = isExpress(data);
       main.classList.toggle('is-virtual', virtual);
+      main.classList.toggle('is-express', express);
+      $.express.hidden = !express;
+      if (express) {
+        // nothing to fill in: no shipping, billing set automatically on "Confirmar inscrição"
+        shipping?.remove();
+        billing?.remove();
+        shipping = null;
+        billing = null;
+        shippingRef.current = null;
+        billingRef.current = null;
+        return;
+      }
       if (virtual) {
         shipping?.remove();
         shipping = null;
@@ -171,7 +223,7 @@ export default async function decorate(block) {
       checkout.render(ShippingMethods)($.delivery),
       checkout.render(PaymentMethods, { slots: { Methods: NO_ONLINE_PAYMENT } })($.payment),
       checkout.render(PlaceOrder, {
-        handleValidation: () => validateForms([
+        handleValidation: () => validateForms(express ? [{ name: LOGIN_FORM }] : [
           { name: LOGIN_FORM },
           { name: SHIPPING_FORM, ref: shippingRef },
           { name: BILLING_FORM, ref: billingRef },
@@ -179,6 +231,7 @@ export default async function decorate(block) {
         handlePlaceOrder: async ({ cartId }) => {
           wrapper.classList.add('is-placing');
           try {
+            if (express) await prepareExpressOrder();
             await placeOrder(cartId);
           } finally {
             wrapper.classList.remove('is-placing');

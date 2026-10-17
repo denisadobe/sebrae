@@ -19,8 +19,17 @@
 .commerce-checkout .commerce-checkout-main > div:empty,
 .commerce-checkout .commerce-checkout-main.is-virtual .commerce-checkout-shipping,
 .commerce-checkout .commerce-checkout-main.is-virtual .commerce-checkout-bill-to-shipping,
-.commerce-checkout .commerce-checkout-main.is-virtual .commerce-checkout-delivery {
+.commerce-checkout .commerce-checkout-main.is-virtual .commerce-checkout-delivery,
+.commerce-checkout .commerce-checkout-main.is-express .commerce-checkout-payment,
+.commerce-checkout .commerce-checkout-main.is-express .commerce-checkout-billing {
   display: none;
+}
+
+/* express checkout (free courses): short note instead of address and payment steps */
+.commerce-checkout .commerce-checkout-express {
+  border-radius: var(--radius-s);
+  padding: var(--spacing-small) var(--spacing-medium);
+  background-color: var(--sebrae-card-bg);
 }
 
 .commerce-checkout .commerce-checkout-summary {

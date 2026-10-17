@@ -1,7 +1,9 @@
 /*
  * Order view (Adobe Commerce order drop-in): status, items, customer details and totals.
  * Shared by the order details page (commerce-order block) and the checkout confirmation.
- * Courses are virtual products, so there is no shipping status card.
+ * Courses are virtual products, so there is no shipping status card. Free virtual orders (free
+ * courses, express checkout) also hide the customer details: their billing address is the
+ * automatic one and there is no payment.
  */
 import {
   ACCOUNT_PAGE, CATALOG_PAGE, getProductLink, initializeOrder,
@@ -42,6 +44,14 @@ export default async function renderOrder(container, { orderRef, orderData, conf
   const layout = el('commerce-order-layout');
   layout.append(main, aside);
   container.replaceChildren(layout);
+
+  // free + virtual order: no address / payment details to show
+  const { events } = await import('@dropins/tools/event-bus.js');
+  const hideDetails = (order) => {
+    customer.hidden = !!order && order.isVirtual && Number(order.grandTotal?.value) === 0;
+  };
+  events.on('order/data', hideDetails, { eager: true });
+  if (orderData) hideDetails(orderData);
 
   await initializeOrder({ orderRef, orderData });
   const [{ render }, ...containers] = await Promise.all([
