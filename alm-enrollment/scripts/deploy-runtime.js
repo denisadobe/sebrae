@@ -8,6 +8,7 @@
  * Runtime credentials: workspace.json in this folder (Developer Console > workspace >
  * Download all) or AIO_runtime_namespace / AIO_runtime_auth in .env. Secrets are never printed.
  */
+const crypto = require('crypto');
 const fs = require('fs');
 const path = require('path');
 
@@ -20,7 +21,8 @@ const API = 'https://adobeioruntime.net/api/v1';
 const PACKAGE_PARAMS = [
   'ALM_BASE_URL', 'ALM_CLIENT_ID', 'ALM_CLIENT_SECRET', 'ALM_REFRESH_TOKEN', 'ALM_EXTERNAL_PROFILE_ID',
   'ALM_COURSE_ATTRIBUTE', 'ALM_LOCALE', 'ALM_ACCOUNT_ID', 'COMMERCE_GRAPHQL_URL', 'COMMERCE_WEBSITE_CODE', 'COMMERCE_STORE_CODE',
-  'COMMERCE_STORE_VIEW_CODE', 'SSO_DOMAIN', 'SSO_CLIENT_ID', 'IMS_CLIENT_ID', 'IMS_CLIENT_SECRET', 'IMS_ORG_ID',
+  'COMMERCE_STORE_VIEW_CODE', 'SSO_DOMAIN', 'SSO_CLIENT_ID', 'SSO_COMMERCE_MODE', 'SSO_PASSWORD_SECRET',
+  'IMS_CLIENT_ID', 'IMS_CLIENT_SECRET', 'IMS_ORG_ID',
 ];
 const ACTIONS = {
   enroll: { web: false, timeout: 60000 },
@@ -118,6 +120,12 @@ async function request(runtime, method, url, body) {
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
   const env = { ...getImsFromWorkspace(), ...Object.fromEntries(Object.entries(loadEnv()).filter(([, v]) => v)) };
+  if (env.SSO_COMMERCE_MODE === 'password' && !env.SSO_PASSWORD_SECRET && !dryRun) {
+    // interim SSO: generate the secret once and keep it in .env (changing it locks SSO accounts out)
+    env.SSO_PASSWORD_SECRET = crypto.randomBytes(32).toString('hex');
+    fs.appendFileSync(path.join(ROOT, '.env'), `\nSSO_PASSWORD_SECRET=${env.SSO_PASSWORD_SECRET}\n`);
+    console.log('OK    SSO_PASSWORD_SECRET gerada e salva no .env (guarde: trocar a chave bloqueia as contas do login único)');
+  }
   const missing = ['ALM_CLIENT_ID', 'ALM_CLIENT_SECRET', 'ALM_REFRESH_TOKEN', 'COMMERCE_GRAPHQL_URL'].filter((k) => !env[k]);
   if (missing.length) throw new Error(`missing in .env: ${missing.join(', ')}`);
 
@@ -133,8 +141,11 @@ async function main() {
 
   const params = PACKAGE_PARAMS.filter((key) => env[key]).map((key) => ({ key, value: env[key] }));
   console.log(`OK    package parameters: ${params.map((p) => p.key).join(', ')}`);
-  const noSso = ['SSO_DOMAIN', 'SSO_CLIENT_ID', 'IMS_CLIENT_ID', 'IMS_CLIENT_SECRET'].filter((k) => !env[k]);
+  const ssoMode = env.SSO_COMMERCE_MODE || (env.SSO_PASSWORD_SECRET ? 'password' : 'exchange');
+  const ssoNeeds = ['SSO_DOMAIN', 'SSO_CLIENT_ID', ...(ssoMode === 'password' ? ['SSO_PASSWORD_SECRET'] : ['IMS_CLIENT_ID', 'IMS_CLIENT_SECRET'])];
+  const noSso = ssoNeeds.filter((k) => !env[k] && !(dryRun && k === 'SSO_PASSWORD_SECRET'));
   if (noSso.length) console.log(`AVISO sso-login sem ${noSso.join(', ')} (login único não vai funcionar)`);
+  else console.log(`OK    sso-login: modo ${ssoMode}`);
 
   if (dryRun) {
     console.log('dry run: nothing deployed');

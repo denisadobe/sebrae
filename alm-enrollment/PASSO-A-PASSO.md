@@ -257,21 +257,30 @@ Use o tenant `dev-533cjwwlbzw8n64k.us.auth0.com`, com uma aplicação **Single P
 
 O **Client ID** dessa aplicação é público. Ele vai em `SSO_CLIENT_ID` no `.env` e em `sso-client-id` no `config.json` do site.
 
-### F.2 Credencial do Commerce
+### F.2 Como a sessão da loja é aberta (`SSO_COMMERCE_MODE` no `.env`)
 
-No Developer Console, no mesmo workspace, use **Add service → API → Adobe Commerce as a Cloud Service** na credencial **OAuth Server-to-Server**. O escopo `commerce.accs` precisa aparecer na credencial.
+| Modo | Como funciona | Precisa de |
+|---|---|---|
+| `password` (**provisório, padrão agora**) | O serviço calcula uma senha interna para cada e-mail (HMAC com `SSO_PASSWORD_SECRET`). No primeiro login cria a conta pela API pública da loja; depois só entra. O cliente nunca vê essa senha | Nada além do `.env`. A chave é gerada pelo `npm run deploy` na primeira vez |
+| `exchange` (oficial) | `exchangeExternalCustomerToken` com credencial de administrador | Credencial OAuth Server-to-Server com a API **Adobe Commerce as a Cloud Service** (escopo `commerce.accs`). Exige ser **Developer** do produto no Admin Console |
 
-Depois, baixe o `workspace.json` de novo (**Download all**). O deploy tira dele o Client ID, o Secret e o Org ID dessa credencial. Também dá para preencher `IMS_CLIENT_ID`, `IMS_CLIENT_SECRET` e `IMS_ORG_ID` no `.env`.
+Cuidados no modo `password`:
+- **Guarde a `SSO_PASSWORD_SECRET`.** Se ela for trocada ou perdida, as contas criadas pelo login único deixam de entrar.
+- **Contas antigas:** contas criadas **antes**, com senha própria pelo formulário da loja, não entram pelo login único. O site avisa "já existe uma conta da loja com este e-mail". Para testar, use e-mails novos (ex.: `flosi+aluno1@adobe.com`).
+
+Para passar para o modo oficial quando a permissão sair:
+1. No `.env`, coloque `SSO_COMMERCE_MODE=exchange` e preencha `IMS_CLIENT_ID`, `IMS_CLIENT_SECRET` e `IMS_ORG_ID`.
+2. Rode `npm run sso-check` e `npm run deploy`.
 
 ### F.3 Testar e publicar
 
 ```sh
-npm run sso-check -- <e-mail de teste>
 npm run deploy
+npm run sso-check -- <e-mail de teste novo>
 ```
 
-- O `sso-check` cria (ou reutiliza) esse cliente no Commerce pela ponte. O esperado é `OK Commerce: login externo para …`.
-- O deploy agora publica também a ação `sebrae-alm/sso-login` e mostra a URL dela.
+- **Primeira vez em modo `password`:** o `deploy` gera a `SSO_PASSWORD_SECRET` e salva no `.env`. Ele publica também a ação `sebrae-alm/sso-login` e mostra a URL dela.
+- **O que esperar do `sso-check`:** ele cria (ou reutiliza) esse cliente no Commerce pelo mesmo código da ação. O esperado é `OK Commerce: sessão aberta para …`.
 
 ### F.4 Teste no site
 
@@ -282,7 +291,8 @@ npm run deploy
 
 | Sintoma | O que fazer |
 |---|---|
-| `sso-check`: `IMS token failed` | Credencial S2S sem a API do Commerce ou `workspace.json` antigo (F.2) |
+| `sso-check`: `IMS token failed` (modo `exchange`) | Credencial S2S sem a API do Commerce ou `workspace.json` antigo (F.2) |
+| `sso-check`: `já tem conta na loja com senha própria` (modo `password`) | Esse e-mail foi cadastrado antes pelo formulário da loja: teste com um e-mail novo |
 | `sso-check`: `You do not have permission` | A credencial S2S precisa de acesso de administrador ao Commerce. Confira no Admin Console o perfil de produto do Commerce |
 | Site: "confirme o seu e-mail" | O Auth0 só libera e-mails verificados: use o link do e-mail de confirmação |
 | Auth0: "Callback URL mismatch" | O endereço do site não está em *Allowed Callback URLs* (F.1) |

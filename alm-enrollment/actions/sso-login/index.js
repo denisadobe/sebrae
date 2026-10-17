@@ -1,10 +1,18 @@
 /*
  * sso-login — web action called by the site after the shopper signs in with the identity
  * provider (Auth0, OIDC). POST { idToken }: the ID token is validated (signature, issuer,
- * audience, expiry, verified e-mail) and exchanged for a Commerce customer token with
- * exchangeExternalCustomerToken (creates the customer on first login). The site stores the
- * token like the auth drop-in does, so cart, checkout and account keep working unchanged.
+ * audience, expiry, verified e-mail) and exchanged for a Commerce customer token. The site
+ * stores the token like the auth drop-in does, so cart, checkout and account keep working.
+ *
+ * Commerce side (SSO_COMMERCE_MODE):
+ *   exchange — exchangeExternalCustomerToken with an IMS server-to-server token (commerce.accs):
+ *              the official way, needs that credential (IMS_CLIENT_ID / IMS_CLIENT_SECRET)
+ *   password — interim, no admin credential: a per-customer password derived from
+ *              SSO_PASSWORD_SECRET (HMAC of the e-mail) is used with the public storefront
+ *              API (createCustomerV2 on first login, then generateCustomerToken). Accounts
+ *              created before with their own password cannot sign in this way.
  */
+const crypto = require('crypto');
 const sso = require('../sso.js');
 const commerce = require('../commerce.js');
 
@@ -13,6 +21,67 @@ const response = (statusCode, body) => ({
   headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' },
   body,
 });
+
+class LoginError extends Error {
+  constructor(message, status) {
+    super(message);
+    this.status = status;
+  }
+}
+
+const getMode = (params) => params.SSO_COMMERCE_MODE || (params.SSO_PASSWORD_SECRET ? 'password' : 'exchange');
+
+/** Internal password of a customer: always the same for the e-mail, meets Commerce rules. */
+function derivePassword(secret, email) {
+  const digest = crypto.createHmac('sha256', secret).update(email.trim().toLowerCase()).digest('base64url');
+  return `${digest.slice(0, 28)}Aa1!`;
+}
+
+async function exchangeToken(params, customer) {
+  const data = await commerce.graphql(params, `mutation ($customer: CustomerCreateInput!) {
+    exchangeExternalCustomerToken(input: { customer: $customer }) {
+      token
+      customer { email firstname lastname }
+    }
+  }`, { customer: { ...customer, is_subscribed: false } }, await sso.commerceAdminHeaders(params));
+  return data.exchangeExternalCustomerToken || {};
+}
+
+async function passwordToken(params, customer) {
+  if (!params.SSO_PASSWORD_SECRET) throw new LoginError('SSO_PASSWORD_SECRET not configured', 500);
+  const password = derivePassword(params.SSO_PASSWORD_SECRET, customer.email);
+  // create first (no failed sign-in attempts counted against the account); existing = sign in
+  try {
+    await commerce.graphql(params, `mutation ($input: CustomerCreateInput!) {
+      createCustomerV2(input: $input) { customer { email } }
+    }`, { input: { ...customer, password, is_subscribed: false } });
+  } catch (error) {
+    const exists = (error.errors || []).some((e) => /already exists/i.test(e.message || ''));
+    if (!exists) throw error;
+  }
+  try {
+    const data = await commerce.graphql(params, `mutation ($email: String!, $password: String!) {
+      generateCustomerToken(email: $email, password: $password) { token }
+    }`, { email: customer.email, password });
+    return { token: data.generateCustomerToken?.token, customer };
+  } catch (error) {
+    const authError = (error.errors || []).some((e) => e.extensions?.category === 'graphql-authentication'
+      || /sign-in was incorrect|account is disabled/i.test(e.message || ''));
+    if (authError) {
+      throw new LoginError('account exists with its own password (created before single sign-on)', 409);
+    }
+    throw error;
+  }
+}
+
+/** Commerce customer token for a verified identity ({ email, firstname, lastname }). */
+async function getCustomerToken(params, customer) {
+  const result = getMode(params) === 'password'
+    ? await passwordToken(params, customer)
+    : await exchangeToken(params, customer);
+  if (!result.token) throw new Error('no customer token');
+  return result;
+}
 
 async function main(params) {
   const idToken = params.idToken || params.id_token;
@@ -33,25 +102,16 @@ async function main(params) {
   }
 
   try {
-    const { firstname, lastname } = sso.getNames(claims);
-    const data = await commerce.graphql(params, `mutation ($customer: CustomerCreateInput!) {
-      exchangeExternalCustomerToken(input: { customer: $customer }) {
-        token
-        customer { email firstname lastname }
-      }
-    }`, {
-      customer: {
-        email: claims.email, firstname, lastname, is_subscribed: false,
-      },
-    }, await sso.commerceAdminHeaders(params));
-    const { token, customer } = data.exchangeExternalCustomerToken || {};
-    if (!token) throw new Error('no customer token');
+    const { token, customer } = await getCustomerToken(params, { email: claims.email, ...sso.getNames(claims) });
     return response(200, { token, customer });
   } catch (error) {
     // eslint-disable-next-line no-console
-    console.error('sso-login failed', claims.email, error.message, JSON.stringify(error.errors || {}));
+    console.error('sso-login failed', claims.email, getMode(params), error.message, JSON.stringify(error.errors || {}));
+    if (error.status === 409) return response(409, { error: error.message, email: claims.email });
     return response(502, { error: `commerce login failed: ${error.message}` });
   }
 }
 
-module.exports = { main };
+module.exports = {
+  main, getCustomerToken, derivePassword, getMode,
+};

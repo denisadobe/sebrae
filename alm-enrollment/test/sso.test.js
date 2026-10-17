@@ -116,3 +116,70 @@ test('names fall back when the provider has no given/family name (Auth0 database
   });
   assert.deepEqual(sso.getNames({ email: 'a@b.c', name: 'Ana Paula Lima' }), { firstname: 'Ana', lastname: 'Paula Lima' });
 });
+
+test('password mode: new customer -> createCustomerV2 then generateCustomerToken with the derived password', async () => {
+  const seen = [];
+  global.fetch = async (input, init = {}) => {
+    const url = String(input);
+    if (url.endsWith('/jwks.json')) return json({ keys: [JWK] });
+    const { query, variables } = JSON.parse(init.body);
+    seen.push({ query, variables, auth: init.headers.Authorization });
+    if (query.includes('createCustomerV2')) return json({ data: { createCustomerV2: { customer: { email: variables.input.email } } } });
+    if (query.includes('generateCustomerToken')) return json({ data: { generateCustomerToken: { token: 'pw-token' } } });
+    throw new Error(`unexpected ${url}`);
+  };
+  const params = { ...PARAMS, SSO_COMMERCE_MODE: 'password', SSO_PASSWORD_SECRET: 's3cret' };
+  const res = await ssoLogin.main({ ...params, idToken: idToken() });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.token, 'pw-token');
+  const password = ssoLogin.derivePassword('s3cret', 'maria@example.com');
+  assert.equal(seen[0].variables.input.password, password);
+  assert.equal(seen[1].variables.password, password);
+  assert.ok(seen.every((s) => !s.auth), 'no admin credential in password mode');
+  assert.match(password, /[A-Z]/);
+  assert.match(password, /[a-z]/);
+  assert.match(password, /[0-9]/);
+  assert.ok(password.length >= 8);
+  assert.equal(ssoLogin.derivePassword('s3cret', ' Maria@Example.com '), password, 'same password for the same e-mail');
+  assert.notEqual(ssoLogin.derivePassword('other', 'maria@example.com'), password);
+});
+
+test('password mode: returning customer (already exists) signs in', async () => {
+  global.fetch = async (input, init = {}) => {
+    if (String(input).endsWith('/jwks.json')) return json({ keys: [JWK] });
+    const { query } = JSON.parse(init.body);
+    if (query.includes('createCustomerV2')) {
+      return json({ errors: [{ message: 'A customer with the same email address already exists in an associated website.' }] });
+    }
+    return json({ data: { generateCustomerToken: { token: 'pw-token-2' } } });
+  };
+  const res = await ssoLogin.main({
+    ...PARAMS, SSO_COMMERCE_MODE: 'password', SSO_PASSWORD_SECRET: 's3cret', idToken: idToken(),
+  });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.token, 'pw-token-2');
+});
+
+test('password mode: account created before SSO (own password) -> 409', async () => {
+  global.fetch = async (input, init = {}) => {
+    if (String(input).endsWith('/jwks.json')) return json({ keys: [JWK] });
+    const { query } = JSON.parse(init.body);
+    if (query.includes('createCustomerV2')) return json({ errors: [{ message: 'A customer with the same email address already exists.' }] });
+    return json({
+      errors: [{
+        message: 'The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later.',
+        extensions: { category: 'graphql-authentication' },
+      }],
+    });
+  };
+  const res = await ssoLogin.main({
+    ...PARAMS, SSO_COMMERCE_MODE: 'password', SSO_PASSWORD_SECRET: 's3cret', idToken: idToken(),
+  });
+  assert.equal(res.statusCode, 409);
+});
+
+test('mode selection: explicit SSO_COMMERCE_MODE wins; secret alone means password', () => {
+  assert.equal(ssoLogin.getMode({ IMS_CLIENT_ID: 'x' }), 'exchange');
+  assert.equal(ssoLogin.getMode({ SSO_PASSWORD_SECRET: 'x', IMS_CLIENT_ID: 'x' }), 'password');
+  assert.equal(ssoLogin.getMode({ SSO_COMMERCE_MODE: 'exchange', SSO_PASSWORD_SECRET: 'x' }), 'exchange');
+});

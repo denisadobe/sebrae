@@ -105,6 +105,9 @@ export async function completeLogin() {
   });
   const result = await loginResp.json().catch(() => ({}));
   if (loginResp.status === 403) throw new Error('confirme o seu e-mail pelo link que enviamos e entre de novo');
+  if (loginResp.status === 409) {
+    throw new Error('já existe uma conta da loja com este e-mail, criada antes do login único. Use outro e-mail');
+  }
   if (!loginResp.ok || !result.token) throw new Error(result.error || 'falha ao abrir a sua conta na loja');
 
   // same cookies as the auth drop-in (storefront-auth)
