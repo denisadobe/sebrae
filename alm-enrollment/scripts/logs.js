@@ -14,23 +14,31 @@ async function main() {
   const runtime = getRuntime(loadEnv());
   const max = Math.min(Number(limit) || 5, 50);
   let list = await request(runtime, 'GET', `/activations?name=${PACKAGE}/${action}&limit=${max}&docs=true`);
+  const seen = [];
   if (!list.length) {
-    // the name filter does not match packaged actions everywhere: filter recent activations by path
+    // the name filter does not match packaged actions everywhere: filter recent activations
     const path = `${PACKAGE}/${action}`;
-    const matches = (a) => a.name === action
-      && (a.annotations || []).some((n) => n.key === 'path' && String(n.value).endsWith(path));
+    const pathOf = (a) => String((a.annotations || []).find((n) => n.key === 'path')?.value || a.name || '');
+    const matches = (a) => pathOf(a).endsWith(path) || a.name === path || a.name === action;
     list = [];
     // the API returns at most 50 activations per call: look through the last 200
     for (let skip = 0; skip < 200 && list.length < max; skip += 50) {
       // eslint-disable-next-line no-await-in-loop
       const page = await request(runtime, 'GET', `/activations?limit=50&skip=${skip}&docs=true`);
+      seen.push(...page.map(pathOf));
       list.push(...page.filter(matches));
       if (page.length < 50) break;
     }
     list = list.slice(0, max);
   }
   if (!list.length) {
-    console.log(`Nenhuma execução de ${PACKAGE}/${action} ainda.`);
+    console.log(`Nenhuma execução de ${PACKAGE}/${action} encontrada.`);
+    // diagnostic: which actions ran recently in the namespace (names only, no data)
+    const counts = seen.reduce((acc, name) => ({ ...acc, [name]: (acc[name] || 0) + 1 }), {});
+    const top = Object.entries(counts).sort((a, b) => b[1] - a[1]).slice(0, 10);
+    console.log(top.length
+      ? `Execuções recentes no namespace: ${top.map(([n, c]) => `${n} (${c})`).join(', ')}`
+      : 'Nenhuma execução recente no namespace.');
     return;
   }
   list.forEach((activation) => {
