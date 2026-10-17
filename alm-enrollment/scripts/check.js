@@ -81,6 +81,16 @@ async function main() {
         const courses = await alm.listUserEnrollments(params, adminToken, userId, params.ALM_LOCALE || 'pt-BR');
         return `id ${userId}, ${courses.length} curso(s) matriculado(s)`;
       });
+      // what the SSO login matches against (state, type, unique id, external profile)
+      await step(`ALM: cadastro de ${email} (o que o SSO usa)`, async () => {
+        const userId = await alm.findUserIdByAdmin(params, adminToken, email);
+        if (!userId) return 'não existe';
+        const { data } = await alm.api(params, adminToken, `/users/${userId}`);
+        const a = data?.attributes || {};
+        const profile = data?.relationships?.externalProfile?.data?.id || data?.relationships?.manager?.data?.id;
+        return `email "${a.email}", userUniqueId "${a.userUniqueId ?? '-'}", tipo ${a.userType}, `
+          + `estado ${a.state}, perfil ${a.profile ?? '-'}${profile ? ` (${profile})` : ''}`;
+      });
     }
   }
 
