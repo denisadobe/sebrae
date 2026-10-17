@@ -50,14 +50,24 @@ async function verifyIdToken(idToken, { issuer, audience, now = Date.now() / 100
   return claims;
 }
 
-/** First / last name for Commerce (both required) from the OIDC claims. */
+// Commerce accepts letters, spaces and a few separators in names (no "+", "@", digits-only...)
+const cleanName = (value) => String(value || '')
+  .replace(/[^\p{L}\p{M}\s.'’-]/gu, ' ')
+  .replace(/\s+/g, ' ')
+  .trim();
+const capitalize = (word) => word.charAt(0).toLocaleUpperCase('pt-BR') + word.slice(1);
+
+/**
+ * First / last name for Commerce (both required) from the OIDC claims. Without a real name
+ * (Auth0 database users: name = e-mail) they come from the e-mail: flosi+aluno2@x -> Flosi Aluno.
+ */
 function getNames(claims) {
-  const email = claims.email || '';
-  const full = claims.name && !claims.name.includes('@') ? claims.name.trim() : '';
-  const [first, ...rest] = full.split(/\s+/);
+  const full = cleanName(claims.name && !claims.name.includes('@') ? claims.name : '');
+  const fromEmail = (claims.email || '').split('@')[0].split(/[^\p{L}\p{M}]+/u).filter(Boolean).map(capitalize);
+  const words = full ? full.split(' ') : fromEmail;
   return {
-    firstname: claims.given_name || first || claims.nickname || email.split('@')[0] || 'Cliente',
-    lastname: claims.family_name || rest.join(' ') || 'Sebrae',
+    firstname: cleanName(claims.given_name) || words[0] || 'Cliente',
+    lastname: cleanName(claims.family_name) || words.slice(1).join(' ') || 'Sebrae',
   };
 }
 

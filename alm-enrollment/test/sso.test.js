@@ -116,11 +116,17 @@ test('missing token -> 400; Commerce permission error -> 502 with detail', async
   assert.match(res.body.error, /permission/);
 });
 
-test('names fall back when the provider has no given/family name (Auth0 database users)', () => {
-  assert.deepEqual(sso.getNames({ email: 'joao.souza@example.com', name: 'joao.souza@example.com', nickname: 'joao.souza' }), {
-    firstname: 'joao.souza', lastname: 'Sebrae',
+test('names: Commerce-safe, from the e-mail when the provider has no name (Auth0 database users)', () => {
+  assert.deepEqual(sso.getNames({ email: 'flosi+aluno2@adobe.com', name: 'flosi+aluno2@adobe.com', nickname: 'flosi+aluno2' }), {
+    firstname: 'Flosi', lastname: 'Aluno',
   });
+  assert.deepEqual(sso.getNames({ email: 'joao.souza@example.com', name: 'joao.souza@example.com' }), {
+    firstname: 'Joao', lastname: 'Souza',
+  });
+  assert.deepEqual(sso.getNames({ email: 'maria123@example.com' }), { firstname: 'Maria', lastname: 'Sebrae' });
+  assert.deepEqual(sso.getNames({ email: '123@example.com' }), { firstname: 'Cliente', lastname: 'Sebrae' });
   assert.deepEqual(sso.getNames({ email: 'a@b.c', name: 'Ana Paula Lima' }), { firstname: 'Ana', lastname: 'Paula Lima' });
+  assert.deepEqual(sso.getNames({ email: 'a@b.c', given_name: 'José', family_name: "D'Ávila" }), { firstname: 'José', lastname: "D'Ávila" });
 });
 
 test('password mode: new customer -> createCustomerV2 then generateCustomerToken with the derived password', async () => {
