@@ -89,12 +89,12 @@ const toLoId = (value) => {
   return id.includes(':') ? id : `course:${id}`;
 };
 
-/** Id of the ALM user with this e-mail (via a learner token), or null. */
-async function findUserId(params, email) {
-  const token = await getLearnerToken(params, email, 300);
-  if (!token) return null;
-  const { data } = await api(params, token, '/user');
-  return data?.id || null;
+/** Id of the ALM user with this e-mail, or null. */
+async function findUserId(params, adminToken, email) {
+  const { data } = await api(params, adminToken, '/users', {
+    query: { ids: `email:${email}` },
+  });
+  return (Array.isArray(data) ? data[0] : data)?.id || null;
 }
 
 /**
@@ -111,7 +111,7 @@ async function createUser(params, adminToken, { email, name }) {
 }
 
 async function findOrCreateUser(params, adminToken, { email, name }) {
-  return (await findUserId(params, email)) || createUser(params, adminToken, { email, name });
+  return (await findUserId(params, adminToken, email)) || createUser(params, adminToken, { email, name });
 }
 
 /** Default (or first active) instance of a learning object. */

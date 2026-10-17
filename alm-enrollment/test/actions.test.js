@@ -69,7 +69,7 @@ test('getSkus keeps unique SKUs', () => {
 test('enroll: new customer -> external user + enrollment in the course', async () => {
   on(commerceProducts, productsReply);
   on((url) => url.endsWith('/oauth/token/refresh'), () => json({ access_token: 'admin' }));
-  on((url) => url.includes('/oauth/o/learnerToken'), () => json({ error: 'no user' }, 400));
+  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => json({ data: [] }));
   on((url, b, i) => url.endsWith('/externalProfiles/42/users') && i.method === 'POST', () => json({ data: { id: '777', type: 'user' } }));
   on((url) => url.includes('/learningObjects/course%3A123'), () => json({
     data: { id: 'course:123', relationships: { instances: { data: [{ id: 'course:123_1' }, { id: 'course:123_2' }] } } },
@@ -97,8 +97,7 @@ test('enroll: new customer -> external user + enrollment in the course', async (
 test('enroll: existing user already enrolled is a success (event retry)', async () => {
   on(commerceProducts, productsReply);
   on((url) => url.endsWith('/oauth/token/refresh'), () => json({ access_token: 'admin' }));
-  on((url) => url.includes('/oauth/o/learnerToken'), () => json({ access_token: 'learner' }));
-  on((url) => url.endsWith('/primeapi/v2/user'), () => json({ data: { id: '555' } }));
+  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => json({ data: [{ id: '555', type: 'user' }] }));
   on((url) => url.includes('/learningObjects/'), () => json({
     data: { id: 'course:123', relationships: { instances: { data: [{ id: 'course:123_1' }] } } },
     included: [{ id: 'course:123_1', type: 'learningObjectInstance', attributes: { isDefault: true } }],
@@ -109,6 +108,7 @@ test('enroll: existing user already enrolled is a success (event retry)', async 
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.enrolled[0].status, 'already-enrolled');
   assert.ok(!calls.some((c) => c.url.includes('/externalProfiles/')));
+  assert.ok(!calls.some((c) => c.url.includes('/oauth/o/learnerToken')));
 });
 
 test('enroll: order without courses does not call ALM', async () => {
