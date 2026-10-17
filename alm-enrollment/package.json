@@ -13,6 +13,7 @@
     "deploy": "node scripts/deploy-runtime.js",
     "logs": "node scripts/logs.js",
     "enroll-test": "node scripts/enroll-test.js",
-    "sso-check": "node scripts/sso-check.js"
+    "sso-check": "node scripts/sso-check.js",
+    "alm-sso-urls": "node scripts/alm-sso-urls.js"
   }
 }
