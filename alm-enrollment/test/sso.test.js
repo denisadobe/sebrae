@@ -97,6 +97,12 @@ test('unverified e-mail cannot sign in (account takeover by e-mail)', async () =
   assert.ok(!calls.some((c) => c.url === PARAMS.COMMERCE_GRAPHQL_URL));
 });
 
+test('demo switch SSO_REQUIRE_VERIFIED_EMAIL=false lets unverified e-mails in', async () => {
+  const res = await ssoLogin.main({ ...PARAMS, SSO_REQUIRE_VERIFIED_EMAIL: 'false', idToken: idToken({ email_verified: false }) });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.token, 'customer-token');
+});
+
 test('missing token -> 400; Commerce permission error -> 502 with detail', async () => {
   assert.equal((await ssoLogin.main(PARAMS)).statusCode, 400);
   global.fetch = async (input) => {

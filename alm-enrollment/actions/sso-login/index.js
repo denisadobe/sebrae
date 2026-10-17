@@ -96,8 +96,11 @@ async function main(params) {
   } catch (error) {
     return response(401, { error: `invalid identity token: ${error.message}` });
   }
-  // the Commerce account is matched by e-mail: only verified e-mails can sign in
-  if (!claims.email || claims.email_verified !== true) {
+  // the Commerce account is matched by e-mail: only verified e-mails can sign in, unless the
+  // demo turns it off (SSO_REQUIRE_VERIFIED_EMAIL=false: anyone who registers an e-mail in the
+  // identity provider gets that e-mail's store account)
+  const requireVerified = String(params.SSO_REQUIRE_VERIFIED_EMAIL ?? 'true') !== 'false';
+  if (!claims.email || (requireVerified && claims.email_verified !== true)) {
     return response(403, { error: 'email not verified', email: claims.email || null });
   }
 

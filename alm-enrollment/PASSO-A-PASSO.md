@@ -294,7 +294,7 @@ npm run sso-check -- <e-mail de teste novo>
 | `sso-check`: `IMS token failed` (modo `exchange`) | Credencial S2S sem a API do Commerce ou `workspace.json` antigo (F.2) |
 | `sso-check`: `já tem conta na loja com senha própria` (modo `password`) | Esse e-mail foi cadastrado antes pelo formulário da loja: teste com um e-mail novo |
 | `sso-check`: `You do not have permission` | A credencial S2S precisa de acesso de administrador ao Commerce. Confira no Admin Console o perfil de produto do Commerce |
-| Site: "confirme o seu e-mail" | O Auth0 só libera e-mails verificados: use o link do e-mail de confirmação |
+| Site: "confirme o seu e-mail" | O login só aceita e-mails confirmados no Auth0: use o link do e-mail de confirmação. Para uma demo sem confirmação, coloque `SSO_REQUIRE_VERIFIED_EMAIL=false` no `.env` e rode `npm run deploy` (risco: quem cadastrar um e-mail primeiro no Auth0 fica com a conta da loja desse e-mail) |
 | Auth0: "Callback URL mismatch" | O endereço do site não está em *Allowed Callback URLs* (F.1) |
 
 ## 9. O que devolver para quem cuida do site
