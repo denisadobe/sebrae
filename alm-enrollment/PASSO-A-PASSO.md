@@ -21,6 +21,7 @@ Site "Meus cursos" ──(token do cliente)──▶ ação my-courses ──▶
 | Ação (Adobe I/O Runtime) | O que faz |
 |---|---|
 | `sebrae-alm/enroll` | Recebe o evento `observer.sales_order_save_after`. Para cada produto do pedido com o atributo `alm_course_id`, garante que o cliente existe no ALM (cria como usuário externo) e o matricula no curso. Esse evento dispara a cada vez que o pedido é salvo (no Commerce SaaS não existe o `sales_order_place_after`). A ação é idempotente: o mesmo pedido de novo não duplica a matrícula. |
+| `sebrae-alm/sso-login` | Ação web do login único: valida o login do Auth0 e abre a sessão do cliente na loja (cria o cliente no primeiro acesso). |
 | `sebrae-alm/my-courses` | Ação web chamada pelo site. Valida o token do cliente no Commerce e devolve os cursos dele no ALM, mais um token de aluno para abrir o player do ALM dentro do site. |
 
 > **Curso dentro do site × no portal do ALM.** O token de aluno usa a *learner impersonation* do ALM (`/oauth/o/learnerToken`), que a Adobe só libera **a pedido** para a conta.
@@ -242,6 +243,50 @@ A URL da `my-courses` (C.6) precisa estar no site para "Meus cursos" funcionar. 
 3. No ALM, o cliente aparece matriculado no curso.
 4. No site, **Minha conta → Meus cursos** mostra o curso. O botão **Começar** abre o player do ALM dentro do site.
 
+## 8b. Parte F: login único (Auth0 → Commerce)
+
+O cliente entra uma vez no **Auth0**, na tela "Entrar com conta Sebrae", e a ação `sso-login` abre a sessão dele na loja. Ela usa a função `exchangeExternalCustomerToken` do Commerce, que cria o cliente no primeiro acesso.
+
+### F.1 Auth0
+
+Use o tenant `dev-533cjwwlbzw8n64k.us.auth0.com`, com uma aplicação **Single Page Application** chamada "Sebrae Site":
+
+- **Allowed Callback URLs:** `http://localhost:3000/loja/entrar, https://commerce-area-logada--sebrae--denisadobe.aem.page/loja/entrar, https://main--sebrae--denisadobe.aem.page/loja/entrar, https://main--sebrae--denisadobe.aem.live/loja/entrar`
+- **Allowed Logout URLs:** as mesmas origens com `/` no final.
+- **Allowed Web Origins:** as mesmas origens, sem `/` no final.
+
+O **Client ID** dessa aplicação é público. Ele vai em `SSO_CLIENT_ID` no `.env` e em `sso-client-id` no `config.json` do site.
+
+### F.2 Credencial do Commerce
+
+No Developer Console, no mesmo workspace, use **Add service → API → Adobe Commerce as a Cloud Service** na credencial **OAuth Server-to-Server**. O escopo `commerce.accs` precisa aparecer na credencial.
+
+Depois, baixe o `workspace.json` de novo (**Download all**). O deploy tira dele o Client ID, o Secret e o Org ID dessa credencial. Também dá para preencher `IMS_CLIENT_ID`, `IMS_CLIENT_SECRET` e `IMS_ORG_ID` no `.env`.
+
+### F.3 Testar e publicar
+
+```sh
+npm run sso-check -- <e-mail de teste>
+npm run deploy
+```
+
+- O `sso-check` cria (ou reutiliza) esse cliente no Commerce pela ponte. O esperado é `OK Commerce: login externo para …`.
+- O deploy agora publica também a ação `sebrae-alm/sso-login` e mostra a URL dela.
+
+### F.4 Teste no site
+
+1. Abra `/loja/entrar` e clique em **Entrar com conta Sebrae**.
+2. Faça o login no Auth0, ou **Criar conta**. Na primeira vez, confirme o e-mail pelo link que o Auth0 envia.
+3. O esperado é voltar para o site já logado: "Minha conta" no menu e os pedidos e o carrinho funcionando.
+4. Em **Sair da conta**, a sessão do Auth0 também é encerrada.
+
+| Sintoma | O que fazer |
+|---|---|
+| `sso-check`: `IMS token failed` | Credencial S2S sem a API do Commerce ou `workspace.json` antigo (F.2) |
+| `sso-check`: `You do not have permission` | A credencial S2S precisa de acesso de administrador ao Commerce. Confira no Admin Console o perfil de produto do Commerce |
+| Site: "confirme o seu e-mail" | O Auth0 só libera e-mails verificados: use o link do e-mail de confirmação |
+| Auth0: "Callback URL mismatch" | O endereço do site não está em *Allowed Callback URLs* (F.1) |
+
 ## 9. O que devolver para quem cuida do site
 
 Envie (nada disso é secreto):
@@ -283,3 +328,4 @@ Envie (nada disso é secreto):
 | `npm run deploy` | Publica as ações `sebrae-alm/enroll` e `sebrae-alm/my-courses` |
 | `npm run logs [enroll\|my-courses] [quantidade]` | Últimas execuções das ações |
 | `npm run enroll-test -- <e-mail> <SKU>` | Matricula na mão (testa o ALM sem o evento do Commerce) |
+| `npm run sso-check -- <e-mail>` | Testa a ponte de login único com o Commerce (cria o cliente se não existir) |

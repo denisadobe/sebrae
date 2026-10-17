@@ -12,6 +12,7 @@
     "refresh-token": "node scripts/refresh-token.js",
     "deploy": "node scripts/deploy-runtime.js",
     "logs": "node scripts/logs.js",
-    "enroll-test": "node scripts/enroll-test.js"
+    "enroll-test": "node scripts/enroll-test.js",
+    "sso-check": "node scripts/sso-check.js"
   }
 }

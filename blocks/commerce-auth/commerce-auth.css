@@ -24,3 +24,39 @@
     padding: var(--spacing-big);
   }
 }
+
+/* single sign-on panel */
+.commerce-auth .commerce-auth-sso {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-small);
+  text-align: center;
+}
+
+.commerce-auth .commerce-auth-sso-title {
+  margin: 0;
+}
+
+.commerce-auth .commerce-auth-sso-text {
+  margin: 0;
+}
+
+.commerce-auth .commerce-auth-sso-actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xsmall);
+  margin-top: var(--spacing-xsmall);
+}
+
+.commerce-auth .commerce-auth-sso-actions .button {
+  margin: 0;
+}
+
+.commerce-auth .commerce-auth-status {
+  margin: 0;
+  text-align: center;
+}
+
+.commerce-auth .commerce-auth-message + .commerce-auth-sso {
+  margin-top: var(--spacing-small);
+}

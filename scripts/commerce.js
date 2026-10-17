@@ -258,6 +258,19 @@ export async function signOut(destination = '/') {
   await initializeAuth();
   const { revokeCustomerToken } = await import('@dropins/storefront-auth/api.js');
   await revokeCustomerToken();
+  // signed in with the identity provider (single sign-on, scripts/sso.js): end that session too
+  const ssoDomain = localStorage.getItem('sso-session');
+  localStorage.removeItem('sso-session');
+  const clientId = getConfigValue('sso-client-id');
+  if (ssoDomain && clientId) {
+    const logout = new URL(`https://${ssoDomain}/v2/logout`);
+    logout.search = new URLSearchParams({
+      client_id: clientId,
+      returnTo: new URL(destination, window.location.origin).href,
+    });
+    window.location.href = logout.href;
+    return;
+  }
   window.location.href = destination;
 }
 

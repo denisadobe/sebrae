@@ -16,15 +16,16 @@ const PACKAGE = 'sebrae-alm';
 const KIND = 'nodejs:20';
 const API = 'https://adobeioruntime.net/api/v1';
 
-// package parameters (from .env): shared by both actions
+// package parameters (from .env; IMS_* default to the workspace's OAuth server-to-server credential)
 const PACKAGE_PARAMS = [
   'ALM_BASE_URL', 'ALM_CLIENT_ID', 'ALM_CLIENT_SECRET', 'ALM_REFRESH_TOKEN', 'ALM_EXTERNAL_PROFILE_ID',
   'ALM_COURSE_ATTRIBUTE', 'ALM_LOCALE', 'ALM_ACCOUNT_ID', 'COMMERCE_GRAPHQL_URL', 'COMMERCE_WEBSITE_CODE', 'COMMERCE_STORE_CODE',
-  'COMMERCE_STORE_VIEW_CODE',
+  'COMMERCE_STORE_VIEW_CODE', 'SSO_DOMAIN', 'SSO_CLIENT_ID', 'IMS_CLIENT_ID', 'IMS_CLIENT_SECRET', 'IMS_ORG_ID',
 ];
 const ACTIONS = {
   enroll: { web: false, timeout: 60000 },
   'my-courses': { web: true, timeout: 30000 },
+  'sso-login': { web: true, timeout: 30000 },
 };
 
 function loadEnv() {
@@ -54,15 +55,30 @@ function getRuntime(env) {
     + 'in this folder (Download all) or set AIO_runtime_namespace and AIO_runtime_auth in .env');
 }
 
+/** IMS credentials (client id/secret, org) of the OAuth server-to-server credential in workspace.json. */
+function getImsFromWorkspace() {
+  const file = path.join(ROOT, 'workspace.json');
+  if (!fs.existsSync(file)) return {};
+  const ws = JSON.parse(fs.readFileSync(file, 'utf8'));
+  const s2s = (ws.project?.workspace?.details?.credentials || [])
+    .map((c) => c.oauth_server_to_server)
+    .find(Boolean);
+  return {
+    ...(s2s?.client_id && { IMS_CLIENT_ID: s2s.client_id }),
+    ...(s2s?.client_secrets?.[0] && { IMS_CLIENT_SECRET: s2s.client_secrets[0] }),
+    ...(ws.project?.org?.ims_org_id && { IMS_ORG_ID: ws.project.org.ims_org_id }),
+  };
+}
+
 /**
  * Single-file action: the action module plus the shared modules it requires, behind a
  * small require shim (no build tools needed).
  */
 function bundle(name) {
   const read = (file) => fs.readFileSync(path.join(ROOT, 'actions', file), 'utf8');
-  const shared = ['alm.js', 'commerce.js'];
+  const shared = ['alm.js', 'commerce.js', 'sso.js'];
   const wrap = (id, source) => `  ${JSON.stringify(id)}: function (module, exports, require) {\n${source
-    .replace(/require\('\.\.\/(alm|commerce)\.js'\)/g, (m, lib) => `require('${lib}.js')`)}\n  },`;
+    .replace(/require\('\.\.\/(alm|commerce|sso)\.js'\)/g, (m, lib) => `require('${lib}.js')`)}\n  },`;
   return `/* ${PACKAGE}/${name} — bundled by scripts/deploy-runtime.js, do not edit */
 const __sources = {
 ${shared.map((file) => wrap(file, read(file))).join('\n')}
@@ -101,7 +117,7 @@ async function request(runtime, method, url, body) {
 
 async function main() {
   const dryRun = process.argv.includes('--dry-run');
-  const env = loadEnv();
+  const env = { ...getImsFromWorkspace(), ...Object.fromEntries(Object.entries(loadEnv()).filter(([, v]) => v)) };
   const missing = ['ALM_CLIENT_ID', 'ALM_CLIENT_SECRET', 'ALM_REFRESH_TOKEN', 'COMMERCE_GRAPHQL_URL'].filter((k) => !env[k]);
   if (missing.length) throw new Error(`missing in .env: ${missing.join(', ')}`);
 
@@ -116,7 +132,9 @@ async function main() {
   console.log(`OK    actions bundled in dist/ (${Object.keys(code).join(', ')})`);
 
   const params = PACKAGE_PARAMS.filter((key) => env[key]).map((key) => ({ key, value: env[key] }));
-  console.log(`OK    package parameters from .env: ${params.map((p) => p.key).join(', ')}`);
+  console.log(`OK    package parameters: ${params.map((p) => p.key).join(', ')}`);
+  const noSso = ['SSO_DOMAIN', 'SSO_CLIENT_ID', 'IMS_CLIENT_ID', 'IMS_CLIENT_SECRET'].filter((k) => !env[k]);
+  if (noSso.length) console.log(`AVISO sso-login sem ${noSso.join(', ')} (login único não vai funcionar)`);
 
   if (dryRun) {
     console.log('dry run: nothing deployed');
@@ -151,6 +169,8 @@ async function main() {
 
   console.log('\nURL da ação my-courses (vai em alm-my-courses-url no config.json do site):');
   console.log(`  https://${runtime.namespace}.adobeioruntime.net/api/v1/web/${PACKAGE}/my-courses`);
+  console.log('\nURL da ação sso-login (vai em sso-login-url no config.json do site):');
+  console.log(`  https://${runtime.namespace}.adobeioruntime.net/api/v1/web/${PACKAGE}/sso-login`);
   console.log(`\nAção para ligar ao evento do Commerce no Developer Console: ${PACKAGE}/enroll`);
 }
 
