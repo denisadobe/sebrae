@@ -127,6 +127,10 @@ const message = (list, text, link) => {
 
 const SESSION_KEY = 'alm-session';
 const CONNECT_KEY = 'alm-connect';
+// the silent ALM connection runs by itself once per browser session (then only on click)
+const AUTO_KEY = 'alm-connect-auto';
+
+const courseNumber = (loId) => String(loId || '').split(':').pop();
 
 async function getConfig() {
   const { getConfigValue } = await import('@dropins/tools/lib/aem/configs.js');
@@ -217,8 +221,17 @@ async function load(list, config, { open } = {}) {
   ul.append(...courses.map((course) => renderCourse(course, ctx)));
   list.replaceChildren(ul);
   // back from the ALM connection: open the course that was clicked
-  const course = open && player && courses.find((c) => c.loId === open);
-  if (course) openPlayer(course, player);
+  const course = open && player && courses.find((c) => courseNumber(c.loId) === courseNumber(open));
+  if (course) {
+    openPlayer(course, player);
+    return;
+  }
+  // has courses but no learner token yet: connect right away (silent round trip), so the
+  // first click on a course opens the player directly
+  if (ctx.connect && !sessionStorage.getItem(AUTO_KEY)) {
+    sessionStorage.setItem(AUTO_KEY, '1');
+    ctx.connect(null);
+  }
 }
 
 export default async function decorate(block) {
