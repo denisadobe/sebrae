@@ -7,7 +7,7 @@
       "commerce-free-gifts-enabled": true,
       "alm-my-courses-url": "https://285361-473chartreusepike.adobeioruntime.net/api/v1/web/sebrae-alm/my-courses",
       "sso-domain": "dev-533cjwwlbzw8n64k.us.auth0.com",
-      "sso-client-id": "",
+      "sso-client-id": "y6NYpJRQo0gYkxaxSI7da0YuRRj2d0PJ",
       "sso-login-url": "https://285361-473chartreusepike.adobeioruntime.net/api/v1/web/sebrae-alm/sso-login",
       "headers": {
         "all": {
