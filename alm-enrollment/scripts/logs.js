@@ -12,15 +12,22 @@ const {
 async function main() {
   const [action = 'enroll', limit = '5'] = process.argv.slice(2);
   const runtime = getRuntime(loadEnv());
-  const max = Number(limit);
+  const max = Math.min(Number(limit) || 5, 50);
   let list = await request(runtime, 'GET', `/activations?name=${PACKAGE}/${action}&limit=${max}&docs=true`);
   if (!list.length) {
     // the name filter does not match packaged actions everywhere: filter recent activations by path
     const path = `${PACKAGE}/${action}`;
-    list = (await request(runtime, 'GET', '/activations?limit=200&docs=true'))
-      .filter((a) => a.name === action
-        && (a.annotations || []).some((n) => n.key === 'path' && String(n.value).endsWith(path)))
-      .slice(0, max);
+    const matches = (a) => a.name === action
+      && (a.annotations || []).some((n) => n.key === 'path' && String(n.value).endsWith(path));
+    list = [];
+    // the API returns at most 50 activations per call: look through the last 200
+    for (let skip = 0; skip < 200 && list.length < max; skip += 50) {
+      // eslint-disable-next-line no-await-in-loop
+      const page = await request(runtime, 'GET', `/activations?limit=50&skip=${skip}&docs=true`);
+      list.push(...page.filter(matches));
+      if (page.length < 50) break;
+    }
+    list = list.slice(0, max);
   }
   if (!list.length) {
     console.log(`Nenhuma execução de ${PACKAGE}/${action} ainda.`);
