@@ -66,18 +66,50 @@ test('getSkus keeps unique SKUs', () => {
   assert.deepEqual(enroll.getSkus(ORDER_EVENT.data.value), ['CURSO-1', 'CAMISETA']);
 });
 
+const adminToken = () => on((url) => url.endsWith('/oauth/token/refresh'), () => json({ access_token: 'admin', account_id: '115171' }));
+const noImpersonation = () => on((url) => url.includes('/oauth/o/learnerToken'), () => json({ title: 'Learner impersonation not enabled' }, 403));
+const usersReply = (users) => json({
+  data: users.map(([id, email]) => ({ id, type: 'user', attributes: { email } })),
+});
+const courseInstances = () => on((url) => url.includes('/learningObjects/course%3A123'), () => json({
+  data: { id: 'course:123', relationships: { instances: { data: [{ id: 'course:123_1' }, { id: 'course:123_2' }] } } },
+  included: [
+    { id: 'course:123_1', type: 'learningObjectInstance', attributes: { isDefault: false, state: 'Active' } },
+    { id: 'course:123_2', type: 'learningObjectInstance', attributes: { isDefault: true, state: 'Active' } },
+  ],
+}));
+const ENROLLMENTS = {
+  data: [{ id: 'e1', attributes: { state: 'ENROLLED', progressPercent: 40 }, relationships: { learningObject: { data: { id: 'course:123' } } } }],
+  included: [{
+    id: 'course:123',
+    type: 'learningObject',
+    attributes: { imageUrl: 'https://img', duration: 600, localizedMetadata: [{ locale: 'en-US', name: 'Sales' }, { locale: 'pt-BR', name: 'Vendas' }] },
+  }],
+};
+const customerOk = (email = 'maria@example.com') => on((url, body) => body.includes('customer {'), (url, body, init) => {
+  assert.equal(init.headers.Authorization, 'Bearer good');
+  return json({ data: { customer: { email, firstname: 'Maria', lastname: 'Silva' } } });
+});
+
+test('learner token request follows the ALM docs (e-mail in the query, credentials in the body)', async () => {
+  on((url) => url.includes('/oauth/o/learnerToken'), (url, body) => {
+    const query = new URL(url).searchParams;
+    assert.equal(query.get('learner_email'), 'maria@example.com');
+    assert.equal(query.get('force'), 'false');
+    assert.ok(!url.includes('secret'));
+    assert.deepEqual(JSON.parse(body), { client_id: 'id', client_secret: 'secret', refresh_token: 'refresh' });
+    return json({ access_token: 'learner', user_id: 555, expires_in: 604800 });
+  });
+  assert.deepEqual(await alm.getLearnerToken(PARAMS, 'maria@example.com'), { accessToken: 'learner', userId: '555', expiresIn: 604800 });
+});
+
 test('enroll: new customer -> external user + enrollment in the course', async () => {
   on(commerceProducts, productsReply);
-  on((url) => url.endsWith('/oauth/token/refresh'), () => json({ access_token: 'admin' }));
-  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => json({ data: [] }));
+  adminToken();
+  noImpersonation();
+  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => usersReply([]));
   on((url, b, i) => url.endsWith('/externalProfiles/42/users') && i.method === 'POST', () => json({ data: { id: '777', type: 'user' } }));
-  on((url) => url.includes('/learningObjects/course%3A123'), () => json({
-    data: { id: 'course:123', relationships: { instances: { data: [{ id: 'course:123_1' }, { id: 'course:123_2' }] } } },
-    included: [
-      { id: 'course:123_1', type: 'learningObjectInstance', attributes: { isDefault: false, state: 'Active' } },
-      { id: 'course:123_2', type: 'learningObjectInstance', attributes: { isDefault: true, state: 'Active' } },
-    ],
-  }));
+  courseInstances();
   on((url, b, i) => url.includes('/users/777/enrollments') && i.method === 'POST', () => json({ data: { id: 'enr1' } }));
 
   const res = await enroll.main({ ...PARAMS, ...ORDER_EVENT });
@@ -94,10 +126,25 @@ test('enroll: new customer -> external user + enrollment in the course', async (
   assert.equal(enrollCall.headers.Authorization, 'oauth admin');
 });
 
-test('enroll: existing user already enrolled is a success (event retry)', async () => {
+test('enroll: existing user found by the admin lookup (no impersonation), no user created', async () => {
   on(commerceProducts, productsReply);
-  on((url) => url.endsWith('/oauth/token/refresh'), () => json({ access_token: 'admin' }));
-  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => json({ data: [{ id: '555', type: 'user' }] }));
+  adminToken();
+  noImpersonation();
+  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => usersReply([['888', 'maria@example.com']]));
+  courseInstances();
+  on((url, b, i) => url.includes('/users/888/enrollments') && i.method === 'POST', () => json({ data: { id: 'enr2' } }));
+
+  const res = await enroll.main({ ...PARAMS, ...ORDER_EVENT });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.userId, '888');
+  assert.equal(res.body.enrolled[0].status, 'enrolled');
+  assert.ok(!calls.some((c) => c.url.includes('/externalProfiles/')));
+});
+
+test('enroll: user id from the learner token; already enrolled is a success (event retry)', async () => {
+  on(commerceProducts, productsReply);
+  adminToken();
+  on((url) => url.includes('/oauth/o/learnerToken'), () => json({ access_token: 'learner', user_id: '555' }));
   on((url) => url.includes('/learningObjects/'), () => json({
     data: { id: 'course:123', relationships: { instances: { data: [{ id: 'course:123_1' }] } } },
     included: [{ id: 'course:123_1', type: 'learningObjectInstance', attributes: { isDefault: true } }],
@@ -107,8 +154,7 @@ test('enroll: existing user already enrolled is a success (event retry)', async 
   const res = await enroll.main({ ...PARAMS, ...ORDER_EVENT });
   assert.equal(res.statusCode, 200);
   assert.equal(res.body.enrolled[0].status, 'already-enrolled');
-  assert.ok(!calls.some((c) => c.url.includes('/externalProfiles/')));
-  assert.ok(!calls.some((c) => c.url.includes('/oauth/o/learnerToken')));
+  assert.ok(!calls.some((c) => c.url.includes('/externalProfiles/') || c.url.includes('/primeapi/v2/users?')));
 });
 
 test('enroll: order without courses does not call ALM', async () => {
@@ -119,11 +165,15 @@ test('enroll: order without courses does not call ALM', async () => {
   assert.equal(calls.length, 1);
 });
 
-test('enroll: ALM failure returns 500 so the event is retried', async () => {
+test('enroll: ALM failure returns 500 with the ALM detail so the event is retried', async () => {
   on(commerceProducts, productsReply);
-  on((url) => url.endsWith('/oauth/token/refresh'), () => json({ error: 'invalid' }, 401));
+  adminToken();
+  noImpersonation();
+  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => usersReply([]));
+  on((url) => url.endsWith('/externalProfiles/42/users'), () => json({ status: 'BAD_REQUEST', title: 'Generic Error', source: { info: 'Profile is disabled' } }, 400));
   const res = await enroll.main({ ...PARAMS, ...ORDER_EVENT });
   assert.equal(res.statusCode, 500);
+  assert.match(res.body.error, /externalProfiles\/42\/users failed \(400\).*Profile is disabled/);
 });
 
 test('my-courses: rejects missing or invalid customer token', async () => {
@@ -136,27 +186,11 @@ test('my-courses: rejects missing or invalid customer token', async () => {
   assert.equal((await myCourses.main({ ...PARAMS, __ow_headers: { authorization: 'Bearer garbage' } })).statusCode, 401);
 });
 
-test('my-courses: lists the courses of the customer + player token', async () => {
-  on((url, body) => body.includes('customer {'), (url, body, init) => {
-    assert.equal(init.headers.Authorization, 'Bearer good');
-    return json({ data: { customer: { email: 'maria@example.com', firstname: 'Maria', lastname: 'Silva' } } });
-  });
-  on((url) => url.includes('/oauth/o/learnerToken'), (url, body) => {
-    assert.deepEqual(JSON.parse(body), { email: 'maria@example.com', ttl: 3600 });
-    return json({ access_token: 'learner' });
-  });
-  on((url) => url.includes('/primeapi/v2/enrollments'), () => json({
-    data: [{ id: 'e1', attributes: { state: 'ENROLLED', progressPercent: 40 }, relationships: { learningObject: { data: { id: 'course:123' } } } }],
-    included: [{
-      id: 'course:123',
-      type: 'learningObject',
-      attributes: { imageUrl: 'https://img', duration: 600, localizedMetadata: [{ locale: 'en-US', name: 'Sales' }, { locale: 'pt-BR', name: 'Vendas' }] },
-    }],
-  }));
-  const res = await myCourses.main({
-    ...PARAMS,
-    __ow_headers: { authorization: 'Bearer good', origin: 'https://main--sebrae--denisadobe.aem.page' },
-  });
+test('my-courses: with learner impersonation -> courses + player token', async () => {
+  customerOk();
+  on((url) => url.includes('/oauth/o/learnerToken'), () => json({ access_token: 'learner', user_id: '555', expires_in: 3600 }));
+  on((url) => url.includes('/primeapi/v2/enrollments'), () => json(ENROLLMENTS));
+  const res = await myCourses.main({ ...PARAMS, __ow_headers: { authorization: 'Bearer good' } });
   assert.equal(res.statusCode, 200);
   assert.equal(res.headers['Access-Control-Allow-Origin'], undefined);
   assert.equal(res.body.courses[0].name, 'Vendas');
@@ -164,9 +198,24 @@ test('my-courses: lists the courses of the customer + player token', async () =>
   assert.equal(res.body.player.accessToken, 'learner');
 });
 
+test('my-courses: without impersonation -> courses via admin API with ALM learner app links', async () => {
+  customerOk();
+  noImpersonation();
+  adminToken();
+  on((url) => new URL(url).searchParams.get('ids') === 'email:maria@example.com', () => usersReply([['555', 'maria@example.com']]));
+  on((url, b, i) => url.includes('/users/555/enrollments') && (i.method || 'GET') === 'GET', () => json(ENROLLMENTS));
+  const res = await myCourses.main({ ...PARAMS, __ow_headers: { authorization: 'Bearer good' } });
+  assert.equal(res.statusCode, 200);
+  assert.equal(res.body.player, undefined);
+  assert.equal(res.body.courses[0].name, 'Vendas');
+  assert.equal(res.body.courses[0].url, 'https://learningmanager.adobe.com/app/learner?accountId=115171#/course/123');
+});
+
 test('my-courses: customer not in ALM yet -> no courses', async () => {
-  on((url, body) => body.includes('customer {'), () => json({ data: { customer: { email: 'novo@example.com' } } }));
-  on((url) => url.includes('/oauth/o/learnerToken'), () => json({}, 404));
+  customerOk('novo@example.com');
+  noImpersonation();
+  adminToken();
+  on((url) => new URL(url).searchParams.get('ids') === 'email:novo@example.com', () => usersReply([]));
   const res = await myCourses.main({ ...PARAMS, __ow_headers: { authorization: 'Bearer good' } });
   assert.deepEqual(res.body, { courses: [] });
 });

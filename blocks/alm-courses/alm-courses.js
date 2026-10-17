@@ -1,6 +1,7 @@
 /*
  * Meus cursos: Adobe Learning Manager courses of the signed-in customer, played inside the
- * site (ALM Fluidic Player in a dialog). Data comes from the App Builder "my-courses" action
+ * site (ALM Fluidic Player in a dialog) when the action returns a learner token, otherwise
+ * opened in the ALM learner app (new tab). Data comes from the I/O Runtime "my-courses" action
  * (alm-enrollment/), called with the Commerce customer token; its URL is the
  * "alm-my-courses-url" key of /config.json.
  * Authoring (key-value table, optional):
@@ -81,12 +82,22 @@ function renderCourse(course, player) {
   progress.append(bar, el('span', '', done ? 'Concluído' : `${Math.round(course.progress)}% concluído`));
   body.append(progress);
 
-  const action = el('button', 'button primary alm-courses-card-action');
-  action.type = 'button';
-  if (done) action.textContent = 'Rever curso';
-  else action.textContent = course.progress ? 'Continuar' : 'Começar';
-  action.setAttribute('aria-label', `${action.textContent}: ${course.name}`);
-  action.addEventListener('click', () => openPlayer(course, player));
+  let label = course.progress ? 'Continuar' : 'Começar';
+  if (done) label = 'Rever curso';
+  let action;
+  if (player) {
+    // embedded ALM player (learner token)
+    action = el('button', 'button primary alm-courses-card-action', label);
+    action.type = 'button';
+    action.addEventListener('click', () => openPlayer(course, player));
+  } else {
+    // no learner token: the course page in the ALM learner app (learner signs in there)
+    action = el('a', 'button primary alm-courses-card-action', label);
+    action.href = course.url;
+    action.target = '_blank';
+    action.rel = 'noopener';
+  }
+  action.setAttribute('aria-label', `${label}: ${course.name}${player ? '' : ' (abre o Learning Manager em nova aba)'}`);
   body.append(action);
 
   card.append(media, body);
