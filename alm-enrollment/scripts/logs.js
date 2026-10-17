@@ -12,7 +12,16 @@ const {
 async function main() {
   const [action = 'enroll', limit = '5'] = process.argv.slice(2);
   const runtime = getRuntime(loadEnv());
-  const list = await request(runtime, 'GET', `/activations?name=${PACKAGE}/${action}&limit=${Number(limit)}&docs=true`);
+  const max = Number(limit);
+  let list = await request(runtime, 'GET', `/activations?name=${PACKAGE}/${action}&limit=${max}&docs=true`);
+  if (!list.length) {
+    // the name filter does not match packaged actions everywhere: filter recent activations by path
+    const path = `${PACKAGE}/${action}`;
+    list = (await request(runtime, 'GET', '/activations?limit=200&docs=true'))
+      .filter((a) => a.name === action
+        && (a.annotations || []).some((n) => n.key === 'path' && String(n.value).endsWith(path)))
+      .slice(0, max);
+  }
   if (!list.length) {
     console.log(`Nenhuma execução de ${PACKAGE}/${action} ainda.`);
     return;
